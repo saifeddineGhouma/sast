@@ -1,0 +1,45 @@
+div.dt-buttons {
+    position: relative;
+    float: right;
+}
+div.dt-button-collection>a.dt-button.active {
+    background: #f6f6f6!important;
+    box-shadow: none!important;
+    border: 0!important;
+}
+.portlet.box .dataTables_wrapper .dt-buttons {
+    margin-top: -50px;
+}
+
+.form-section {
+    margin: 30px 0;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #e7ecf1;
+}
+.display-none{
+	display: none;
+}
+
+button.spinner,input[type="text"].spinner, input[type="password"].spinner, input[type="datetime"].spinner, input[type="datetime-local"].spinner, input[type="date"].spinner, input[type="month"].spinner, input[type="time"].spinner, input[type="week"].spinner, input[type="number"].spinner, input[type="email"].spinner, input[type="url"].spinner, input[type="search"].spinner, input[type="tel"].spinner, input[type="color"].spinner {
+    background-image: url("../img/input-spinner.gif") !important;
+    background-repeat: no-repeat;
+    background-position: right 8px;
+}
+.badge-success {
+    background-color: #36c6d3;
+}
+
+.note.note-success {
+    background-color: #eef7ea;
+    border-color: #c9e2b3;
+    color: #3c763d;
+}
+.panel-default > .panel-heading {
+    color: #333333;
+    background-color: #f9f9f9;
+    border-color: #e0e0e0;
+}
+.thumbnail a>img, .thumbnail>img{
+	/*height: 100%;*/
+}
+table:last-child td i {margin-right:15px;}

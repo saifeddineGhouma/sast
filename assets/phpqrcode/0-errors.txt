@@ -1,0 +1,1 @@
+2017-12-17 17:32:49: imagepng(): Invalid 2nd parameter, it must a filename or a stream2017-12-17 17:32:53: imagepng(): Invalid 2nd parameter, it must a filename or a stream2017-12-17 17:33:23: imagepng(): Invalid 2nd parameter, it must a filename or a stream

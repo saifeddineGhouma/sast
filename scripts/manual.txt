@@ -1,0 +1,14 @@
+import table manualcertificate in new_db to compare with name ,
+
+get last ids from the web platform,
+
+execute the script,
+
+//in case of proble run this
+DELETE from users where id > 3950;
+DELETE from students  where id > 3948;
+delete from courses where id > 53;
+DELETE from course_translations where course_id > 53;
+DELETE from courses_mirror;
+delete from users_mirror;
+delete from students_certificates where id > 4163;
