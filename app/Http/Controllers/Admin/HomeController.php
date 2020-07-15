@@ -28,7 +28,7 @@ class HomeController extends Controller
 	{
 		if (Auth::guard("admins")->check()) {
 
-			$users = User::get();
+			/*$users = User::get();
 			foreach ($users as $user) {
 				$Ordersp = Order::where("user_id", $user->id)->get();
 				foreach ($Ordersp as $Ordersps) {
@@ -47,6 +47,10 @@ class HomeController extends Controller
 						$OrderProduct = OrderProduct::where("order_id", $Ordersps["id"])->first();
 						if ($OrderProduct["course_id"] != NULL) {
 							$coursetypevariation = CourseTypeVariation::where("id", $OrderProduct->coursetypevariation_id)->first();
+							if (empty($coursetypevariation)) {
+								continue;
+							}
+							//dd(CourseType::where("id", $coursetypevariation['coursetype_id'])->first());
 							$coursetype = CourseType::where("id", $coursetypevariation['coursetype_id'])->first();
 							if ($coursetype['type'] == "online") {
 								//print_r($OrderProduct);
@@ -445,7 +449,7 @@ class HomeController extends Controller
 						}
 					}
 				}
-			}
+			}*/
 
 			$date = date("Y-m-d");
 			$previous_week = strtotime("-1 week +1 day");

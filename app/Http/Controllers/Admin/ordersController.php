@@ -110,8 +110,7 @@ class ordersController extends Controller
 			}
 
 			$total = $item->total . "$<br/>";
-			$total .= "Total Paid:" . $item->totalPaid() . "$";
-
+			$total .= "Total Paid: $" . $item->totalPaid();
 
 			$facture = "<a href='https://swedish-academy.se/PDF/" . md5($item->id)  . "/" .  md5($item->user->id) . "'> facture </a><br>";
 

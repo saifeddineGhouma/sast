@@ -97,12 +97,13 @@ class Course extends Model
                 return $query1;
             });
         }
-        if ($request->price) {
-            if($request->price=='free'){                
+        if (isset($request->price)) {
+            if ($request->price == 'free') {
                 $query = $query->join("course_types", "course_types.course_id", "=", "courses.id");
                 $query = $query->join("coursetype_variations", "coursetype_variations.coursetype_id", "=", "course_types.id");
                 $query->where("coursetype_variations.price", "=", 0.00);
-            }else{                
+            }
+            if ($request->price == 'paid') {
                 $query = $query->join("course_types", "course_types.course_id", "=", "courses.id");
                 $query = $query->join("coursetype_variations", "coursetype_variations.coursetype_id", "=", "course_types.id");
                 $query->where("coursetype_variations.price", ">", 0.00);
@@ -235,7 +236,7 @@ class Course extends Model
     public function isRegistered($user = null)
     {
         $isRegistered = false;
-        if (is_null($user)) { 
+        if (is_null($user)) {
             $user = Auth::user();
         }
         if ($user) {
@@ -531,7 +532,7 @@ class Course extends Model
         return $isPaid;
     }
 
-// fitness assistant 
+    // fitness assistant 
     public function isCompleteQuizzesExam()
     {
         $isComplete = true;
@@ -563,7 +564,6 @@ class Course extends Model
             $isComplete = false;
         }
         return $isComplete;
-
     }
 
 
@@ -599,7 +599,7 @@ class Course extends Model
         return $isComplete;
     }
 
-    
+
     public function isCompleteQuizzesWithoutVdo()
     {
         $isComplete = true;
@@ -728,31 +728,31 @@ class Course extends Model
     }
     // fitness assistant 
     public function validateExam($type, &$messageValid)
-    { 
+    {
         $isValid = false;
         $isValidQuiz = false;
         $isRegistered = $this->isRegistered();
         //echo $isRegistered;
         if ($isRegistered) {
-            if ($type != "exam" || ($type == "exam" && $this->isTotalPaid())) {          
-                if ($type != "video" || ($type == "video" && $this->isCompleteQuizzesExam()))  {
+            if ($type != "exam" || ($type == "exam" && $this->isTotalPaid())) {
+                if ($type != "video" || ($type == "video" && $this->isCompleteQuizzesExam())) {
                     $isValid = true;
                 } else {
                     $messageValid = '<p class="failed">لابد من إتمام جميع الكويزات والاختبار النهائي لإتمام الفيديو</p>';
-                } 
+                }
                 if ($type != "exam" || ($type == "exam" && $this->isCompleteQuizzesWithoutVdo())) {
                     $isValidQuiz = true;
                 } else {
                     $messageValid = ' <p class="failed">لابد من إتمام جميع الكويزات </p>';
-                }          
-            }else {
+                }
+            } else {
                 $messageValid = '<p class="failed">برجاء إكمال باقي الأقساط لأداء الاختبار النهائي</p>';
             }
         } else {
             $messageValid = '<p class="failed">أنت غير مشترك في هذه الدورة</p>';
         }
-        
-        return ['isValid' => $isValid, 'isValidQuiz' => $isValidQuiz];               
+
+        return ['isValid' => $isValid, 'isValidQuiz' => $isValidQuiz];
     }
 
     public function validateQuiz($type, &$messageValid)

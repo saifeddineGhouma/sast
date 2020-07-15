@@ -62,13 +62,7 @@
                         <div class="well table-toolbar">
                             <form id="search_form" name="search_form" method="get">
                                 <div class="row">
-                                    <div class="col-md-4 col-sm-4">
-                                        <div class="form-group">
-                                            <label class="control-label bold">Order id</label>
-                                            <input type="text" name="order_id" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="control-label bold">Course</label>
                                             <select name="course_id" class="form-control">
@@ -79,26 +73,42 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-4 col-sm-4">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label bold">Order type</label>
+                                            <select name="otype" class="form-control">
+                                                <option value='all'>All</option>
+                                                <option value='free'>Free</option>
+                                                <option value='nofree'>Not free</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label bold">Payment</label>
+                                            <select name="paid" class="form-control">
+                                                <option value=''>All</option>
+                                                <option value='yes'>Paid</option>
+                                                <option value='no'>Not paid</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3 col-sm-3">
                                         <div class="form-group">
                                             <label class="control-label bold">Client</label>
-                                            <select name="user_id" class="form-control select2" >
-                                                <option value="0">choose...</option>
-                                                @foreach($users as $user)
-                                                    <option value="{{$user->id}}">{{$user->full_name_en}}</option>
-                                                @endforeach
-                                            </select>
+                                            <input type="text" name="user" class="form-control" placeholder="Email or Username">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="control-label bold">Date added</label>
                                             <input class="form-control date-picker" size="16" type="text" name="created_at" />
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="control-label bold">Category</label>
                                             <select name="category_id" class="form-control select2" >
@@ -110,7 +120,7 @@
                                             <!--still in developpement-->
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <button type="submit" id="filterBtn" class="btn green demo-loading-btn col-md-6" style="margin-top: 25px;" data-loading-text="<li class='fa fa-search'></li> searching...">
                                             <li class="fa fa-search"></li> Search
                                         </button>

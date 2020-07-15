@@ -81,7 +81,7 @@
 									<div class="form-group">
 										<label class="control-label bold">Price</label>
 										<select  name="price" id="price"  class="form-control select2" aria-hidden="true" >
-											<option>All</option>
+											<option value="">All</option>
 											<option value="paid">Paid</option>
 											<option value="free">Free</option>
 										</select>

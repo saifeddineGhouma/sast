@@ -10,18 +10,18 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 class Admin extends Authenticatable
 {
-	use Notifiable,EntrustUserTrait;
-	
-	protected $guard="admins";
+    use Notifiable, EntrustUserTrait;
+
+    protected $guard = "admins";
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    
-	
+
+
     protected $fillable = [
-        'username','email', 'password','remember'
+        'username', 'email', 'password', 'remember'
     ];
 
     /**
@@ -32,9 +32,13 @@ class Admin extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-	
-	public function sendPasswordResetNotification($token)
+
+    public function sendPasswordResetNotification($token)
     {
         $this->notify(new AdminResetPasswordNotification($token));
+    }
+    public   function scopeActive($query)
+    {
+        return $query->where('active', 1);
     }
 }
