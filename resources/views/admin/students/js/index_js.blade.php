@@ -55,7 +55,47 @@ function deleteRecord(e) {
   
 };
  
+/**************blocked student ***********/
 
+function blockedRecord(e) {	
+	var row =$(this);
+	var id = row.attr('elementId');	
+		
+	bootbox.confirm({
+			title: "Block Student",
+			message: "Are you sure to blocked this Student? This operation is irreversible.",
+		    callback: function(result) {
+				if (result == true) {
+			 	  
+		            $.ajax({
+		                url: "{{url('admin/students/blocked/')}}" + '/' + id,
+		                type: 'POST',
+		                headers: {
+		                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		                }, 
+		                beforeSend:function(){
+		                     $("#loadmodel_category").show();
+		                },               
+		                success: function( msg ) { 
+		                   	$("#filterBtn").trigger("click");
+		                },
+		                error: function( data ) {
+		                    if ( data.status === 422 ) {
+		                        toastr.error('Cannot delete the category');
+		                    }
+		                },
+				        complete: function(){
+				        	 $("#loadmodel_category").hide();
+				        }
+		            });
+		          
+			  }
+		}
+	}); 
+  
+};
+
+/***********end blocked *************/
 
 function formFilter(e){
 	e.preventDefault();
@@ -72,6 +112,10 @@ function formFilter(e){
 		success: function(result){				
 			$("#studentsChildList").html(result);
 			$('.deletestudent').on('click', deleteRecord); 
+			/********blocked student*****/
+			$('.blockedstudent').on('click', blockedRecord);
+
+			/*********end blocked*******/
 			
 			$('#table1').DataTable(options);
 			$(".livicon").addLivicon();

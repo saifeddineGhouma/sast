@@ -45,6 +45,7 @@ class AccountController extends Controller
     public function getIndex()
     {
         $user = Auth::user();
+        
         $countOrders = Order::where("user_id", $user->id)
             ->count();
 

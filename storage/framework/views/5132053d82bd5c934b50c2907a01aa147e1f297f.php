@@ -135,14 +135,17 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    
+
                                 <?php $__currentLoopData = $ordersProducts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $orderproduct): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr>
                                         <?php 
-                                            $i = ((Request::get('page')-1) * 5) + $loop->iteration ; 
+                                            $page = empty(Request::get('page')) ?  1 : Request::get('page');
+                                            $i = (($page-1) * 5) + $loop->iteration ; 
                                         ?>
-                                        <td class="row_head"><?php echo e($i); ?> </td>
-                                        
+                                         
+                                         
+                                        <td class="row_head"><?php echo e($i); ?></td>
+                                        <?php $page++; ?>
                                         <td>
                                             <?php
                                                 $url = "";

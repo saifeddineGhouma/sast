@@ -59,6 +59,25 @@ if(!is_null($course->ratings()->where("approved",1))){
                 <i class="fa fa-video"></i> 
                 <i class="fa fa-html5"></i> 
             </div>-->
+<div class="col-md-12">
+      
+      
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         </div>
     </div>
 </div>

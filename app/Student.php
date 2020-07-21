@@ -56,4 +56,8 @@ class Student extends Model
     {
         return $this->hasMany("App\StudentStage", "user_id");
     }
+    public function scopeNotBlocked($query)
+    {
+        return $query->where('blocked', 0);
+    }
 }

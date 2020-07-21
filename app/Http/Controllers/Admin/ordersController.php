@@ -144,7 +144,7 @@ class ordersController extends Controller
 
 		$order = Order::findOrFail($id);
 		$Arabic = new I18N_Arabic('Glyphs');
-		$students = Student::get();
+		$students = Student::NotBlocked()->get();
 
 
 		// foreach (Auth::guard("admins")->user()->unreadnotifications as $notification) {

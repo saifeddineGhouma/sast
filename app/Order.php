@@ -70,22 +70,22 @@ class Order extends Model
             $query = $query->where(DB::raw("DATE(created_at)"), $created_at);
         }
 
-        /*if (!empty($request1['paid'])) {
-            $res = new Collection();
-            foreach ($query as $item) {
+        if (!empty($request1['paid'])) {
+            $res = [];
+
+            foreach ($query->get() as $item) {
                 if ($request1['paid'] == 'yes') {
-                    //dd($item->totalPaid());
-                    if ($item->totalPaid() == '0.00' || $item->totalPaid() == '0' || $item->totalPaid() == '0.0')
-                        continue;
+                    if ($item->totalPaid() > 0.00)
+                        array_push($res, $item->id);
                 }
                 if ($request1['paid'] == 'no') {
-                    if ($item->totalPaid() > 0.00)
-                        continue;
+                    if ($item->totalPaid() == '0.00' || $item->totalPaid() == '0' || $item->totalPaid() == '0.0')
+                        array_push($res, $item->id);
                 }
-                $res->push($item);
             }
-            $query = $res;
-        }*/
+            $query = Order::whereIn('id', $res);
+        }
+
         return $query;
     }
 

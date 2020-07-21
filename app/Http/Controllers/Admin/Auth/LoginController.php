@@ -40,6 +40,7 @@ class LoginController extends Controller
 
 	public function postLogin(Request $request)
 	{
+
 		$this->validate($request, [
 			'login'   => 'required',
 			'password' => 'required'
@@ -61,8 +62,8 @@ class LoginController extends Controller
 			if (Auth::guard("admins")->user()->active == 0) {
 
 				Auth::guard('admins')->logout();
-				Session::flash('message', "don't have an account"); 
-             Session::flash('alert-class', 'alert-danger'); 
+				Session::flash('message', "don't have an account");
+				Session::flash('alert-class', 'alert-danger');
 				return redirect('admin/login');
 			}
 			$adminhistory = new AdminHistory;

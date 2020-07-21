@@ -22,7 +22,8 @@
                     ?>
                     <?php $__currentLoopData = $courseType_variations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $courseTypeVariation): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <p class="teachernm"><?php echo app('translator')->getFromJson('navbar.coach'); ?>  : <span>  <?php echo e($courseTypeVariation->teacher->user->{'full_name_'.session()->get('locale')}); ?></span>
-
+                       
+                            
                         <?php if(!empty($courseTypeVariation->government)): ?>
                             <span><?php echo e(isset($courseTypeVariation->government->government_trans(session()->get('locale'))->name) ? $courseTypeVariation->government->government_trans(session()->get('locale'))->name : null); ?></span>
                             <span><?php echo e($courseTypeVariation->date_from ." - ".$courseTypeVariation->date_to); ?></span>
@@ -46,7 +47,7 @@
                             <?php else: ?>
                                 <div class="alert alert-success alertweb"><i class="fa fa-exclamation-circle"></i>
                                     <strong> <?php echo app('translator')->getFromJson('navbar.sucessCertification'); ?></strong>
-                                    <br> <?php echo app('translator')->getFromJson('navbar.visitYourCertification'); ?> <a href="<?php echo e(url(App('urlLang').'account')); ?>"><?php echo app('translator')->getFromJson('navbar.account'); ?></a>
+                                    <br> <?php echo app('translator')->getFromJson('navbar.visitYourCertification'); ?> <a href="<?php echo e(url(App('urlLang').'account')); ?>"> <?php echo app('translator')->getFromJson('navbar.account'); ?></a>
                                 </div>
                             <?php endif; ?>
                         <?php endif; ?>
@@ -157,6 +158,8 @@
                     <?php endif; ?>
                 </div>
             </div>
+
+              <!----code edit ticket ta3dil chera --->
             <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
                 <div class="meta-price media-body align-self-center">
                     <?php if($courseType->points >0): ?>
@@ -204,7 +207,8 @@
 
                                     <?php if($user->user_verify->verify == 1): ?>
                                       <button class="btn btn-primary btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" data-toggle="collapse" data-target="#change-search"><span style="margin-right: 10px;">  <?php echo e(floor($first_Variation->price+$vat)); ?>$ </span></button>        
-                                    <?php else: ?> 
+                                  
+                                      <?php else: ?> 
                                       <button class="btn btn-disabled btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" disabled="disabled"><span style="margin-right: 10px;"><?php echo e(floor($first_Variation->price+$vat)); ?>$</span></button>
                                     <?php endif; ?>
 
@@ -225,7 +229,7 @@
                             <?php else: ?>
                             
                             
-                            <button class="btn btn-primary btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" data-toggle="collapse" data-target="#change-search"><span style="margin-right: 10px;">  <?php echo e(floor($first_Variation->price+$vat)); ?>$ </span></button>        
+                            <button class="btn btn-primary btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" data-toggle="collapse" data-target="#change-search"><span style="margin-right: 10px;"> <?php echo e(floor($first_Variation->price+$vat)); ?>$ </span></button>        
                             <?php endif; ?>
                         <?php endif; ?>
 
@@ -250,6 +254,7 @@
 
                                 <div class="col-xs-12 col-sm-12 col-md-12 groups-box">
                                     <div class="gbox">
+                                        
                                         <?php if($courseType->type=="online"): ?>
                                           
                                   <?php else: ?>
@@ -268,6 +273,7 @@
                                                        
                                                         
                                             </div>
+                                            
                                             <div class="form-group select_group">
                                                 <?php if($courseType->type=="online"): ?>
                                                 

@@ -134,14 +134,17 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    
+
                                 @foreach($ordersProducts as $orderproduct)
                                     <tr>
                                         @php 
-                                            $i = ((Request::get('page')-1) * 5) + $loop->iteration ; 
+                                            $page = empty(Request::get('page')) ?  1 : Request::get('page');
+                                            $i = (($page-1) * 5) + $loop->iteration ; 
                                         @endphp
-                                        <td class="row_head">{{ $i }} </td>
-                                        
+                                         
+                                         
+                                        <td class="row_head">{{ $i }}</td>
+                                        <?php $page++; ?>
                                         <td>
                                             <?php
                                                 $url = "";

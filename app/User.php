@@ -136,4 +136,8 @@ class User extends Authenticatable
     {
         return $this->hasMany("App\StudentStage", "user_id");
     }
+    public   function scopeActive($query)
+    {
+        return $query->where('blocked', 0);
+    }
 }

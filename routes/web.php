@@ -111,6 +111,9 @@ Route::group([
     Route::get('/students/edit/{id}', 'studentsController@getEdit');
     Route::post('/students/edit/{id}', 'studentsController@postEdit');
     Route::post('/students/delete/{id}', 'studentsController@postDelete');
+    /*********blocked students******* */
+    Route::post('/students/blocked/{id}', 'studentsController@postBlocked');
+    /*************end blocked *** */
     Route::get('/students/user-details', 'studentsController@getUserDetails');
     Route::get('/students/unique-user', 'studentsController@getUniqueUser');
 

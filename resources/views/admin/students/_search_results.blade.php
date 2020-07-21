@@ -2,7 +2,7 @@
     <thead>
         <tr>
         	<th>Image</th>   
-            <th>Full Name En</th>
+            <th>Full Name En </th>
             <th>Email</th>
             <th>Username</th>
             <th>Created_at</th>
@@ -42,7 +42,27 @@
 							<i class="livicon" data-name="remove-circle" data-size="18" data-loop="true" data-c="#f56954" data-hc="#f56954" title="delete student"></i>
 						</a>
 					@endif
+					<!----bloque student --->
+					@if($u->id!=1)
+					 
+						@if($u->user->blocked==0)
+								<a data-toggle="modal" class="blockedstudent" elementId="{{$u->id}}">
+									<i class="fa fa-block" data-name="remove-circle" data-size="18" data-loop="true" data-c="#f56954" data-hc="#f56954" title="delete student">block</i>
+								</a>
+								
+						@else 
+
+								<a data-toggle="modal" class="blockedstudent" elementId="{{$u->id}}">
+									<i class="fa fa-block" data-name="remove-circle" data-size="18" data-loop="true" data-c="#f56954" data-hc="#f56954" title="delete student">unblock </i>
+								</a>
+
+						@endif
+
+				    @endif
+
+				<!---------end bloque ------>
 					<a href="{{ url('/admin/login-user/'.$u->id) }}" target="_blank">login</a>
+					
 	            </td>
 	        </tr>
 	        @endforeach

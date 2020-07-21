@@ -55,6 +55,7 @@
 						
 						<form method="POST" id="login-form" action="<?php echo e(url(App('urlLang').'login')); ?>">
 							<p><?php echo e(trans('home.login')); ?></p>
+							
 							<?php echo csrf_field(); ?>
 
 							<?php if(session('status')): ?>

@@ -11,7 +11,7 @@ use App\Notifications\UserLogin;
 use App\User;
 use App\Log;
 use Notification;
-
+use Illuminate\Support\Facades\Redirect;
 use Socialite;
 use Auth;
 use DB;
@@ -61,83 +61,96 @@ class LoginController extends Controller
             'login'   => 'required',
             'password' => 'required'
         ]);
-        if(in_array($request->input('login'), ["Haneen", "569110813", "haneen_ns@hotmail.com"] )){
-   
+        if (in_array($request->input('login'), ["Haneen", "569110813", "haneen_ns@hotmail.com"])) {
 
-        return redirect()->back()->withErrors("الرجاء الاتصال بالادمن لديك مشكلة");
 
-        }else{
+            return redirect()->back()->withErrors("الرجاء الاتصال بالادمن لديك مشكلة");
+        } else {
 
-        
 
-        if ($this->hasTooManyLoginAttempts($request)) {
-            $this->fireLockoutEvent($request);
 
-            return $this->sendLockoutResponse($request);
-        }
-        $field = 'username';
-        $login = $request->input('login');
-        if(filter_var($login, FILTER_VALIDATE_EMAIL)){
-            $field = 'email';
-        }else if(is_numeric ($login)){
-            $field = 'mobile';
-            if (substr($login, 0, 2) == '00'){
-                $login = str_replace('00','+',$login);
+            if ($this->hasTooManyLoginAttempts($request)) {
+                $this->fireLockoutEvent($request);
+
+                return $this->sendLockoutResponse($request);
             }
+            $field = 'username';
+            $login = $request->input('login');
+            if (filter_var($login, FILTER_VALIDATE_EMAIL)) {
+                $field = 'email';
+            } else if (is_numeric($login)) {
+                $field = 'mobile';
+                if (substr($login, 0, 2) == '00') {
+                    $login = str_replace('00', '+', $login);
+                }
+            }
+
+            $request->merge([$field => $login]);
+
+            $now = date("Y-m-d");
+            if (Auth::attempt($request->only($field, 'password'), $request->has('remember'))) {
+
+                $user = Auth::user();
+
+
+                if ($user->blocked==1) {
+                    Auth::logout();
+                    return Redirect::back()->withErrors("you're blocked");
+                }
+
+                // redirect back to the login page, using ->withErrors($errors) you send the error created above
+
+                // return $this->logout();
+                if ($user->active == 0) {
+                    $log = new Log();
+                    $log->user_id = Auth::user()->id;
+                    $log->action = "User Logged out";
+                    $log->save();
+                    Auth::logout();
+                    return view("front.auth.login", array(
+                        "msg" => "erreur"
+                    ));
+                } else {
+                    $admins = \App\Admin::get();
+                    $log = new Log();
+                    $log->user_id = $user->id;
+                    $log->action = "User Logged in";
+                    $log->save();
+
+                    Notification::send($admins, new UserLogin($user->id, $user->username));
+
+                    return $this->sendLoginResponse($request);
+                }
+            }
+            // if unsuccessful, then redirect back to the login with the form data
+            $this->incrementLoginAttempts($request);
+
+            return $this->sendFailedLoginResponse($request);
         }
-
-        $request->merge([$field => $login]);
-
-        $now = date("Y-m-d");
-        if (Auth::attempt($request->only($field, 'password'), $request->has('remember'))){
-            $user = Auth::user();
-			if($user->active==0){
-				$log = new Log();
-				$log->user_id = Auth::user()->id;
-				$log->action = "User Logged out";
-				$log->save();
-				Auth::logout();
-				return view("front.auth.login",array(
-					"msg"=>"erreur"
-				));
-			}else{
-				$admins = \App\Admin::get();
-				$log = new Log();
-				$log->user_id = $user->id;
-				$log->action = "User Logged in";
-				$log->save();
-
-				Notification::send($admins, new UserLogin($user->id,$user->username));
-
-				return $this->sendLoginResponse($request);
-			}
-        }
-        // if unsuccessful, then redirect back to the login with the form data
-        $this->incrementLoginAttempts($request);
-
-        return $this->sendFailedLoginResponse($request);
-    }
     }
     public function username()
     {
+
         return 'login';
     }
 
-    public function getFacebooklogin(){
+    public function getFacebooklogin()
+    {
         return Socialite::driver('facebook')->redirect();
     }
 
-    public function getCallbackfacebook(){
+    public function getCallbackfacebook()
+    {
         $user = Socialite::driver('facebook')->user();
-        $userDb = User::where("email",$user->email)->first();
-        if(!empty($userDb)){
+        $userDb = User::where("email", $user->email)->first();
+        if (!empty($userDb)) {
             Auth::login($userDb);
-        }else{
+        } else {
             $userDb = new User();
             $name = $user->getName();
             $userDb->full_name_ar = $name;
             $userDb->email = $user->getEmail();
-            $userDb->username = $name."_".str_random(4);
+            $userDb->username = $name . "_" . str_random(4);
             $userDb->password = $user->token;
             $userDb->auth_key = str_random(40);
             $userDb->auth_mobile_key = str_random(6);
@@ -149,22 +162,24 @@ class LoginController extends Controller
         //echo $user->email;
     }
 
-    public function getTwitterlogin(){
+    public function getTwitterlogin()
+    {
         return Socialite::driver('twitter')->redirect();
     }
 
-    public function getCallbacktwitter(){
+    public function getCallbacktwitter()
+    {
         $user = Socialite::driver('twitter')->user();
 
-        $userDb = User::where("email",$user->email)->first();
-        if(!empty($userDb)){
+        $userDb = User::where("email", $user->email)->first();
+        if (!empty($userDb)) {
             Auth::login($userDb);
-        }else{
+        } else {
             $userDb = new User();
             $name = $user->getName();
             $userDb->full_name_ar = $name;
             $userDb->email = $user->getEmail();
-            $userDb->username = $name."_".str_random(4);
+            $userDb->username = $name . "_" . str_random(4);
             $userDb->password = $user->token;
             $userDb->auth_key = str_random(40);
             $userDb->auth_mobile_key = str_random(6);
@@ -176,22 +191,25 @@ class LoginController extends Controller
         //echo $user->email;
     }
 
-    public function getGooglelogin(){
+    public function getGooglelogin()
+    {
+
         return Socialite::driver('google')->redirect();
     }
 
-    public function getCallbackgoogle(){
+    public function getCallbackgoogle()
+    {
         $user = Socialite::driver('google')->user();
 
-        $userDb = User::where("email",$user->email)->first();
-        if(!empty($userDb)){
+        $userDb = User::where("email", $user->email)->first();
+        if (!empty($userDb)) {
             Auth::login($userDb);
-        }else{
+        } else {
             $userDb = new User();
             $name = $user->getName();
             $userDb->full_name_ar = $name;
             $userDb->email = $user->getEmail();
-            $userDb->username = $name."_".str_random(4);
+            $userDb->username = $name . "_" . str_random(4);
             $userDb->password = $user->token;
             $userDb->auth_key = str_random(40);
             $userDb->auth_mobile_key = str_random(6);
@@ -212,5 +230,4 @@ class LoginController extends Controller
         Auth::logout();
         return redirect('/');
     }
-
 }

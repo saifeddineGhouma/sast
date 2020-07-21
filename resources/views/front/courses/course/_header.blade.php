@@ -21,7 +21,8 @@
                     ?>
                     @foreach($courseType_variations as $courseTypeVariation)
                         <p class="teachernm">@lang('navbar.coach')  : <span>  {{ $courseTypeVariation->teacher->user->{'full_name_'.session()->get('locale')} }}</span>
-
+                       
+                            
                         @if(!empty($courseTypeVariation->government))
                             <span>{{ $courseTypeVariation->government->government_trans(session()->get('locale'))->name or null }}</span>
                             <span>{{ $courseTypeVariation->date_from ." - ".$courseTypeVariation->date_to }}</span>
@@ -45,7 +46,7 @@
                             @else
                                 <div class="alert alert-success alertweb"><i class="fa fa-exclamation-circle"></i>
                                     <strong> @lang('navbar.sucessCertification')</strong>
-                                    <br> @lang('navbar.visitYourCertification') <a href="{{ url(App('urlLang').'account') }}">@lang('navbar.account')</a>
+                                    <br> @lang('navbar.visitYourCertification') <a href="{{ url(App('urlLang').'account') }}"> @lang('navbar.account')</a>
                                 </div>
                             @endif
                         @endif
@@ -166,6 +167,8 @@
                     @endif
                 </div>
             </div>
+
+              <!----code edit ticket ta3dil chera --->
             <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
                 <div class="meta-price media-body align-self-center">
                     @if($courseType->points >0)
@@ -219,7 +222,8 @@
 
                                     @if($user->user_verify->verify == 1)
                                       <button class="btn btn-primary btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" data-toggle="collapse" data-target="#change-search"><span style="margin-right: 10px;">  {{ floor($first_Variation->price+$vat) }}$ </span></button>        
-                                    @else 
+                                  
+                                      @else 
                                       <button class="btn btn-disabled btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" disabled="disabled"><span style="margin-right: 10px;">{{ floor($first_Variation->price+$vat) }}$</span></button>
                                     @endif
 
@@ -251,7 +255,7 @@
 
                         </p> --}}
                             {{-- </form> --}}
-                            <button class="btn btn-primary btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" data-toggle="collapse" data-target="#change-search"><span style="margin-right: 10px;">  {{ floor($first_Variation->price+$vat) }}$ </span></button>        
+                            <button class="btn btn-primary btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" data-toggle="collapse" data-target="#change-search"><span style="margin-right: 10px;"> {{ floor($first_Variation->price+$vat) }}$ </span></button>        
                             @endif
                         @endif
 
@@ -276,6 +280,7 @@
 
                                 <div class="col-xs-12 col-sm-12 col-md-12 groups-box">
                                     <div class="gbox">
+                                        
                                         @if($courseType->type=="online")
                                           {{-- <p>@lang('navbar.specialDiscount')</p>
                                           <p>@lang('navbar.registerWithFreinds')</p>
@@ -305,6 +310,7 @@
                                                     @endforeach
                                                 </select> --}}
                                             </div>
+                                            
                                             <div class="form-group select_group">
                                                 @if($courseType->type=="online")
                                                 {{-- <label>@lang('navbar.choosecoachandDate')</label> --}}
