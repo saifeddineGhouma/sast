@@ -163,9 +163,12 @@ class SiteController extends Controller
     public function getGraduates(Request $request)
     {
 
-        $listStudent = Student::join("users", "students.id", "=", "users.id")->get();
+        $listStudent = Student::join("users", "students.id", "=", "users.id")->where('students.blocked', 0)->get();
 
-        $listcertificate = StudentCertificate::get();
+        //  $listcertificate = StudentCertificate::get();
+        /*****students******/
+        $students = Student::NotBlocked()->pluck('id');
+        $listcertificate = StudentCertificate::whereIn('student_id', $students)->get();
 
         $currentYear = date("Y");
         if ($request->has("year") && !$request->has("course_id")) {
@@ -189,6 +192,7 @@ class SiteController extends Controller
                 $query = "select SC.* from students_certificates SC, students S, users U where SC.student_id = S.id and S.id=U.id and U.full_name_en like '%" . $code . "%'";
                 $studentCertificates = DB::select($query);
             }
+
             return view('front.site.graduates_final', [
                 "year" => 'all years', "course_id" => 0, "code" => $code,
                 "course" => null, "studentCertificate" => $studentCertificates,
@@ -222,7 +226,9 @@ class SiteController extends Controller
         $course_id = $request->course_id;
         $code = $request->code;
 
-        $studentCertificates = StudentCertificate::where(DB::raw("Year(created_at)"), $year)
+        $students = Student::NotBlocked()->pluck('id');
+
+        $studentCertificates = StudentCertificate::whereIn('student_id', $students)->where(DB::raw("Year(created_at)"), $year)
             ->where("active", 1);
         if ($course_id != 0) {
             $studentCertificates = $studentCertificates->where("course_id", $course_id);
@@ -233,7 +239,7 @@ class SiteController extends Controller
 
 
         if (!is_null($code)) {
-            $studentCertificates = StudentCertificate::where('serialnumber', $code)->get();
+            $studentCertificates = StudentCertificate::whereIn('student_id', $students)->where('serialnumber', $code)->get();
             if ($studentCertificates->count() == 0) {
                 $query = "select U.id from users U where U.full_name_en like '%" . $code . "%'";
                 $users_r = DB::select($query);
@@ -241,15 +247,17 @@ class SiteController extends Controller
                 foreach ($users_r as $user) {
                     array_push($users, $user->id);
                 }
-                $studentCertificates = StudentCertificate::whereIn('student_id', $users)->get();
+                $studentCertificates = StudentCertificate::whereIn('student_id', $students)->whereIn('student_id', $users)->get();
             }
         }
 
         $recordsTotal = $studentCertificates->count();
         $numPages = ceil($recordsTotal);
+
+
         $view = view('front.site._graduates', [
             "studentCertificates" => $studentCertificates, "numPages" => $numPages,
-            "current" => $current
+            "current" => $current, "nbrs" => $recordsTotal
         ]);
         $result = array();
         $result[0] = str_replace('"', '\"', $view);
@@ -293,7 +301,12 @@ class SiteController extends Controller
 
     public function certificates($serialNumber)
     {
-        $studentCertificate = StudentCertificate::where("serialnumber", $serialNumber)->firstOrFail();
+        $students = Student::NotBlocked()->pluck('id');
+
+        $studentCertificate = StudentCertificate::whereIn('student_id', $students)->where("serialnumber", $serialNumber)->firstOrFail();
+        if ($studentCertificate->count() == 0) {
+            echo "sorry";
+        }
         $course_name = $studentCertificate->course_name;
         if (!is_null($studentCertificate->course))
             $course_name = $studentCertificate->course->course_trans(session()->get('locale'))->name;

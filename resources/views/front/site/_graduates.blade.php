@@ -4,11 +4,13 @@
 
         <thead>
         <tr role="row">
+            <th class="text-center">@lang('navbar.id')</th>
             <th class="text-center">@lang('navbar.certifnum')</th>
             <th class="text-center">@lang('navbar.nom')</th>
             <th class="text-center">@lang('navbar.nation')</th>
             <th class="text-center">@lang('navbar.datecertif') </th>
             <th class="text-center">@lang('navbar.more')</th>
+
         </tr>
         </thead>
         <tbody>
@@ -25,6 +27,7 @@
                 $student_name = ucwords(strtolower($studentCertificate->student->user->full_name_en));
             ?>
             <tr>
+                <td class="sorting_1">{{ $studentCertificate->student->user->id }}</td>
                 <td class="sorting_1">{{ $studentCertificate->serialnumber }}</td>
                 <td> {{$student_name}}</td>
                 <td>

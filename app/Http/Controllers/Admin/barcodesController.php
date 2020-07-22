@@ -21,15 +21,16 @@ class barcodesController extends Controller
     private $table_name = "barcodes";
     private $record_name = "barcode";
 
-	public function __construct() {
-
+    public function __construct()
+    {
     }
-	
-    public function index(Request $request){
 
-      return view('admin.barcodes.index',array(
-          "table_name"=>$this->table_name,"record_name"=>$this->record_name
-      ));
+    public function index(Request $request)
+    {
+
+        return view('admin.barcodes.index', array(
+            "table_name" => $this->table_name, "record_name" => $this->record_name
+        ));
     }
 
     /**
@@ -42,41 +43,45 @@ class barcodesController extends Controller
         $parts = parse_url($request->extra);
         parse_str($parts['path'], $request1);
 
-        $recordsTotal = StudentCertificate::count();
+        $students = Student::NotBlocked()->pluck('id');
 
-        $studentsCertificates = StudentCertificate::search($request);
+        $recordsTotal = StudentCertificate::whereIn('student_id', $students)->count();
+
+
+        $studentsCertificates = StudentCertificate::search($request)->whereIn('student_id', $students);
+
         $recordsFiltered = $studentsCertificates->count();
 
         $studentsCertificates = $studentsCertificates->skip($request->start)
-                    ->take($request->length)->get();
+            ->take($request->length)->get();
 
-        $data =array();
-        foreach($studentsCertificates as $key=>$item){
+        $data = array();
+        foreach ($studentsCertificates as $key => $item) {
             $course_name = $item->course_name;
-            if(!is_null($item->course))
+            if (!is_null($item->course))
                 $course_name = $item->course->course_trans('ar')->name;
             $exam_name = $item->exam_name;
-            if(!is_null($item->exam))
+            if (!is_null($item->exam))
                 $exam_name = $item->exam->quiz_trans('ar')->name;
             $student_name = '';
-            if(!is_null($item->student))
+            if (!is_null($item->student))
                 $student_name = $item->student->user->full_name_ar;
 
-            $image = '<a href="'. asset('uploads/kcfinder/upload/image/barcodes/'.$item->serialnumber."-code.png") .'" target="_blank">
-                        <img src="'.asset('uploads/kcfinder/upload/image/barcodes/'.$item->serialnumber."-code.png").'" alt="no image" width="70px"/></a>';
+            $image = '<a href="' . asset('uploads/kcfinder/upload/image/barcodes/' . $item->serialnumber . "-code.png") . '" target="_blank">
+                        <img src="' . asset('uploads/kcfinder/upload/image/barcodes/' . $item->serialnumber . "-code.png") . '" alt="no image" width="70px"/></a>';
 
             $row = array(
-                '<input type="checkbox" class="checkbox" data-id="'.$item->id.'">',
+                '<input type="checkbox" class="checkbox" data-id="' . $item->id . '">',
                 $image,
                 $student_name,
                 $course_name,
                 $item->serialnumber,
-                date("Y-m-d",strtotime($item->created_at))
+                date("Y-m-d", strtotime($item->created_at))
             );
 
-            array_push($data,$row);
+            array_push($data, $row);
         }
-        $result = array("recordsTotal"=>$recordsTotal,"recordsFiltered"=>$recordsFiltered,"data"=>array_values($data));
+        $result = array("recordsTotal" => $recordsTotal, "recordsFiltered" => $recordsFiltered, "data" => array_values($data));
         return json_encode($result);
     }
 
@@ -88,20 +93,18 @@ class barcodesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public  function Delete(Request $request){
+    public  function Delete(Request $request)
+    {
         $ids = $request->ids;
-        $studentCertificates = StudentCertificate::whereIn("id",$ids)->get();
-        foreach($studentCertificates as $studentCertificate){
-            File::delete('uploads/kcfinder/upload/image/barcodes/'. $studentCertificate->serialnumber."-code.png");
+        $studentCertificates = StudentCertificate::whereIn("id", $ids)->get();
+        foreach ($studentCertificates as $studentCertificate) {
+            File::delete('uploads/kcfinder/upload/image/barcodes/' . $studentCertificate->serialnumber . "-code.png");
         }
-				
-		$adminhistory = new AdminHistory; 
-		$adminhistory->admin_id=Auth::guard("admins")->user()->id; 
-		$adminhistory->entree=date('Y-m-d H:i:s'); 
-		$adminhistory->description="Delete Barcodes"; 
-		$adminhistory->save(); 
+
+        $adminhistory = new AdminHistory;
+        $adminhistory->admin_id = Auth::guard("admins")->user()->id;
+        $adminhistory->entree = date('Y-m-d H:i:s');
+        $adminhistory->description = "Delete Barcodes";
+        $adminhistory->save();
     }
-
-
-
 }

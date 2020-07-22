@@ -77,7 +77,7 @@ class studentsController extends Controller
 			12 => "ديسمبر",
 		);
 		//	$studentsData = Student::get();
-		//$studentsData = Student::whereIn('id', User::where('blocked', 0)->pluck('id'))->get();
+		
 		$studentsData = Student::NotBlocked()->get();
 
 		$countries = Country::get();
