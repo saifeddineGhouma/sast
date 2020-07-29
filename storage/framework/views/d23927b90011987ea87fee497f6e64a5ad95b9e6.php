@@ -132,6 +132,7 @@
 							<input type="hidden" id="countpro" value="<?php echo e($countCourses); ?>"/>
 							<input type="hidden" id="sort_order" value=""/>
 							<div id="coruses-container" class="row justify-content-around content_info">
+								
 								<?php echo $__env->make('front.courses._courses2',array("courseTypes"=>$courseTypes), array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 							</div>
 							<div class="pagination-area ">

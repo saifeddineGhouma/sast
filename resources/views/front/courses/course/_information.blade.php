@@ -48,6 +48,7 @@ if(!is_null($course->ratings()->where("approved",1))){
                         <i class="fa fa-clock-o" aria-hidden="true"></i>
                         <p>@lang('navbar.dure') :</p>
                         <span>{{ $course->period }}</span>
+                       
                     </div>
 
 

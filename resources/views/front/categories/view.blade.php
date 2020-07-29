@@ -136,6 +136,7 @@
 							<input type="hidden" id="countpro" value="{{$countCourses}}"/>
 							<input type="hidden" id="sort_order" value=""/>
 							<div id="coruses-container" class="row justify-content-around content_info">
+								
 								@include('front.courses._courses2',array("courseTypes"=>$courseTypes))
 							</div>
 							<div class="pagination-area ">

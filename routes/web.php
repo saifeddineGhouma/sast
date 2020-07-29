@@ -12,7 +12,10 @@
 */
 
 /*********************************** Admin Routes **************************************************/
+Route::get('/test',function(){
+    return json_decode(App\Student::paginate(10)) ;
 
+});
 Route::get('/admin/login', 'Admin\Auth\LoginController@getLogin')->name('admin.login');
 Route::post('/admin/login', 'Admin\Auth\LoginController@postLogin');
 Route::get('admin/logout', 'Admin\Auth\LoginController@logout');
@@ -106,6 +109,7 @@ Route::group([
 
     Route::get('/students', 'studentsController@getIndex');
     Route::get('/students/searchresults', 'studentsController@getSearchresults');
+    
     Route::get('/students/create', 'studentsController@getCreate');
     Route::post('/students/create', 'studentsController@postCreate');
     Route::get('/students/edit/{id}', 'studentsController@getEdit');
@@ -584,6 +588,8 @@ Route::group([
     Route::post('courses/submit-quiz/{studentQuiz_id}', 'CoursesController@postSubmitQuiz');
     Route::get('courses/studies', 'CoursesController@getStudies');
     Route::get('courses/{coursetype_id}', 'CoursesController@getView');
+    /***study case  */
+    Route::post('courses/submit-study-case', 'CoursesController@postStudyCase')->name('post.study.case');
 
     Route::get('publication/{type}', 'NewsController@getIndex');
     Route::get('publication/{type}/{slug}', 'NewsController@getView');

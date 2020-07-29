@@ -18,9 +18,12 @@ if(!is_null($course->ratings()->where("approved",1))){
 
 $variationCount = $courseType->couseType_variations()->count();
 $first_Variation = $courseType->couseType_variations()->orderBy("price","asc")->first();
+//dd($courseType->couseType_variations()->orderBy("price","desc")->first()->teacher->user->full_name_ar);
+
 $user=null;
 if(!empty($first_Variation)){
     $user = $first_Variation->teacher->user;
+   
 }
 $card = "one";
 switch ($loop->index%8){
@@ -51,11 +54,11 @@ switch ($loop->index%8){
 @if(!empty($first_Variation))
 
 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 col-margin zoom">
-        
+ 
  <div class="card  card_style_{{ $card }}">
             <a href="{{ url(App('urlLang').'courses/'.$courseType->id) }}"><img class="card-img-top" src="{{asset('uploads/kcfinder/upload/image/'.$course->image)}}" alt="{{ $course_trans->name }}"></a>
              @if($variationCount>1)
-                            <sup>تبدأ من</sup>
+                            <sup>تبدأ من </sup>
                         @endif
                         <?php
                             $setting = App('setting');
@@ -82,33 +85,74 @@ switch ($loop->index%8){
                         @endif
                   
             <span class="badge badge-pill badge-warning2">{{ trans('home.'.$courseType->type) }}</span>
-            <div class="card-body ">
+ <div class="card-body ">
                  <a href="{{ url(App('urlLang').'courses/'.$courseType->id) }}">
-                <section class="rate rtgcrc">
+
+               
+                
+ 
+                {{--  <section class=" col-md-4 rate rtgcrc">
                     {!! $course->rating(($countRatings!=0)?$sumRatings/$countRatings:0) !!}
+                
+                </section>  --}}
+@foreach ($courseType->couseType_variations()->orderBy("price","desc")->get() as $key => $cousTypeVariation) 
 
-                </section>
+@php
 
-                @if(!empty($user))
-                    <div class="circle_profile">
-                        <img src="{{ asset("uploads/kcfinder/upload/image/users/".$user->image) }}" />
-                    </div>
+switch ($courseType->couseType_variations()->orderBy("price","desc")->count()) {
+    case 1:
+        $nbrCoach=12;
+        break;
+    case 2:
+      $nbrCoach=6;
+        break;
+    case 3:
+    $nbrCoach=4;
+        break;
+}
+  $teacher= $cousTypeVariation->teacher->user ;
+@endphp
+  <div class="col-md-{{$nbrCoach}}">
+    @if(!empty($user))
+    <div class="circle_profile" >
+{{--       <img src="{{ asset("uploads/kcfinder/upload/image/users/".$user->image) }}" />
+ --}}      <img src="{{ asset("uploads/kcfinder/upload/image/users/".$teacher->image) }}" />
+      
+  </div>
 
-                    <h5 class="card-title">
-                            @if(false && $variationCount>1)
-                            {{ trans('home.plus_que_coach') }} 
-                            @else
-                            {{trans('home.coach')}} /
-                                @if(Session::get('locale') == "ar")
-                                    {{ $user->full_name_ar }}
-                                @else
-                                    {{ $user->full_name_en }}
-                                @endif
-                            @endif
-                      </h5>
-                @endif
-                <p class="card-text"><a href="{{ url(App('urlLang').'courses/'.$courseType->id) }}">{{ $course_trans->name }}</a></p>
 
+  <h5 class="card-title">
+          @if(false && $variationCount>1)
+          {{ trans('home.plus_que_coach') }} 
+          @else
+          {{trans('home.coach')}} /
+              @if(Session::get('locale') == "ar")
+                  {{-- {{ $user->full_name_ar }} --}} {{ $teacher->full_name_ar }} {{ trans('home.plus_que_coach') }} 
+              @else
+                  {{-- {{ $user->full_name_en }} --}}  {{ $teacher->full_name_en }}
+              @endif
+          @endif
+    </h5>
+
+    @endif
+</div>
+@endforeach
+
+<section class="col-md-4 col-md-offset-4 rate rtgcrc">
+    {!! $course->rating(($countRatings!=0)?$sumRatings/$countRatings:0) !!}
+
+</section>
+
+
+<div class="col-md-12">
+    <p class="card-text" ><a href="{{ url(App('urlLang').'courses/'.$courseType->id) }}">{{ $course_trans->name }}</a></p>
+
+</div>
+
+                
+                
+{{--                 <p class="card-text"><a href="{{ url(App('urlLang').'courses/'.$courseType->id) }}">{{ $course_trans->name }}</a></p>
+ --}}
                 <div class="more_info">
                     @if($courseType->type=="presence")
                         @if($variationCount<=1)
@@ -133,6 +177,7 @@ switch ($loop->index%8){
                                     </div>
                                     <div class="col">
                                         <i class="fa fa-map-marker-alt"></i>
+                                        
                                         @if(!empty($couseType_variation1->government))
                                             <p>{{ $couseType_variation1->government->government_trans(session()->get('locale'))->name or $couseType_variation1->government->government_trans("en")->name }}</p>
                                         @endif
@@ -150,6 +195,8 @@ switch ($loop->index%8){
                     </div>
 
                 </div>
+
+                
             </a>
             </div>
         </div>

@@ -165,7 +165,7 @@ class adminsController extends Controller
 
 		$admin->active = 0;
 		$admin->save();
-	//	dd("Admin name : " . '' . Auth::guard("admins")->user()->name);
+	    //	dd("Admin name : " . '' . Auth::guard("admins")->user()->name);
 
 		//$admin->delete();
 

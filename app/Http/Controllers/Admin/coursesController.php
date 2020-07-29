@@ -53,6 +53,7 @@ class coursesController extends Controller
     }
     
     public function index(Request $request){
+        
         $courses = Course::search($request)->get();
         $categories = Category::get();
         foreach ($courses as $key=> $course) {
@@ -192,6 +193,8 @@ class coursesController extends Controller
                 $course->desciption_exam = $request->desciption_exam;
                 $course->description_exam_video = $request->description_exam_video;
                 $course->description_stage = $request->description_stage;
+
+                $course->description_study_party = $request->description_study_party;
 
                 $course->save();
 
@@ -998,7 +1001,7 @@ class coursesController extends Controller
         $request->session()->flash('alert-success', 'Users has been Imported successfully...');
         return redirect()->back();
     }
-
+   
 	public function script(Request $request){
 		$course_ids = array(1 => 15, 2 => 265, 3 => 267, 4 => 272, 5 => 277, 6 => 283, 7 => 284, 7 => 288, 7 => 293, 7 => 297, 7 => 300, 7 => 302, 7 => 303, 7 => 324);
 		

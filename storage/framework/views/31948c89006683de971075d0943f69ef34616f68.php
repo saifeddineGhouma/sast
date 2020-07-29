@@ -49,6 +49,7 @@ if(!is_null($course->ratings()->where("approved",1))){
                         <i class="fa fa-clock-o" aria-hidden="true"></i>
                         <p><?php echo app('translator')->getFromJson('navbar.dure'); ?> :</p>
                         <span><?php echo e($course->period); ?></span>
+                       
                     </div>
 
 

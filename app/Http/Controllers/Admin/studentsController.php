@@ -52,8 +52,9 @@ class studentsController extends Controller
 			$created_at =  date("y-m-d", strtotime($created_at));
 			$students = $students->where(DB::raw("DATE(created_at)"), $created_at);
 		}
-		$students = $students->get(["students.*"]);
-
+		//$students = $students->get(["students.*"]);
+		$students = $students->latest()->paginate(1000,["students.*"]);
+	
 		return view('admin.students._search_results',	array(
 			'students' => $students
 		));

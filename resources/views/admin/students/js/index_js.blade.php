@@ -98,10 +98,11 @@ function blockedRecord(e) {
 /***********end blocked *************/
 
 function formFilter(e){
+	
 	e.preventDefault();
 	var data = $('#search_form').serializeArray();
     
-    
+  
 	$.ajax({
 		url: '{{ url('/admin/students/searchresults/') }}' ,
 		type: "GET",
@@ -117,7 +118,9 @@ function formFilter(e){
 
 			/*********end blocked*******/
 			
-			$('#table1').DataTable(options);
+			$('#table1').DataTable({ 
+				
+				options});
 			$(".livicon").addLivicon();
 		},
 		error: function(error){

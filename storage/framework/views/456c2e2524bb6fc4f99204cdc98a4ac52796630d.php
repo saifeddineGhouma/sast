@@ -3,6 +3,7 @@
         <p>الامتحانات</p>
         <?php echo $course->description_all_exam; ?>
 
+     
     </div>
     <div id="accordion">
         <div class="card curriculum_exam_card card_deactive">
@@ -15,6 +16,7 @@
             </div>
 
             <div>
+                
 
                 <div class="card-body">
                     <h3 class="form-section">الكويزات</h3> 
@@ -235,6 +237,7 @@
                          </div>
                     </form>
                     
+                    
                     <?php else: ?>
                     <?php echo $messageValid; ?>
 
@@ -252,7 +255,7 @@
                     <?php endif; ?>
                         
                 
-
+              
                         <h3 class="form-section">إمتحانات الفيديو</h3>
                         <div class="content_header_one">
                         <?php echo $course->description_exam_video; ?>
@@ -266,8 +269,83 @@
                             <p>لا يوجد امتحانات</p>
                         <?php endif; ?> 
                     <?php else: ?>                
-                   
+                   <!---start study party--->
+                   <hr/>
+                    <h3 class="form-section" > : متطلبات الدورة</h3>
+                    <div class="content_header_one">
+                    <?php echo $course->description_study_party; ?>
 
+                      <?php if($passed>0): ?>
+                     <p style="p color: rgb(3, 227, 172);font-size: 20px;float:left">لقد اجتزت الاختبار</p>
+                     <?php else: ?> 
+
+                     <a  id="start" class="ui-btn ui-shadow ui-corner-all ui-icon-plus ui-btn-icon-notext ui-btn-inline" style="cursor: pointer; color: rgb(3, 227, 172);font-size: 20px;float:left">ابدء</a>
+                  
+                  
+                    
+                  
+                  
+                     <?php endif; ?>
+
+                     <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+                      <script type="text/javascript">
+                      $( document ).ready( function() {
+    
+                            $('#start').click(function(){
+                            var link = $(this);
+                            $('#study_case').slideToggle('slow', function() {
+                                if ($(this).is(':visible')) {
+                                    link.text('غلق'); 
+                                    link.css('color','red')
+                       
+                                } else {
+                                    link.text('ابدء');     
+                                    $('#btCategoriaA').addClass('btn-success');
+                                    link.css('color','green')
+          
+                                }        
+                            });       
+                          });
+
+
+
+                        });
+
+                      </script>
+                      <!---form study case --->
+                            <div id="study_case" style="display:none">
+                                <h5>الموضوع  :  <?php echo e($sujet->description); ?> </h5>
+                                <form action="<?php echo e(route('post.study.case')); ?>" method="post">
+                                    <?php echo e(csrf_field()); ?>
+
+
+
+                                    <input type="hidden" name="sujets_id" value="<?php echo e($sujet->id); ?>">
+                                    <input type="hidden" name="courses_id" value="<?php echo e($course->id); ?>">
+                                    
+                                    <div class="custom-file">
+                                        <input type="file" name="document" class="custom-file-input" id="customFile">
+                                        <label class="custom-file-label" for="customFile"></label>
+                                    </div>
+                                    <div class="form-group">
+                                        <textarea class="form-control" name="user_message" rows="5" id="comment"></textarea>
+                                    </div>
+
+
+                                    
+
+
+                                    <button class="btn btn-success btn-block" type="submit">Save </button>
+                                </form>                           
+                                
+                            </div>
+
+                      <!------>
+                     
+                  
+                    </div>
+                   
+                    <!---end study party---->
 
                     <h3 class="form-section">إمتحانات الفيديو</h3>
                     <div class="content_header_one">
@@ -283,7 +361,7 @@
                     <?php endif; ?> 
 
 
-
+      
                     <?php if(in_array($courseType->id, [292, 298])): ?> 
 
                  
@@ -408,6 +486,7 @@
                                
                         </div>
                     </div>
+
                     <div class="row">
                         <div class="col-1 curriculum_exam_type">
                             
@@ -440,6 +519,7 @@
                 <?php endif; ?>
                 <?php endif; ?>
                     <?php if(in_array($courseType->id, [54, 328])): ?>
+
                     <?php else: ?>
 
                     <h3 class="form-section">الإمتحانات النهائية</h3>
@@ -464,6 +544,7 @@
                         <?php endif; ?>
                     
                     <?php else: ?>
+
                         <?php if($exams->count()>0): ?>
                             <?php $__currentLoopData = $exams; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $exam): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
@@ -476,9 +557,12 @@
                     <?php endif; ?>
                    <?php endif; ?>
                    
+                   <!---5eme parti of certif--->
+                   
+                   
+                  <!------end----->
+                    
                 <?php endif; ?>
-
-
                 </div> 
 
             </div>

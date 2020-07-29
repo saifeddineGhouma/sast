@@ -20,7 +20,8 @@
                                 ->where('coursetype_variations.date_to', '>=', $now)->get();
                     ?>
                     @foreach($courseType_variations as $courseTypeVariation)
-                        <p class="teachernm">@lang('navbar.coach')  : <span>  {{ $courseTypeVariation->teacher->user->{'full_name_'.session()->get('locale')} }}</span>
+                        <p class="teachernm">@lang('navbar.coach')  : <span> 
+                             {{ $courseTypeVariation->teacher->user->{'full_name_'.session()->get('locale')} }}</span>
                        
                             
                         @if(!empty($courseTypeVariation->government))
@@ -261,6 +262,7 @@
 
 
                     @else
+                    <!----------if course  paid ------>
                     <button class="btn btn-disabled btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" disabled="disabled"><span style="margin-right: 10px;">{{ floor($first_Variation->price+$vat) }}$</span></button>
                     @endif
                     @endif
@@ -455,7 +457,7 @@
                                                                 @else    
                                                                     {{ $stdnum }}
                                                                 @endif --}}
-                                                                {{ floor($courseTypeVariation->price + App('setting')->vat*$courseTypeVariation->price/100) }}$
+                                                                {{ floor($courseTypeVariation->price+App('setting')->vat*$courseTypeVariation->price/100) }}$
 
                                                             @endif
                                                         </span> 

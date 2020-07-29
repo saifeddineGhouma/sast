@@ -21,7 +21,8 @@
                                 ->where('coursetype_variations.date_to', '>=', $now)->get();
                     ?>
                     <?php $__currentLoopData = $courseType_variations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $courseTypeVariation): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <p class="teachernm"><?php echo app('translator')->getFromJson('navbar.coach'); ?>  : <span>  <?php echo e($courseTypeVariation->teacher->user->{'full_name_'.session()->get('locale')}); ?></span>
+                        <p class="teachernm"><?php echo app('translator')->getFromJson('navbar.coach'); ?>  : <span> 
+                             <?php echo e($courseTypeVariation->teacher->user->{'full_name_'.session()->get('locale')}); ?></span>
                        
                             
                         <?php if(!empty($courseTypeVariation->government)): ?>
@@ -235,6 +236,7 @@
 
 
                     <?php else: ?>
+                    <!----------if course  paid ------>
                     <button class="btn btn-disabled btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" disabled="disabled"><span style="margin-right: 10px;"><?php echo e(floor($first_Variation->price+$vat)); ?>$</span></button>
                     <?php endif; ?>
                     <?php endif; ?>
@@ -413,7 +415,7 @@
                                                             <?php else: ?>
                                                              
                                                                 
-                                                                <?php echo e(floor($courseTypeVariation->price + App('setting')->vat*$courseTypeVariation->price/100)); ?>$
+                                                                <?php echo e(floor($courseTypeVariation->price+App('setting')->vat*$courseTypeVariation->price/100)); ?>$
 
                                                             <?php endif; ?>
                                                         </span> 

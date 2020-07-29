@@ -40,6 +40,7 @@ class SiteController extends Controller
      */
     public function getIndex(Request $request)
     {
+      
 
 
         $setting = Setting::find(1);

@@ -11,6 +11,7 @@ use App\Student;
 use App\User;
 use App\Log;
 use App\AdminHistory;
+use Illuminate\Support\Facades\Redirect ;
 use DB;
 use Illuminate\Support\Facades\Session;
 
@@ -62,9 +63,10 @@ class LoginController extends Controller
 			if (Auth::guard("admins")->user()->active == 0) {
 
 				Auth::guard('admins')->logout();
-				Session::flash('message', "don't have an account");
+				return Redirect::back()->withErrors("you're blocked");
+				/*Session::flash('message', "don't have an account");
 				Session::flash('alert-class', 'alert-danger');
-				return redirect('admin/login');
+				return redirect('admin/login');*/
 			}
 			$adminhistory = new AdminHistory;
 			$adminhistory->admin_id = Auth::guard("admins")->user()->id;

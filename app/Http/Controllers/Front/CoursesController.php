@@ -31,6 +31,8 @@ use App\Notifications\UserReview;
 use App\Notifications\ExamFinished;
 use Notification;
 use App\Log;
+use App\Sujet;
+use App\SujetCourse;
 
 use App\Notifications\UserQuiz;
 
@@ -59,7 +61,16 @@ class CoursesController extends Controller
 
     public function getView($courseType_id)
     {
+
+
         $courseType = CourseType::findOrFail($courseType_id);
+
+        $sujetsUse = SujetCourse::where('courses_id', $courseType->course->id)->pluck('sujets_id');
+        $sujet = Sujet::whereNotIn('id', $sujetsUse)->orderByRaw("RAND()")->first();
+
+        $student = Auth::user()->student;
+
+        $passed = SujetCourse::where('courses_id', $courseType->course->id)->where('students_id', $student->id)->count();
 
         $topCourseTypes = CourseType::join("courses", "courses.id", "=", "course_types.course_id")
             ->join("order_products", "order_products.course_id", "=", "courses.id")
@@ -121,7 +132,8 @@ class CoursesController extends Controller
             "course" => $courseType->course, "courseQuestions" => $courseQuestions,
             "quizzes" => $quizzes, "exams" => $exams, "videoExams" => $videoExams,
             "user" => $user, "isRegistered" => $isRegistered, "comment" => $comment, "quizzesTest" => $quizzesTest,
-            "examsTest" => $examsTest, "quizzesTestFr" => $quizzesTestFr
+            "examsTest" => $examsTest, "quizzesTestFr" => $quizzesTestFr,
+            "sujet" => $sujet, "passed" => $passed
         ));
     }
 
@@ -261,6 +273,31 @@ class CoursesController extends Controller
         abort(404);
     }
 
+    public function postStudyCase(Request $request)
+    {
+        $this->validate($request, [
+            'document' => 'required'
+        ]);
+        $student = Auth::user()->student;
+        if ($student->id != null) {
+            $sujetCourse = new SujetCourse();
+            $sujetCourse->sujets_id = $request->sujets_id;
+            $sujetCourse->students_id = $student->id;
+            $sujetCourse->courses_id = $request->courses_id;
+            $sujetCourse->user_message = $request->user_message;
+
+            $sujetCourse->save();
+
+            $user = Auth::user();
+            $admins = \App\Admin::get();
+            //  Notification::send($admins, new ExamFinished($user->username, $sujetCourse->id, "study case", $sujetCourse->sujet->description));
+
+            Session::flash('alert-success', 'تم إنشاء الإختبار بنجاح...');
+            return redirect(App('urlLang') . 'account');
+        } else {
+            abort(404);
+        }
+    }
     public function postSubmitQuiz($studentQuiz_id, Request $request)
     {
         $data = array();

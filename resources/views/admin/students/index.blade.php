@@ -110,7 +110,9 @@ students
 	                </div>
 	                <div id="reloaddiv">
 	                    <div id="studentsChildList"></div>
-                	</div>
+					</div>
+					{{-- @include('admin.students.get_all') --}}
+					
 	            </div>
 	         </div>
 	    </div>

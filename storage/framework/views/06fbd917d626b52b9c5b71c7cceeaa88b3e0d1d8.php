@@ -18,9 +18,12 @@ if(!is_null($course->ratings()->where("approved",1))){
 
 $variationCount = $courseType->couseType_variations()->count();
 $first_Variation = $courseType->couseType_variations()->orderBy("price","asc")->first();
+//dd($courseType->couseType_variations()->orderBy("price","desc")->first()->teacher->user->full_name_ar);
+
 $user=null;
 if(!empty($first_Variation)){
     $user = $first_Variation->teacher->user;
+   
 }
 $card = "one";
 switch ($loop->index%8){
@@ -51,11 +54,11 @@ switch ($loop->index%8){
 <?php if(!empty($first_Variation)): ?>
 
 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 col-margin zoom">
-        
+ 
  <div class="card  card_style_<?php echo e($card); ?>">
             <a href="<?php echo e(url(App('urlLang').'courses/'.$courseType->id)); ?>"><img class="card-img-top" src="<?php echo e(asset('uploads/kcfinder/upload/image/'.$course->image)); ?>" alt="<?php echo e($course_trans->name); ?>"></a>
              <?php if($variationCount>1): ?>
-                            <sup>تبدأ من</sup>
+                            <sup>تبدأ من </sup>
                         <?php endif; ?>
                         <?php
                             $setting = App('setting');
@@ -82,35 +85,70 @@ switch ($loop->index%8){
                         <?php endif; ?>
                   
             <span class="badge badge-pill badge-warning2"><?php echo e(trans('home.'.$courseType->type)); ?></span>
-            <div class="card-body ">
+ <div class="card-body ">
                  <a href="<?php echo e(url(App('urlLang').'courses/'.$courseType->id)); ?>">
-                <section class="rate rtgcrc">
-                    <?php echo $course->rating(($countRatings!=0)?$sumRatings/$countRatings:0); ?>
+
+               
+                
+ 
+                
+<?php $__currentLoopData = $courseType->couseType_variations()->orderBy("price","desc")->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $cousTypeVariation): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?> 
+
+<?php
+
+switch ($courseType->couseType_variations()->orderBy("price","desc")->count()) {
+    case 1:
+        $nbrCoach=12;
+        break;
+    case 2:
+      $nbrCoach=6;
+        break;
+    case 3:
+    $nbrCoach=4;
+        break;
+}
+  $teacher= $cousTypeVariation->teacher->user ;
+?>
+  <div class="col-md-<?php echo e($nbrCoach); ?>">
+    <?php if(!empty($user)): ?>
+    <div class="circle_profile" >
+      <img src="<?php echo e(asset("uploads/kcfinder/upload/image/users/".$teacher->image)); ?>" />
+      
+  </div>
 
 
-                </section>
+  <h5 class="card-title">
+          <?php if(false && $variationCount>1): ?>
+          <?php echo e(trans('home.plus_que_coach')); ?> 
+          <?php else: ?>
+          <?php echo e(trans('home.coach')); ?> /
+              <?php if(Session::get('locale') == "ar"): ?>
+                   <?php echo e($teacher->full_name_ar); ?> <?php echo e(trans('home.plus_que_coach')); ?> 
+              <?php else: ?>
+                    <?php echo e($teacher->full_name_en); ?>
 
-                <?php if(!empty($user)): ?>
-                    <div class="circle_profile">
-                        <img src="<?php echo e(asset("uploads/kcfinder/upload/image/users/".$user->image)); ?>" />
-                    </div>
+              <?php endif; ?>
+          <?php endif; ?>
+    </h5>
 
-                    <h5 class="card-title">
-                            <?php if(false && $variationCount>1): ?>
-                            <?php echo e(trans('home.plus_que_coach')); ?> 
-                            <?php else: ?>
-                            <?php echo e(trans('home.coach')); ?> /
-                                <?php if(Session::get('locale') == "ar"): ?>
-                                    <?php echo e($user->full_name_ar); ?>
+    <?php endif; ?>
+</div>
+<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-                                <?php else: ?>
-                                    <?php echo e($user->full_name_en); ?>
+<section class="col-md-4 col-md-offset-4 rate rtgcrc">
+    <?php echo $course->rating(($countRatings!=0)?$sumRatings/$countRatings:0); ?>
 
-                                <?php endif; ?>
-                            <?php endif; ?>
-                      </h5>
-                <?php endif; ?>
-                <p class="card-text"><a href="<?php echo e(url(App('urlLang').'courses/'.$courseType->id)); ?>"><?php echo e($course_trans->name); ?></a></p>
+
+</section>
+
+
+<div class="col-md-12">
+    <p class="card-text" ><a href="<?php echo e(url(App('urlLang').'courses/'.$courseType->id)); ?>"><?php echo e($course_trans->name); ?></a></p>
+
+</div>
+
+                
+                
 
                 <div class="more_info">
                     <?php if($courseType->type=="presence"): ?>
@@ -136,6 +174,7 @@ switch ($loop->index%8){
                                     </div>
                                     <div class="col">
                                         <i class="fa fa-map-marker-alt"></i>
+                                        
                                         <?php if(!empty($couseType_variation1->government)): ?>
                                             <p><?php echo e(isset($couseType_variation1->government->government_trans(session()->get('locale'))->name) ? $couseType_variation1->government->government_trans(session()->get('locale'))->name : $couseType_variation1->government->government_trans("en")->name); ?></p>
                                         <?php endif; ?>
@@ -153,6 +192,8 @@ switch ($loop->index%8){
                     </div>
 
                 </div>
+
+                
             </a>
             </div>
         </div>
