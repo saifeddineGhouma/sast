@@ -94,18 +94,15 @@
 								<textarea cols="60"  name="description_stage" id="description_stage" class="ckeditor">{{$course->description_stage}} </textarea>
 							</div>
 						</div>
-
-						<!-----start study party----->
-
+						     <!---start study case description--->
 						<div class="form-group">
-							<label class="col-md-2 control-label">Description Study Case </label>
+							<label class="col-md-2 control-label">Description Study case</label>
 							<div class="col-md-10">
-								<textarea cols="60"  name="description_study_party" id="description_study_party" class="ckeditor">{{$course->description_study_party}} </textarea>
+								<textarea cols="60"  name="description_study_case" id="description_study_case" class="ckeditor">{{$course->description_study_case}} </textarea>
 							</div>
 						</div>
+								<!---end --->
 
-						<!------end --------->
-					
 
 						<ul class="nav nav-tabs">
 							<li class="active">

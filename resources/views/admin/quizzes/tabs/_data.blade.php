@@ -32,5 +32,16 @@
 		</div>
 	</div>
 
+	<div class="form-group">
+		<label class="col-md-2 control-label">language</label>
+		<div class="col-md-10">
+			<select name="lang" class="select2">
+				<option value=""></option>
+				<option value="Ar" {{$quiz->lang == 'Ar' ? 'selected' : ''}}>Arabic</option>
+				<option value="Fr" {{$quiz->lang == 'Fr' ? 'selected' : ''}}>French</option>
+			</select>
+		</div>
+	</div>
+
 
 </div>

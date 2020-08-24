@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front\Auth;
 
 use App\User;
+use App\Student;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -98,10 +99,16 @@ class RegisterController extends Controller
             $subscriber->user_id = $user->id;
             $subscriber->save();
         }
-
+      
+        $student = new  Student();
+        if(!empty($student)){
+            $student->id = $user->id;
+            $student->save();
+        }
+       
         $admins = \App\Admin::get();
         Notification::send($admins, new UserRegistered($user->id,$user->username));
-
+        
         $status = \App\Setting::sendSms($user);
         $status = $this->sendEmail($user);
         $user->notify(new UserConfirm($user));

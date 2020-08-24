@@ -4,10 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class SujetCourse extends Model
+class StudentStudyCase extends Model
 {
    
-    protected $table = "sujets_courses";
+    protected $table = "students_study_case";
 
     /**
      * The attributes that are mass assignable.
@@ -54,10 +54,13 @@ class SujetCourse extends Model
         $query = self::filter($request);
         return $query;
     }
-
+  public function user()
+    {
+        return $this->belongsTo("App\User");
+    }
     public function student()
     {
-        return $this->belongsTo("App\Student");
+        return $this->belongsTo("App\Student",'students_id');
     }
 
     public function Sujet()

@@ -36,46 +36,32 @@
 												{{ session('status') }}
 											</div>
 										@endif
-
-
-										@if(Session::has('message'))
-<p class="alert {{ Session::get('alert-class', 'alert-info') }}">{{ Session::get('message') }}</p>
-@endif
-
-@if ($errors->any())
-@foreach ($errors->all() as $error)
-	<div class="alert alert-danger">{{$error}}</div>
-@endforeach
-@endif
-
-
-
 									<p>
 	                                    <label style="margin-bottom:0px;" for="login" class="uname"> <i class="livicon" data-name="user" data-size="16" data-loop="true" data-c="#3c8dbc" data-hc="#3c8dbc"></i>
 	                                        E- mail or Username	                                      
 	                                    </label>
 	                                    <input id="username" name="login" value="{{ old('login') }}" required type="text" placeholder="username or e-mail" />
-	                                   {{--   @if ($errors->has('login'))
+	                                     @if ($errors->has('login'))
 		                                    <span class="help-block">
 		                                        <strong>{{ $errors->first('login') }}</strong>
 		                                    </span>
-		                                @endif --}}
-		                                {{--  @if ($errors->has('username'))
+		                                @endif
+		                                 @if ($errors->has('username'))
 		                                    <span class="help-block">
 		                                        <strong>{{ $errors->first('username') }}</strong>
 		                                    </span>
-		                                @endif --}}
+		                                @endif
 	                                </p>
 	                                <p>
 	                                    <label style="margin-bottom:0px;" for="password" class="youpasswd"> <i class="livicon" data-name="key" data-size="16" data-loop="true" data-c="#3c8dbc" data-hc="#3c8dbc"></i>
 	                                        Password
 	                                    </label>
 	                                    <input id="password" name="password" required type="password" placeholder="eg. X8df!90EO" />
-	                                    {{--  @if ($errors->has('password'))
+	                                     @if ($errors->has('password'))
 		                                    <span class="help-block">
 		                                        <strong>{{ $errors->first('password') }}</strong>
 		                                    </span>
-		                                @endif --}}
+		                                @endif
 	                                </p>
 	                                <p class="keeplogin">
 	                                    <input type="checkbox" name="remember" id="loginkeeping" value="loginkeeping" />

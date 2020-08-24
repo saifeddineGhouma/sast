@@ -12,7 +12,7 @@ use App\Http\Controllers\Controller;
 use App\User;
 use App\Country;
 use App\Government;
-
+use App\Student;
 use File;
 use DB;
 
@@ -35,7 +35,20 @@ class usersController extends Controller
             "users" => $users
         ));
     }
-
+    
+     public function addStudent($id){
+    	
+        try {
+            $student = new  Student();
+            if(!empty($student)){
+                $student->id = $id;
+                $student->save();
+            }
+        } catch (ModelNotFoundException $exception) {
+            return back()->withError($exception->getMessage())->withInput();
+        }
+        return back();
+    }
 
     public function getSearchresults(Request $request)
     {

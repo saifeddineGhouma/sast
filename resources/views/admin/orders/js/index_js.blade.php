@@ -87,6 +87,7 @@ function formFilter(e){
 $("#search_form").on("submit",formFilter);
 //$("#search_form").submit();
 
+
 var options = {
     buttons: [
         { extend: 'print', className: 'btn dark btn-outline' },

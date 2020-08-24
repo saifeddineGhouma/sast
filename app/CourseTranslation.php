@@ -25,10 +25,10 @@ class CourseTranslation extends Model
         'meta_description',
     ];
 
-    public function fillByLang($request,$lang){
+     public function fillByLang($request,$lang){
 
         foreach(self::getFillable() as $property){
-            if($request->has($lang."_".$property))
+           // if($request->has($lang."_".$property))
                 $this->$property = $request->get($lang."_".$property);
         }
         $this->lang = $lang;

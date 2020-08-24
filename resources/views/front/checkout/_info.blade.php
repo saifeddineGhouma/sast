@@ -26,6 +26,7 @@
                 <input type="text" class="form-control" value="{{ $user->username }}" disabled>
             </div>
         </div>
+       
         <div class="col-md-6">
             <div class="form-group">
                 <label class="control-label col-md-3 {{ $pull}} ">{{trans('navbar.sexe')}}   <span>*</span></label>
@@ -61,7 +62,7 @@
                     <option value=""></option>
                     @foreach($countries as $country)
                         <option value="{{$country->id}}" {{ $user->nationality==$country->country_trans("en")->name?"selected":null }} >
-                            {{$country->country_trans(Session()->get('locale'))->name or $country->country_trans("en")->name}}
+                            {{$country->country_trans(Session()->get('locale'))->name or $country->country_trans("en")->name}} 
                         </option>
                     @endforeach
                 </select>
@@ -69,10 +70,6 @@
         </div>
     </div>
 
-
-
-
- 
 
 
 
@@ -89,6 +86,9 @@
                 <input type="text" class="form-control"  dir="ltr" name="mobile" id="mobile"  value="{{ $user->mobile }}" style="direction: ltr !important;text-align: right;">
             </div>
         </div>
+
+      
+
     </div>
 
 

@@ -15,7 +15,7 @@ class Student extends Model
     {
         return $this->hasOne("App\User", "id", "id");
     }
-
+    
     public function order_products()
     {
         return $this->belongsToMany("App\OrderProduct", "orderproducts_students", "student_id", "orderproduct_id");

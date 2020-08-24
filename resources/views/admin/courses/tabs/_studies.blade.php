@@ -4,8 +4,10 @@
         <tr>
           <td>name ar</td>
           <td>name en</td>
+          <td>Lang</td>
           <td>type</td>
 			<td colspan="2">url</td>
+			
           <td></td>
         </tr>
       </thead>
@@ -18,6 +20,15 @@
 				  </td>
 				  <td>
 					   <input type="text" class="form-control" name="study_name_en_{{$courseStudy->id}}" value="{{$courseStudy->name_en}}">
+				  </td>
+				  <td>
+				  	<select class="form-control"name="study_lang_{{$courseStudy->id}}">
+				  		<option>لغات الدراسة</option>
+				  		<option value="Ar" {{ $courseStudy->lang == 'Ar' ? 'selected' : '' }}>عربية</option>
+				  		<option value="Fr" {{ $courseStudy->lang == 'Fr' ? 'selected' : '' }}>فرنسية</option>
+				  	</select>
+				  	
+
 				  </td>
 				  <td>
 					   <div class="radio-list">
@@ -49,6 +60,7 @@
 							<textarea cols="60" id="study_content_{{$courseStudy->id}}" name="study_content_{{$courseStudy->id}}" class="form-control ckeditor">{{$courseStudy->content}} </textarea>
 					  </div>
 		          </td>
+		          <td>Test</td>
 		          {{-- <td>
 					  <input  type="text"  name="study_duration_{{$courseStudy->id}}" class="form-control touchspin_6" value="{{$courseStudy->duration or 0}}">
 		          </td>--}}

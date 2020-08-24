@@ -58,7 +58,7 @@ students
                           <div class="row">
                           	<div class="col-md-4 col-sm-4">
                                 <div class="form-group">
-                                    <label class="control-label bold">Full name En </label>
+                                    <label class="control-label bold">Full name En</label>
                                     <input class="form-control" type="text" name="full_name" />
                                 </div>
                             </div>
@@ -110,9 +110,7 @@ students
 	                </div>
 	                <div id="reloaddiv">
 	                    <div id="studentsChildList"></div>
-					</div>
-					{{-- @include('admin.students.get_all') --}}
-					
+                	</div>
 	            </div>
 	         </div>
 	    </div>

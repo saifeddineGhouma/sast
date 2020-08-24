@@ -1,9 +1,7 @@
-
-
-<table class="table table-striped table-bordered" id="table1" >
+<table class="table table-striped table-bordered" id="table1">
     <thead>
         <tr>
-        	<th>Image </th>   
+        	<th>Image</th>   
             <th>Full Name En </th>
             <th>Email</th>
             <th>Username</th>
@@ -24,7 +22,7 @@
 	        	</td>  
 	     
 	            <td>
-	            	{{ $u->user->full_name_en}} || {{ $u->user->id }}
+	            	{{ $u->user->full_name_en}}
 	            </td>
 	            <td>
 	            	{{ $u->user->email}}
@@ -71,7 +69,3 @@
        @endif
     </tbody>
 </table>
-
-
-  
- 

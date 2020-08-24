@@ -47,7 +47,8 @@
 
                         </div>
                     @endif
-                    <button class="btn button" onclick="js:window.location.href='{{url(App('urlLang'))}}'">{{trans('home.continue_shopping')}}</button>
+                    <!--button class="btn button" onclick="js:window.location.href='{{url(App('urlLang'))}}'">{{trans('home.continue_shopping')}}</button-->
+					<button class="btn button" onclick="js:window.location.href='{{ url(App('urlLang').'account') }}'">{{trans('home.continue_shopping')}}</button>
                 </div>
             </div>
         </div>

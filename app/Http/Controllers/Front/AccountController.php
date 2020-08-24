@@ -20,7 +20,7 @@ use App\Book;
 use App\Ticket;
 use App\Course;
 use App\Log;
-
+use App\UserStudieLang ;
 use App\Notifications\UserInfos;
 use App\Notifications\UserPassword;
 use Notification;
@@ -196,10 +196,18 @@ class AccountController extends Controller
         }
         $admins = \App\Admin::get();
         $user->save();
+
+      
+
+
         $log = new Log();
         $log->user_id = $user->id;
         $log->action = "User updated his infos";
         $log->save();
+
+
+
+
         Notification::send($admins, new UserInfos($user->id, $user->username));
 
         $request->session()->flash('alert-success', trans('home.succes_update_profil_etudiant'));

@@ -140,4 +140,8 @@ class User extends Authenticatable
     {
         return $query->where('blocked', 0);
     }
+    public function lang()
+    {
+        return isset($this->user_lang->lang_stud) ? $this->user_lang->lang_stud : "Ar";
+    }
 }

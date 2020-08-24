@@ -1,7 +1,7 @@
 <?php $dir = session()->get('locale') === "ar" ? "rtl" : "ltr" ?>
 
 <div class="filteration_method_head"  style="direction:<?php echo e($dir); ?>">
-	<p><?php echo e(trans('home.filtre_courses_sidbar')); ?></p> 
+	<p><?php echo e(trans('home.filtre_courses_sidbar')); ?></p>
 </div>
 <div class="filteration_method_content">
 	<div class="row justify-content-between price_rate_filter">

@@ -12,9 +12,8 @@
 */
 
 /*********************************** Admin Routes **************************************************/
-Route::get('/test',function(){
-    return json_decode(App\Student::paginate(10)) ;
-
+Route::get('/test', function () {
+    return json_decode(App\Student::paginate(10));
 });
 Route::get('/admin/login', 'Admin\Auth\LoginController@getLogin')->name('admin.login');
 Route::post('/admin/login', 'Admin\Auth\LoginController@postLogin');
@@ -109,7 +108,7 @@ Route::group([
 
     Route::get('/students', 'studentsController@getIndex');
     Route::get('/students/searchresults', 'studentsController@getSearchresults');
-    
+
     Route::get('/students/create', 'studentsController@getCreate');
     Route::post('/students/create', 'studentsController@postCreate');
     Route::get('/students/edit/{id}', 'studentsController@getEdit');
@@ -273,7 +272,16 @@ Route::group([
     Route::get('students-exams/listing-ajax', 'studentsexamsController@listingAjax');
     Route::post('students-exams/delete/{id}', 'studentsexamsController@delete');
     Route::resource('students-exams', 'studentsexamsController');
+    /****stage and study case *****/
+    Route::get('students-stages','studentsexamsController@indexStageStudycase')->name('students.stage') ;
+     Route::get('students-studycase','studentsexamsController@indexStudycase')->name('students.studycase') ;
 
+     Route::get('students-studycase-edit/{id}','studentsexamsController@editstudycase')->name('students.studycase.edit');
+    /********update*******/
+     Route::get('students-stage-update/{id}','studentsexamsController@EditStatusStage')->name('students.stage.update') ;
+      Route::post('students-studycase-update/{id}','studentsexamsController@EditStatusStudycase')->name('students.studycase.update') ;
+
+     
     Route::get('/testimonials', 'testimonialsController@getIndex');
     Route::get('/testimonials/create', 'testimonialsController@getCreate');
     Route::post('/testimonials/create', 'testimonialsController@postCreate');
@@ -405,6 +413,11 @@ Route::group([
     Route::get('students-exams/listing-ajax', 'studentsexamsController@listingAjax');
     Route::get('/students-certificates', 'studentscertificatesController@index');
 
+
+
+   
+
+
     Route::get('/forum', 'forumController@getIndex');
     Route::get('/forum/searchresults', 'forumController@getSearchresults');
     Route::get('/forum/edit/{id}', 'forumController@getEdit');
@@ -519,7 +532,7 @@ Route::group([
 
     Route::get('download_eval', 'HomeController@downloadEvaluation')->name('downloadEval');
     Route::get('download_eval_arab', 'HomeController@downloadEvaluationArab')->name('downloadEvaluationArab');
-    Route::get('addStudLang/{lang}/{user}', 'StudentStudLangController@addStudLang');
+    Route::get('addStudLang/{lang}/{user}', 'StudentStudLangController@addStudLang')->name('add.student.lang');
 
 
     Route::get('download_stage', 'HomeController@downloadDemandeStage')->name('downloadStage');
@@ -579,6 +592,8 @@ Route::group([
     Route::get('/pages/{slug}', 'SiteController@getPage');
     Route::get('/PDF/{id}/{client}', 'HomeController@getPDF');
 
+
+ /******** */
     Route::get('courses/quiz-attempt', 'CoursesController@quizAttempt');
     Route::get('courses/quiz-result', 'CoursesController@quizResult');
     Route::post('courses/save-course-review/{course_id}', 'CoursesController@postSaveCourseReview');
@@ -590,6 +605,10 @@ Route::group([
     Route::get('courses/{coursetype_id}', 'CoursesController@getView');
     /***study case  */
     Route::post('courses/submit-study-case', 'CoursesController@postStudyCase')->name('post.study.case');
+ /*********submitgetsujet */
+ Route::post('/submitgetsujet', 'CoursesController@submitgetsujet')->name('submit.get.sujet');
+
+ Route::post('/user-add-lang','StudentStudLangController@addStudLangNew')->name('user.add.lang');
 
     Route::get('publication/{type}', 'NewsController@getIndex');
     Route::get('publication/{type}/{slug}', 'NewsController@getView');

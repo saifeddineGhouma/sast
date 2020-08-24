@@ -43,6 +43,7 @@
                         <form  id="info_form" method="post" action="{{ url(App('urlLang').'account/info') }}" enctype="multipart/form-data">
                         {!! csrf_field() !!}
                             @include("front.checkout._info")
+                            
 
                        
                             <input type="submit" class="btn btn-md btn-success svme" value="{{trans('home.save_modif')}}">

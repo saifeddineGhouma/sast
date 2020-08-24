@@ -38,6 +38,7 @@ class ordersController extends Controller
 
 	public function getIndex()
 	{
+		
 		$users = User::orderBy("created_at", "desc")->get();
 		$courses = Course::get();
 		$categoris = Category::all();
@@ -144,7 +145,7 @@ class ordersController extends Controller
 
 		$order = Order::findOrFail($id);
 		$Arabic = new I18N_Arabic('Glyphs');
-		$students = Student::NotBlocked()->get();
+		$students = Student::get();
 
 
 		// foreach (Auth::guard("admins")->user()->unreadnotifications as $notification) {

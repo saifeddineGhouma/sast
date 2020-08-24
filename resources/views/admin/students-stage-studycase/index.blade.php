@@ -1,3 +1,4 @@
+
 @extends('admin/layouts/master')
 
 @section('title')
@@ -15,7 +16,7 @@
 <link href="{{asset('assets/admin/vendors/select2/select2.min.css')}}" type="text/css" rel="stylesheet">
 <link href="{{asset('assets/admin/vendors/select2/select2-bootstrap.min.css')}}" type="text/css" rel="stylesheet">
 @endsection
-                 
+
 @section('content')
 <!-- Content Header (Page header) -->
 <section class="content-header">
@@ -32,7 +33,6 @@
     </ol>
 </section>
 <!--section ends-->
-
 <section class="content">
     <div class="row">
         <div class="col-lg-12">
@@ -59,7 +59,7 @@
 	                </div>
 
 					<div class="well table-toolbar">
-						<form id="search_form" name="search_form" method="get">
+						<form   action="{{route('students.stage')}}" method="get">
 							<div class="row">
 								<div class="col-md-4 col-sm-4">
 									<div class="form-group">
@@ -87,27 +87,18 @@
 								<div class="col-md-4 col-sm-4">
 									<div class="form-group">
 										<label class="control-label bold">Type</label>
-										<select  name="types[]" class="form-control select2" multiple>
-											<option value="quiz">Quizzes</option>
-											<option value="video">Video Exams</option>
-											<option value="exam">Final Exams</option>
-											<option value="stage">Stage</option>
+										<select  name="types" class="form-control" id="stageOrstudycase"  onchange="location = this.value;">
+											<option>selected Type </option>
+											<option value="{{route('students.stage')}}" {{(\Request::route()->getName()=='students.stage')?'selected':''}}>Stage</option>
+											<option value="{{route('students.studycase')}}" {{(\Request::route()->getName()=='students.studycase')?'selected':''}}>Study Case</option>
 										</select>
+
+								      
 									</div>
 								</div>
 							</div>
 							<div class="row">
-								<div class="col-md-4 col-sm-4">
-									<div class="form-group">
-										<label class="control-label bold">Status</label>
-										<select  name="status[]" class="form-control select2" multiple>
-											<option value="pending">Pending</option>
-											<option value="processing">Processing</option>
-											<option value="completed">Completed</option>
-											<option value="not_completed">Not completed</option>
-										</select>
-									</div>
-								</div>
+								
 								<div class="col-md-4 col-sm-4">
 									<div class="form-group">
 										<label class="control-label bold">Date Added</label>
@@ -115,43 +106,176 @@
 									</div>
 								</div>
 								<div class="col-md-4">
-									<button type="submit" id="filterBtn" class="btn green demo-loading-btn col-md-6" style="margin-top: 25px;" data-loading-text="<li class='fa fa-search'></li> Searching...">
-										<li class="fa fa-search"></li> Search
+									<button type="submit" name='search'id="filterBtn" class="btn green demo-loading-btn col-md-6" style="margin-top: 25px;" data-loading-text="<li class='fa fa-search'></li> Searching...">
+										<li class="fa fa-search"></li> Search 
 									</button>
 								</div>
 							</div>
 						</form>
+
 					</div>
+
+
+
 
 					<div class="table-toolbar">
 	                    <div class="row" style="margin-top: 20px;">
 
+
 	                    </div>
 	                </div>
-	                <div id="reloaddiv">
+
+
+	                <div id="reloaddiv" class="block_stage" >
 						<table class="table table-striped table-bordered" id="table1">
 							<thead>
 							<tr>
 								<th>Username</th>
-								<th>Full name</th>
+								<th>Email</th>
 								<th>Course </th>
-								<th>Exam</th>
-								<th>Type</th>
+								<th>Demande de stage</th>
+								<th>Evaluation de stage</th>
 								<th>Status</th>
-								<th> Date added </th>
-								<th class="text-center"> Actions </th>
+								<th class="text-center"> Date added </th>
+								<th > Actions </th>
 							</tr>
 							</thead>
 							<tbody>
+								@foreach($stages as $stage)
+								<tr>
+									<td>{{$stage->user->full_name_ar}}</td>
+									<td>{{$stage->user->email}}</td>
+									<td>{{$stage->course->course_trans('ar')->name}}</td>
+									<td>
+									   @foreach($stage->user->user_stage as $stage_user)
+                                              
+                                               <a href="{{asset('uploads/kcfinder/upload/image/stage/'.$stage_user->demande_stage)}}" target="_blank">
+											
+											 stage   
+
+									        	</a> <br/>
+
+										@endforeach
+									
+										
+
+										</td>
+										<td>
+										
+										
+										 @foreach($stage->user->user_stage as $stage_user)
+                                              
+                                               <a href="{{asset('uploads/kcfinder/upload/image/stage/'.$stage_user->evaluation_stage)}}" target="_blank">
+											
+											 Evalution de stage 
+
+									        	</a> <br/>
+
+										@endforeach
+
+										</td>
+								
+								
+									<td> 
+										@php 
+									
+										if($stage->valider==1)
+										{
+											$badge='success';
+											$status='Valid' ;
+										}elseif($stage->valider==0){
+										    $badge='info';
+										    $status='EnCours';
+
+
+									}else{
+									        $badge='danger';
+										    $status='Invalid';
+
+								}
+										
+										
+
+										@endphp
+										
+											
+										
+										<span class="badge badge-{{$badge}}">{{$status}}</span>
+
+									</td>
+										<td>{{\Carbon\Carbon::parse($stage->created_at)->format('m-d-Y')}}</td>
+									<td>
+								@php 
+									
+										if($stage->valider==1)
+										{
+											$badge='success';
+											$status='Valid' ;
+										}elseif($stage->valider==0){
+										    $badge='info';
+										    $status='EnCours';
+
+
+									}else{
+									        $badge='danger';
+										    $status='Invalid';
+
+								}
+										
+										
+
+										@endphp
+										
+											<form method="GET" action ="{{route('students.stage.update',$stage->id)}}">
+											<select class="form-control" name="valider" >
+												<option class="bg-info" value="0"{{($stage->valider==0)?'selected':''}} >Encours</option>
+												<option class="bg-success" value="1"{{($stage->valider==1)?'selected':''}}>Valid</option>
+												<option class="bg-danger" value="-1"{{($stage->valider==-1)?'selected':''}}>Invalid</option>
+
+											</select>
+											<button type="submit" class="btn btn-secondary" onclick="return confirm('Are you sure?')">save</button>
+										
+									</td>
+
+								</tr>
+
+								@endforeach
+
 
 							</tbody>
 						</table>
+						{{ $stages->links() }}
                 	</div>
+
+
+
+
 	            </div>
 	         </div>
 	    </div>
 	</div>
 </section>
+
+<div class="modal fade" id="modal_stage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Valid stage </h5>
+        <p> vailid = <span class="label_stage"></span></p>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="save_valid">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 @endsection
 @section("footer_scripts")
@@ -168,7 +292,30 @@
 	<script src="{{asset('assets/admin/vendors/bootbox/bootbox.min.js')}}" type="text/javascript"></script>
 	<script src="{{asset('assets/admin/js/pages/components-date-time-pickers.js')}}" type="text/javascript"></script>
 	<script src="{{asset('assets/admin/vendors/select2/select2.min.js')}}" type="text/javascript"></script>
-@include('admin.'.$table_name.'.js.index_js')
 
+
+<script type="text/javascript">
+    $('.valid_stage').on('change', function() {
+    	alert('test')
+        $('#label_stage').html($(".valid_stage option:selected").text());
+        $('#modal_stage').modal('show');
+    });
+
+    $('#save_valid').on('click', function() {
+alert('test')
+        var lang =$('#lang').val() ;
+        url = "{{route('add.student.lang',['lang'=>':lang','user'=>Auth::id()])}}";
+        url = url.replace(':lang', lang);
+ 
+        window.location.href= url ;
+
+
+
+
+       
+
+    });
+
+
+</script>
 @endsection
-

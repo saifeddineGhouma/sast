@@ -23,8 +23,6 @@ class CartController extends Controller
 {
     public function getIndex()
     {
-
-        
         //session()->forget('cart');
         $cart = session()->get('cart');
         //print_r($cart);
@@ -59,12 +57,12 @@ class CartController extends Controller
         $error = 0;
         $message = array();
         $message[1] = "";
-      
+        //$error = $this->hasErrorRequest($request);
+        //dd($request);
         if ($error == 0) {
             if (session()->has("cart")) {
                 $cart = session()->get('cart');
                 //print_r($cart);
-               
 
                 if ($this->hasproduct($cart, $request)) {
                     $this->updateproduct($cart, $request);
@@ -73,7 +71,6 @@ class CartController extends Controller
                 }
                 session()->put('cart', $cart);
             } else {
-              
                 $this->initCart($request);
             }
             /****** add files to cart */
@@ -104,9 +101,9 @@ class CartController extends Controller
 
             $message[1] = "تم تحديث سلة المشتريات بنجاح...";
         } else {
-            
             $message[1] = trans('home.error_update_cart');
         }
+
         Session::flash('alert-success', $message[1]);
         return redirect(App('urlLang') . "cart");
     }
@@ -253,7 +250,6 @@ class CartController extends Controller
 
     public function initCart($request)
     {
-
         $cart = array();
         array_push($cart, $this->newcartpro($request));
         session()->put('cart', $cart);

@@ -8,6 +8,7 @@
 
     <div class="col-6 curriculum_exam_title">
 
+    
 
         <?php if($type!="video"): ?>
 
@@ -55,12 +56,11 @@
 
                 <?php if(Auth::check()): ?>
 
-                    <?php echo e($quiz->students_quizzes()->where("student_id",Auth::user()->id)->count()); ?>
-
+                    <?php echo e($quiz->students_quizzes()->where("student_id",Auth::user()->id)->count()); ?> 
 
                 <?php else: ?>
 
-                    0
+                    0  
 
                 <?php endif; ?> 
 
@@ -179,14 +179,14 @@
                             <?php if($completedcount>0): ?>
 
                                 <?php if(!empty($currentQuiz)): ?>
-
-                                        <button class="startquiz" data-id="<?php echo e($quiz->id); ?>" data-type="<?php echo e($type); ?>"><?php echo app('translator')->getFromJson('navbar.completetest'); ?></button>
+                             
+                                    <button class="startquiz" data-id="<?php echo e($quiz->id); ?>" data-type="<?php echo e($type); ?>"><?php echo app('translator')->getFromJson('navbar.completetest'); ?></button>
 
                                 <?php else: ?>
 
                                     <?php if(!empty($studentQuiz) || $type!="video"): ?>
 
-                                        <?php if($studentQuizTmp->successfull): ?>
+                                        <?php if($studentQuizTmp->successfull && $studentQuizTmp->status=="completed"): ?>
 
                                             <p class="success"><?php echo app('translator')->getFromJson('navbar.succeded'); ?></p>
 
@@ -200,7 +200,7 @@
 
 
 
-                                        <?php if(!($studentQuizTmp->successfull || $type=="video")): ?>
+                                        <?php if(!(($studentQuizTmp->successfull && $studentQuizTmp->status=="completed")|| $type=="video")): ?>
 
                                                 <?php if($type!="video" && $quiz->num_questions==0): ?>
 
@@ -267,9 +267,12 @@
                                     <p><?php echo app('translator')->getFromJson('navbar.noquestionPleaseWait'); ?></p>
 
                                 <?php else: ?>
+                                    <?php if($type=="video" && !$course->isFinishedFinalExam()): ?>
+                                        <p class="failed">للابد من إتمام إمتحان النظري النهائي   </p>
+                                    <?php else: ?>    
+                                        <button class="startquiz" data-id="<?php echo e($quiz->id); ?>" data-type="<?php echo e($type); ?>"><?php echo app('translator')->getFromJson('navbar.starttest'); ?></button>
 
-                                    <button class="startquiz" data-id="<?php echo e($quiz->id); ?>" data-type="<?php echo e($type); ?>"><?php echo app('translator')->getFromJson('navbar.starttest'); ?></button>
-
+                                    <?php endif; ?>
                                 <?php endif; ?>
 
                             <?php endif; ?>

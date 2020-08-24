@@ -31,7 +31,6 @@
 								<i class="fa fa-home" aria-hidden="true"></i>
 								<a href="<?php echo e(url(App('urlLang'))); ?>"><span><?php echo e(trans('home.home')); ?></span></a>
 							</li>
-							
 							<?php $__currentLoopData = $course->categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 								<li class="breadcrumb-item">
 									<a href="<?php echo e(url(App('urlLang').$category->category_trans(session()->get('locale'))->slug)); ?>">
@@ -87,14 +86,15 @@
 <?php if(Session::has('Review_Updated')): ?>
 	<div class="alert alert-success">
 		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-		<?php echo Session::get('Review_Updated'); ?> 
+		<?php echo Session::get('Review_Updated'); ?>
+
 	</div>
 <?php endif; ?>
 <div class="courses_more_info">
 	<div class="container">
 		<div class="row more_info_one justify-content-between tab-content">
 			<div class="tab-pane fade in active show" role="tabpanel" id="information">
-				<?php echo $__env->make("front.courses.course._information", array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>  
+				<?php echo $__env->make("front.courses.course._information", array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 			</div>
 			<div role="tabpanel" class="wide-tb  col-lg-12 tab-pane fade " id="curriculum">
 				<?php echo $__env->make("front.courses.course._studies", array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
@@ -124,7 +124,6 @@
             </div>
             <div class="company_courses ">
                 <div class="row">
-					
                     <?php echo $__env->make("front.courses._courses",["courseTypes"=>$topCourseTypes], array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 
                 </div>

@@ -104,6 +104,7 @@ class quizzesController extends Controller
                     $quiz->num_questions = $request->num_questions;
                 }else
                     $quiz->is_exam = 0;
+                $quiz->lang = $request->lang;
                 $quiz->save();
 				
 				$adminhistory = new AdminHistory; 
@@ -210,6 +211,7 @@ class quizzesController extends Controller
                 if(!empty($request->exam)&&$request->exam){
                     $quiz->num_questions = $request->num_questions;
                 }
+                $quiz->lang = $request->lang;
                 $quiz->save();
 				
 				$adminhistory = new AdminHistory; 

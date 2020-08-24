@@ -58,7 +58,7 @@ Users
                         <div class="row">
                             <div class="col-md-4 col-sm-4">
                                 <div class="form-group">
-                                    <label class="control-label bold">Full Name </label>
+                                    <label class="control-label bold">Full Name</label>
                                     <input type="text" name="full_name" class="form-control">
                                 </div>
                             </div>

@@ -4,12 +4,14 @@
 <div class="training_purchasing">
     <div class="container training_container">
         <div class="media" style="direction: {{ $dir }}; text-align: {{ $align }}">
+           
             <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                 <img class="align-self-center mr-3" src="{{asset('uploads/kcfinder/upload/image/'.$course->image)}}"
                      alt="{{ $course_trans->name }}">
             </div>
             <div class="col-xs-12 col-sm-6 col-md-5 col-lg-5">
                 <div class="media-body align-self-center">
+
                     {{ $course_trans->name }} - {{ trans('home.'.$courseType->type) }}
                     <?php
                         $now = date("Y-m-d");
@@ -20,10 +22,8 @@
                                 ->where('coursetype_variations.date_to', '>=', $now)->get();
                     ?>
                     @foreach($courseType_variations as $courseTypeVariation)
-                        <p class="teachernm">@lang('navbar.coach')  : <span> 
-                             {{ $courseTypeVariation->teacher->user->{'full_name_'.session()->get('locale')} }}</span>
-                       
-                            
+                        <p class="teachernm">  @lang('navbar.coach')  : <span>  {{ $courseTypeVariation->teacher->user->{'full_name_'.session()->get('locale')} }}</span>
+
                         @if(!empty($courseTypeVariation->government))
                             <span>{{ $courseTypeVariation->government->government_trans(session()->get('locale'))->name or null }}</span>
                             <span>{{ $courseTypeVariation->date_from ." - ".$courseTypeVariation->date_to }}</span>
@@ -47,7 +47,7 @@
                             @else
                                 <div class="alert alert-success alertweb"><i class="fa fa-exclamation-circle"></i>
                                     <strong> @lang('navbar.sucessCertification')</strong>
-                                    <br> @lang('navbar.visitYourCertification') <a href="{{ url(App('urlLang').'account') }}"> @lang('navbar.account')</a>
+                                    <br> @lang('navbar.visitYourCertification') <a href="{{ url(App('urlLang').'account') }}">@lang('navbar.account')</a>
                                 </div>
                             @endif
                         @endif
@@ -168,8 +168,6 @@
                     @endif
                 </div>
             </div>
-
-              <!----code edit ticket ta3dil chera --->
             <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
                 <div class="meta-price media-body align-self-center">
                     @if($courseType->points >0)
@@ -223,8 +221,7 @@
 
                                     @if($user->user_verify->verify == 1)
                                       <button class="btn btn-primary btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" data-toggle="collapse" data-target="#change-search"><span style="margin-right: 10px;">  {{ floor($first_Variation->price+$vat) }}$ </span></button>        
-                                  
-                                      @else 
+                                    @else 
                                       <button class="btn btn-disabled btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" disabled="disabled"><span style="margin-right: 10px;">{{ floor($first_Variation->price+$vat) }}$</span></button>
                                     @endif
 
@@ -256,13 +253,12 @@
 
                         </p> --}}
                             {{-- </form> --}}
-                            <button class="btn btn-primary btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" data-toggle="collapse" data-target="#change-search"><span style="margin-right: 10px;"> {{ floor($first_Variation->price+$vat) }}$ </span></button>        
+                            <button class="btn btn-primary btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" data-toggle="collapse" data-target="#change-search"><span style="margin-right: 10px;">  {{ floor($first_Variation->price+$vat) }}$ </span></button>        
                             @endif
                         @endif
 
 
                     @else
-                    <!----------if course  paid ------>
                     <button class="btn btn-disabled btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" disabled="disabled"><span style="margin-right: 10px;">{{ floor($first_Variation->price+$vat) }}$</span></button>
                     @endif
                     @endif
@@ -282,8 +278,7 @@
 
                                 <div class="col-xs-12 col-sm-12 col-md-12 groups-box">
                                     <div class="gbox">
-                                        
-                                        @if($courseType->type=="online")
+                                    @if($courseType->type=="online")
                                           {{-- <p>@lang('navbar.specialDiscount')</p>
                                           <p>@lang('navbar.registerWithFreinds')</p>
                                           <p>@lang('navbar.aftersucessPayement')</p> --}}
@@ -296,6 +291,26 @@
                                       
                                         <form id="cart-form" class="search_form incourse" method="post" action="{{ url(App('urlLang').'cart/add-to-cart') }}" enctype="multipart/form-data">
                                             {{ csrf_field() }}
+                                            @if(Auth::check() && isset(Auth::user()->user_lang->lang_stud))
+                                                <span> لقد قمت باختيار اللغة  {{  Auth::user()->lang()=='Fr' ?"فرنسية'" : "عربية'"}} سابقا</span>
+                                            @else
+                                                <div class="form-group">
+                                                    <label class="form-label "> إختر لغة المحتوى   </label>
+                                                    <select class="form-control country_id" name="lang" id="lang" style="width: 200px;margin: auto;">
+                                                        <option >إختر لغة</option>
+                                                       
+                                                            <option value="Fr" {{$user->lang()=="Fr" ? 'selected' :'' }}>
+                                                               فرنسية
+                                                            </option>
+                                                             <option value="Ar" {{$user->lang()=="Ar" ? 'selected' :''  }}>
+                                                               عربية
+                                                               </option>
+                                                        
+                                                    </select>
+                                                    
+                                                </div>
+
+                                            @endif
                                             <div class="form-group select_group">
                                                 <input type ="hidden" name="quantity" value="1">
                                                 {{-- <select name="quantity" class="form-control select_form">
@@ -312,7 +327,6 @@
                                                     @endforeach
                                                 </select> --}}
                                             </div>
-                                            
                                             <div class="form-group select_group">
                                                 @if($courseType->type=="online")
                                                 {{-- <label>@lang('navbar.choosecoachandDate')</label> --}}
@@ -457,7 +471,7 @@
                                                                 @else    
                                                                     {{ $stdnum }}
                                                                 @endif --}}
-                                                                {{ floor($courseTypeVariation->price+App('setting')->vat*$courseTypeVariation->price/100) }}$
+                                                                {{ floor($courseTypeVariation->price + App('setting')->vat*$courseTypeVariation->price/100) }}$
 
                                                             @endif
                                                         </span> 
@@ -486,3 +500,50 @@
         </div><!--g-->
     </div>
 </div>
+
+
+<!-----------------modal lang ------->
+
+<div class="modal" tabindex="-1" role="dialog" id="lang_modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">ستقوم بتغيير لغة المحتوى إلى اللغة : <span id='langlabel'></span></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p style="color: red;"> احرص على الإختيار  الأول المجاني للغة المحتوى و في حال أردت تغييرها فعليك دفع 50$   </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="save_lang">أوافق</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">لا</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+    $('#lang').on('change', function() {
+        $('#langlabel').html($("#lang option:selected").text());
+        $('#lang_modal').modal('show');
+    });
+
+    $('#save_lang').on('click', function() {
+
+        var lang =$('#lang').val() ;
+        url = "{{route('add.student.lang',['lang'=>':lang','user'=>Auth::id()])}}";
+        url = url.replace(':lang', lang);
+ 
+        window.location.href= url ;
+
+
+
+
+       
+
+    });
+
+
+</script>

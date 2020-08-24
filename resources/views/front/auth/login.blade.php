@@ -57,7 +57,6 @@
 						
 						<form method="POST" id="login-form" action="{{ url(App('urlLang').'login') }}">
 							<p>{{trans('home.login')}}</p>
-							
 							{!! csrf_field() !!}
 							@if (session('status'))
 								<div class="alert alert-success">

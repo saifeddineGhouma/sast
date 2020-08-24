@@ -124,27 +124,28 @@
                                 <table class="table table_striped_col">
                                 <thead>
                                 <tr>
-                                    <th scope="col" class="head_col" style="text-align: {{$alignText}}" width="5%">#
-                                    </th>
+                                    <th scope="col" class="head_col" style="text-align: {{$alignText}}" width="5%">#</th>
                                     <th scope="col" class="head_col" style="text-align: {{$alignText}};">{{trans('home.product')}}</th>
                                     <th scope="col" class="head_col" style="text-align: {{$alignText}};">{{trans('home.product_type')}}</th>
                                     <th scope="col" class="head_col" style="text-align: {{$alignText}};" width ="15%">{{trans('home.statut')}}</th>
-                                    <th scope="col" class="head_col" style="text-align: {{$alignText}};">{{trans('home.nbr_student')}} </th>
+                                    <th scope="col" class="head_col" style="text-align: {{$alignText}};">{{trans('home.nbr_student')}}</th>
                                     <th scope="col" class="head_col" style="text-align: {{$alignText}};">{{trans('home.total_withou_tva')}}</th>
                                     <th scope="col " class="head_col" style="text-align: {{$alignText}};" width="14%">{{trans('home.date')}}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
+                                    
                                 @foreach($ordersProducts as $orderproduct)
                                     <tr>
-                                        @php 
+                                        @php
                                             $page = empty(Request::get('page')) ?  1 : Request::get('page');
-                                            $i = (($page-1) * 5) + $loop->iteration ; 
+                                            $i = (($page-1) * 5) + $loop->iteration ;
                                         @endphp
-                                         
-                                         
+
+
                                         <td class="row_head">{{ $i }}</td>
                                         <?php $page++; ?>
+                                        
                                         <td>
                                             <?php
                                                 $url = "";

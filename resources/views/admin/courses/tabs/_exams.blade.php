@@ -40,3 +40,76 @@
     'examData'=>$exams
 ])
 
+@php 
+if(isset($course))
+	
+{
+	$studycase= App\CourseStudyCase::where('course_id',$course->id)->first();
+	
+	
+	if(isset($studycase) && $studycase->active)
+		$checked_study_case="checked";
+	else
+		$checked_study_case="";
+		
+}
+else{
+	$checked_study_case="";
+}
+
+@endphp
+@php 
+
+if(isset($course))
+{
+	$coursestage= App\CourseStage::where('course_id',$course->id)->first();
+	
+	if(isset($coursestage) && $coursestage->active)
+		$checked_Stage="checked";
+	else
+		$checked_Stage="";
+		
+}
+else{
+	$checked_Stage="";
+}
+
+@endphp
+
+<h3 class="form-section">Stage</h3>
+<div class="form-check">
+    <input type="checkbox" name="stage_active" class="form-check-input" value="1"id="exampleCheck1" {{ $checked_Stage }} >
+    <label class="form-check-label" for="exampleCheck1">Active</label>
+  </div>
+
+<h3 class="form-section">Study Case</h3>
+
+<div class="form-check">
+    <input type="checkbox" class="form-check-input" name="study_case_active" value="1" id="exampleCheck2" {{ $checked_study_case }}>
+    <label class="form-check-label" for="exampleCheck1">Active</label>
+  </div>
+
+
+<h3 class="form-section">is Langue </h3>
+	@php 
+
+	 if(isset($course))
+	 {
+		if($course->is_lang)
+		  $checked_islangue="checked" ;
+		else
+		$checked_islangue="" ;
+
+	 }else{
+	  $checked_islangue="" ;
+	}
+
+
+	@endphp
+
+<div class="form-check">
+    <input type="checkbox" name="is_lang" value="1" class="form-check-input" id="is_lang" {{ $checked_islangue}}>
+    <label class="form-check-label" for="is_Lang">Is Langue </label>
+  </div>
+
+

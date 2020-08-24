@@ -13,7 +13,7 @@ $totalPrice = 0;
     </tr>
     </thead>
     <tbody>
-
+	
     <?php $__currentLoopData = $cart; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$cart_pro): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <?php
         $type = "book";
@@ -88,9 +88,6 @@ $totalPrice = 0;
                 ?>
                 $<?php echo e(floor($cart_pro["price"]+$vat)); ?>
 
-
-
-                
             </td>
             <td data-th="<?php echo app('translator')->getFromJson('navbar.qte'); ?>">
                 <input type="number" class="form-control text-center input_qte"  

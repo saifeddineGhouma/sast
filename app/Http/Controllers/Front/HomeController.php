@@ -298,21 +298,26 @@ class HomeController extends Controller
 
 	public function downloadDemandeStage()
 	{
+       // return response()->download('uploads/kcfinder/upload/image/stage/Demande de stage SAST.pdf');
 
 		return response()->download('uploads/kcfinder/upload/image/stage/Demande de stage SAST.pdf');
+      
 	}
 	public function downloadDemandeStageArab()
 	{
 		//return $user;
 
 		return response()->download('uploads/kcfinder/upload/image/stage/مطلب تربص.pdf');
+       // return response()->download('uploads/kcfinder/upload/image/stage/fileEdit1.pdf');
 	}
 	public function downloadEvaluation()
 	{
+	    
 		return response()->download('uploads/kcfinder/upload/image/stage/GRILLE D EVATUATION DE STAGE DASH.pdf');
 	}
 	public function downloadEvaluationArab()
 	{
+       
 		return response()->download('uploads/kcfinder/upload/image/stage/جدول تقييم المتدرب.pdf');
 	}
 

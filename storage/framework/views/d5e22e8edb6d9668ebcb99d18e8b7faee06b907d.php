@@ -26,6 +26,7 @@
                 <input type="text" class="form-control" value="<?php echo e($user->username); ?>" disabled>
             </div>
         </div>
+       
         <div class="col-md-6">
             <div class="form-group">
                 <label class="control-label col-md-3 <?php echo e($pull); ?> "><?php echo e(trans('navbar.sexe')); ?>   <span>*</span></label>
@@ -61,8 +62,7 @@
                     <option value=""></option>
                     <?php $__currentLoopData = $countries; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $country): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <option value="<?php echo e($country->id); ?>" <?php echo e($user->nationality==$country->country_trans("en")->name?"selected":null); ?> >
-                            <?php echo e(isset($country->country_trans(Session()->get('locale'))->name) ? $country->country_trans(Session()->get('locale'))->name : $country->country_trans("en")->name); ?>
-
+                            <?php echo e(isset($country->country_trans(Session()->get('locale'))->name) ? $country->country_trans(Session()->get('locale'))->name : $country->country_trans("en")->name); ?> 
                         </option>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </select>
@@ -73,23 +73,38 @@
 
 
 
- 
-
-
-
     <div class="row userlogedin">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="form-group">
                 <label class="form-label"><?php echo e(trans('home.adress_info')); ?>  <span>*</span></label>
                 <input type="text" class="form-control" name="address" value="<?php echo e($user->address); ?>" >
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="form-group">
                 <label class="form-label"> <?php echo e(trans('home.num_tel')); ?><span>*</span></label>
                 <input type="text" class="form-control"  dir="ltr" name="mobile" id="mobile"  value="<?php echo e($user->mobile); ?>" style="direction: ltr !important;text-align: right;">
             </div>
         </div>
+
+        <div class="col-md-4">
+            <div class="form-group">
+                <label class="form-label ">لغات الدراسة</label>
+                <select class="form-control country_id" name="lang">
+                    <option >إختر لغة</option>
+                   
+                        <option value="Fr" <?php echo e($user->lang()=="Fr" ? 'selected' :''); ?>>
+                           فرنسية
+                        </option>
+                         <option value="Ar" <?php echo e($user->lang()=="Ar" ? 'selected' :''); ?>>
+                           عربية
+                           </option>
+                    
+                </select>
+                
+            </div>
+        </div>
+
     </div>
 
 

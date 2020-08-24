@@ -48,7 +48,6 @@ if(!is_null($course->ratings()->where("approved",1))){
                         <i class="fa fa-clock-o" aria-hidden="true"></i>
                         <p>@lang('navbar.dure') :</p>
                         <span>{{ $course->period }}</span>
-                       
                     </div>
 
 
@@ -59,25 +58,6 @@ if(!is_null($course->ratings()->where("approved",1))){
                 <i class="fa fa-video"></i> 
                 <i class="fa fa-html5"></i> 
             </div>-->
-<div class="col-md-12">
-      {{-- @include('front.courses.course._stepPaie') --}}
-      
-
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         </div>
     </div>
 </div>

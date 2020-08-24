@@ -41,7 +41,11 @@
                     <a href="{{url('/admin/users/view/'.$u->id)}}">
                         <i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="view user"></i>
                     </a>
+                    
                     @if($u->id!=1)
+                        <a href="{{url('/admin/admins/addStudent/'.$u->id)}}">
+    						<i class="livicon" data-name="user-remove" data-name="user-add" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="Add Student"></i>
+    					</a>
                         <a data-toggle="modal" class="deletuser" elementId="{{$u->id}}">
                             <i class="livicon" data-name="user-remove" data-size="18" data-loop="true" data-c="#f56954" data-hc="#f56954" title="delete user"></i>
                         </a>

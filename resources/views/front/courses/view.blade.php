@@ -33,7 +33,6 @@
 								<i class="fa fa-home" aria-hidden="true"></i>
 								<a href="{{url(App('urlLang'))}}"><span>{{trans('home.home')}}</span></a>
 							</li>
-							
 							@foreach($course->categories as $category)
 								<li class="breadcrumb-item">
 									<a href="{{url(App('urlLang').$category->category_trans(session()->get('locale'))->slug)}}">
@@ -87,14 +86,14 @@
 @if(Session::has('Review_Updated'))
 	<div class="alert alert-success">
 		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-		{!! Session::get('Review_Updated') !!} 
+		{!! Session::get('Review_Updated') !!}
 	</div>
 @endif
 <div class="courses_more_info">
 	<div class="container">
 		<div class="row more_info_one justify-content-between tab-content">
 			<div class="tab-pane fade in active show" role="tabpanel" id="information">
-				@include("front.courses.course._information")  
+				@include("front.courses.course._information")
 			</div>
 			<div role="tabpanel" class="wide-tb  col-lg-12 tab-pane fade " id="curriculum">
 				@include("front.courses.course._studies")
@@ -124,7 +123,6 @@
             </div>
             <div class="company_courses ">
                 <div class="row">
-					
                     @include("front.courses._courses",["courseTypes"=>$topCourseTypes])
 
                 </div>

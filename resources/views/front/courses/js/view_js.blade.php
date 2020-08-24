@@ -138,6 +138,35 @@
     }).on('success.form.bv', function(e) {
 
     });
+	$('#submit-sujet').on('click', submitgetsujet);
+
+   function submitgetsujet(e)
+   {
+ 
+    var form = $(this);
+    var route = $(this).closest("form").attr('action');
+   sujet_id = $("#sujets_id").val()
+   course_id = $("#courses_id").val()
+console.log(course_id) ;
+    
+   $.ajax({
+        type: "POST",
+        url: route,
+        data: {
+         sujets_id: sujet_id,
+         courses_id: course_id,
+    _token:     '{{ csrf_token() }}'
+  }
+    }).done(function( msg ) {
+        $('#form_sujet_upload').css('display','block'),
+       $('#sujets_description').text(msg)
+       $('#form_get_sujets').css('display','none')
+       
+    });
+
+
+      
+   }
 
     $(".select_form").change(function(){
         var quantity = $("select[name='quantity']").val();

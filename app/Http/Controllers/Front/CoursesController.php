@@ -32,8 +32,7 @@ use App\Notifications\ExamFinished;
 use Notification;
 use App\Log;
 use App\Sujet;
-use App\SujetCourse;
-
+use App\StudentStudyCase;
 use App\Notifications\UserQuiz;
 
 include "assets/I18N/Arabic.php";
@@ -61,17 +60,25 @@ class CoursesController extends Controller
 
     public function getView($courseType_id)
     {
+		$courseType = CourseType::findOrFail($courseType_id);
 
+        $sujetsUse = StudentStudyCase::where('courses_id', $courseType->course->id)->pluck('sujets_id');
 
+        $sujet = Sujet::/* whereNotIn('id', $sujetsUse)-> */orderByRaw("RAND()")->first();
+        
         $courseType = CourseType::findOrFail($courseType_id);
+        $course     = $courseType->course;
 
-        $sujetsUse = SujetCourse::where('courses_id', $courseType->course->id)->pluck('sujets_id');
-        $sujet = Sujet::whereNotIn('id', $sujetsUse)->orderByRaw("RAND()")->first();
-
-        $student = Auth::user()->student;
-
-        $passed = SujetCourse::where('courses_id', $courseType->course->id)->where('students_id', $student->id)->count();
-
+        if (Auth::check()) {
+            $student = Auth::user()->student;
+            $lang    = $course->is_lang ? Auth::user()->lang() : 'Ar';
+            $passed = StudentStudyCase::where('courses_id', $courseType->course->id)->where('students_id', $student->id)->count();
+        } else {
+            $passed = 0;
+            $lang   = 'Ar' ;
+        }
+		
+       
         $topCourseTypes = CourseType::join("courses", "courses.id", "=", "course_types.course_id")
             ->join("order_products", "order_products.course_id", "=", "courses.id")
             ->join("orders", "orders.id", "=", "order_products.order_id")
@@ -104,20 +111,26 @@ class CoursesController extends Controller
 
         $courseQuestions = CourseQuestion::whereNull("parent_id")
             ->where("course_id", $courseType->course_id)->where("active", 1)->get();
-        $course = $courseType->course;
-        $quizzes = $course->quizzes()->where("is_exam", 0)->where("active", 1)->get();
-        $exams = $course->quizzes()->where("is_exam", 1)->where("active", 1)->get();
+        
+        $quizzes = 
+        $exams=($course->is_lang) ? $course->quizzes()->Langue($lang)->where("is_exam", 0)->where("active", 1)->get() : $course->quizzes()->where("is_exam", 0)->where("active", 1)->get();
+        $exams   = $course->quizzes()->Langue($lang)->where("is_exam", 1)->where("active", 1)->get();
         $videoExams = $course->videoexams()->where("active", 1)->get();
-        $user = Auth::user();
+        $user    = Auth::user();
 
-
+  
         //classroom id 292
 
-        $courseTT = CourseType::whereIn('id', [292, 298])->get();
+        $courseTT = CourseType::whereIn('id', [292, 298,328])->get();
+		
         foreach ($courseTT as $courseT) {
             $courseTest = $courseT->course;
-            $quizzesTest = $courseTest->quizzes()->whereIn('quizzes.id', [312, 366, 367, 368, 369, 370])->where("is_exam", 0)->where("active", 1)->get();
-            $quizzesTestFr = $courseTest->quizzes()->whereIn('quizzes.id', [328, 329, 330, 331, 332])->where("is_exam", 0)->where("active", 1)->get();
+			/// liste quiz arbie 
+           // $quizzesTest = $courseTest->quizzes()->whereIn('quizzes.id', [312, 366, 367, 368, 369, 370])->where("is_exam", 0)->where("active", 1)->get();
+			// liste quiz francais 
+         //   $quizzesTestFr = $courseTest->quizzes()->whereIn('quizzes.id', [328, 329, 330, 331, 332])->where("is_exam", 0)->where("active", 1)->get();
+			
+			
             $examsTest = $courseTest->quizzes()->where("is_exam", 1)->where("active", 1)->get();
         }
 
@@ -126,22 +139,78 @@ class CoursesController extends Controller
         //$this->views($courseType->course->id);
 
         $comment = Comment::get();
-
+		
         return view("front.courses.view", array(
             "courseType" => $courseType, "topCourseTypes" => $topCourseTypes,
             "course" => $courseType->course, "courseQuestions" => $courseQuestions,
             "quizzes" => $quizzes, "exams" => $exams, "videoExams" => $videoExams,
-            "user" => $user, "isRegistered" => $isRegistered, "comment" => $comment, "quizzesTest" => $quizzesTest,
-            "examsTest" => $examsTest, "quizzesTestFr" => $quizzesTestFr,
-            "sujet" => $sujet, "passed" => $passed
+            "user" => $user, "isRegistered" => $isRegistered, "comment" => $comment, 
+            "examsTest" => $examsTest, 
+			"sujet" => $sujet, "passed" => $passed
         ));
     }
+    public function submitgetsujet(Request $request)
+    {
+        $student = Auth::user()->student;
+        $studentstudycase = new StudentStudyCase();
+        $studentstudycase->sujets_id = $request->sujets_id;
+        $studentstudycase->courses_id = $request->courses_id;
 
+        $studentstudycase->students_id = $student->id;
+
+        $studentstudycase->save();
+
+        $sujet = Sujet::where('id', $studentstudycase->sujets_id)->first();
+        return  $sujet->description;
+    }
+    private function uploadFile($fichie, $name)
+    {
+        $file = $fichie;
+
+        $destinationPath = 'uploads/kcfinder/upload/image/studyCase';
+
+        $file->move($destinationPath, $name . '_' . $file->getClientOriginalName());
+        return  $file->getClientOriginalName();
+    }
+    public function postStudyCase(Request $request)
+    {
+        $this->validate($request, [
+            'document' => 'required'
+        ]);
+        $student = Auth::user()->student;
+        if ($student->id != null) {
+
+            $studentstudycase =  StudentStudyCase::where('students_id', $student->id)->where('courses_id', $request->courses_id)->first();
+          
+            $studentstudycase->user_message = $request->user_message;
+
+            $name = Auth::user()->username;
+
+            $document =  $this->uploadFile($request->file('document'), $name . '_' . $request->courses_id);
+
+            $sujetCourse->document = $name . '_' . $request->courses_id . '_' . $document;
+
+            $studentstudycase->save();
+
+            $user = Auth::user();
+            $admins = \App\Admin::get();
+
+            Session::flash('alert-success', 'تم إنشاء الإختبار بنجاح...');
+            return back();
+            
+        } else {
+            abort(404);
+        }
+    }
     public function quizAttempt(Request $request)
     {
+
+		
         $this->middleware("auth");
         if (Auth::guest()) {
+			
             abort(404);
+			
         }
         $ip = $_SERVER['REMOTE_ADDR'];
 
@@ -154,6 +223,7 @@ class CoursesController extends Controller
         $course = $courseType->course;
 
 
+
         $quiz = $course->quizzes()->where("active", 1)
             ->where("quizzes.id", $request->quiz_id)->firstOrFail();
         $type = "quiz";
@@ -164,14 +234,10 @@ class CoursesController extends Controller
         }*/
 
         $messageValid = "";
-        if (in_array($courseType->id, [292, 298])) {
-            $validQuiz = $course->validateQuizWithoutVideo($type, $messageValid);
-        } elseif (in_array($courseType->id, [54, 328])) {
-            $validQuiz = $course->validateExam($type, $messageValid);
-        } else {
-            $validQuiz = $course->validateQuiz($type, $messageValid);
-        }
-
+    
+        $validQuiz = $course->validateQuiz($type, $messageValid);
+			
+   
         $validAttempts = true;
         if ($type == "exam")
             $validAttempts = $course->validQuizAttempts($quiz);
@@ -179,6 +245,7 @@ class CoursesController extends Controller
         $student = Auth::user()->student;
         $user = Auth::user();
         if (empty($student)) {
+			
             abort(404);
         }
         $finished = false;
@@ -197,20 +264,10 @@ class CoursesController extends Controller
             return redirect()->back();
         }
         if ($quiz->is_exam) {
-            if (in_array($courseType->id, [292, 298])) {
-                $quizzesFr = $course->quizzes()->whereIn('quizzes.id', [328, 329, 330, 331, 332])->where("quizzes.is_exam", 0)->get();
-                $quizzesAr  = $course->quizzes()->whereIn('quizzes.id', [366, 367, 368, 369, 370])->where("quizzes.is_exam", 0)->get();
-
-                if ($user->user_lang->lang_stud == "fr") {
-                    $questions = Question::whereIn('questions.quiz_id',  [328, 329, 330, 331, 332])->inRandomOrder()->take($quiz->num_questions)->get();
-                } else {
-                    $questions = Question::whereIn('questions.quiz_id',  [366, 367, 368, 369, 370])->inRandomOrder()->take($quiz->num_questions)->get();
-                }
-            } else {
-                $questions = Question::whereHas("quiz.courses_exams", function ($query) use ($course) {
-                    $query->where('courses_quizzes.course_id', $course->id);
-                })->inRandomOrder()->take($quiz->num_questions)->get();
-            }
+            $lang    = $course->is_lang ? Auth::user()->lang() : 'Ar';
+            $questions = Question::whereHas("quiz.courses_exams", function ($query) use ($course) {
+                $query->where('courses_quizzes.course_id', $course->id);
+            })->whereHas('quiz', function ($query1) use ($lang) {$query1->where('quizzes.lang', $lang);})->inRandomOrder()->take($quiz->num_questions)->get();
         } else
             $questions = $quiz->questions()->inRandomOrder()->take($quiz->num_questions)->get();
 
@@ -270,36 +327,13 @@ class CoursesController extends Controller
                 "studentQuiz" => $studentQuiz
             ]);
         }
+	
         abort(404);
     }
 
-    public function postStudyCase(Request $request)
-    {
-        $this->validate($request, [
-            'document' => 'required'
-        ]);
-        $student = Auth::user()->student;
-        if ($student->id != null) {
-            $sujetCourse = new SujetCourse();
-            $sujetCourse->sujets_id = $request->sujets_id;
-            $sujetCourse->students_id = $student->id;
-            $sujetCourse->courses_id = $request->courses_id;
-            $sujetCourse->user_message = $request->user_message;
-
-            $sujetCourse->save();
-
-            $user = Auth::user();
-            $admins = \App\Admin::get();
-            //  Notification::send($admins, new ExamFinished($user->username, $sujetCourse->id, "study case", $sujetCourse->sujet->description));
-
-            Session::flash('alert-success', 'تم إنشاء الإختبار بنجاح...');
-            return redirect(App('urlLang') . 'account');
-        } else {
-            abort(404);
-        }
-    }
     public function postSubmitQuiz($studentQuiz_id, Request $request)
     {
+
         $data = array();
         $data["message"] = "";
         $data["solved"] = "";
@@ -309,6 +343,7 @@ class CoursesController extends Controller
         $questions = $request->get("questions");
 
         if (!empty($student)) {
+
             $currentTime = date("Y-m-d H:i:s", strtotime("-5 seconds"));
 
             //print_r($student->student_quizzes);
@@ -317,8 +352,11 @@ class CoursesController extends Controller
                 ->where("status", "!=", "not_completed")->first();
 
             if (!empty($studentQuiz)) {
+
+
                 $totalPoints = 0;
                 if (!empty($questions)) {
+
                     foreach ($questions as $key => $answerQuestion) {
                         $question = Question::findOrFail($key);
                         $answer = null;
@@ -365,7 +403,9 @@ class CoursesController extends Controller
                 $admins = \App\Admin::get();
                 //Notification::send($admins, new ExamFinished($user->username,$studentQuiz->id,"quiz",$studentQuiz->quiz_name));
                 if ($studentQuiz->successfull)
-                    $user->notify(new SuccessExam($user->username, $studentQuiz->quiz_name));
+                {
+                   // $user->notify(new SuccessExam($user->username, $studentQuiz->quiz_name));
+                }
             } else {
 
                 $currentTime = date("Y-m-d H:i:s");
@@ -377,6 +417,7 @@ class CoursesController extends Controller
 
                 $totalPoints = 0;
                 if (!empty($questions)) {
+
                     foreach ($questions as $key => $answerQuestion) {
                         $question = Question::findOrFail($key);
                         $answer = null;
@@ -423,7 +464,7 @@ class CoursesController extends Controller
                 $admins = \App\Admin::get();
                 //Notification::send($admins, new ExamFinished($user->username,$studentQuiz->id,"quiz",$studentQuiz->quiz_name));
                 if ($studentQuiz->successfull)
-                    $user->notify(new SuccessExam($user->username, $studentQuiz->quiz_name));
+                    //$user->notify(new SuccessExam($user->username, $studentQuiz->quiz_name));
                 $data["message"] = "expired";
             }
         } else {
@@ -435,6 +476,7 @@ class CoursesController extends Controller
 
 
         if ($request->ajax()) {
+             
             return json_encode($data);
         } else {
             $isExport = false;
@@ -447,15 +489,12 @@ class CoursesController extends Controller
                     $studentExam = $student->student_quizzes()->where("students_quizzes.quiz_id", $finalExam->id)->where("course_id", $course->id)
                         ->where("status", "completed")->first();
 
-
-                    // ici
-                    if (in_array($course->id, [17, 532])) {
-                    } else {
-                        if (!empty($studentExam) && $studentExam->successfull) {
-                            $counter++;
-                        }
+                    /* new code */
+                    if (!empty($studentExam) && $studentExam->successfull) {
+                        $counter++;
                     }
                 }
+
                 if ($counter == 1)
                     $isExport = true;
             }
@@ -488,12 +527,16 @@ class CoursesController extends Controller
 
 
                         //add le 05 02 2020
-                        $student = Auth::user()->student;
 
-                        if (in_array($courseTypeVariation->coursetype_id, [292, 298])) {
-                            foreach ($student->student_videoexams as $videoExams) {
-                                if (in_array($videoExams->course_id, [496, 502])) {
-                                    if ($videoExams->successfull == 1) {
+
+
+                        $student = Auth::user()->student;
+                        /// valid quiz 
+                       
+                        if ($course->isCompleteQuizzes()) {
+                            //
+                           
+
                                         $certificate = $courseTypeVariation->certificate;
                                         if (!empty($certificate)) {
                                             $Arabic = new I18N_Arabic('Glyphs');
@@ -502,7 +545,10 @@ class CoursesController extends Controller
 
                                             $certificate->export($student, $Arabic, $serialNumber, $image_name, date("Y-m-d"));
 
+                                            $serialNumber="new certif ";
+
                                             if ($serialNumber != "") {
+
                                                 $studentCertificate = new StudentCertificate();
                                                 $studentCertificate->student_id = $student->id;
                                                 $studentCertificate->course_id = $courseTypeVariation->courseType->course_id;
@@ -559,85 +605,15 @@ class CoursesController extends Controller
                                                 mail($student->user->email, $subject, $message1, $headers);
                                             }
                                         }
-                                    }
-                                }
-                            }
-                        } else {
-                            $certificate = $courseTypeVariation->certificate;
-                            if (!empty($certificate)) {
-                                $Arabic = new I18N_Arabic('Glyphs');
-                                $serialNumber = "";
-                                $image_name = "";
-
-                                $certificate->export($student, $Arabic, $serialNumber, $image_name, date("Y-m-d"));
-
-                                if ($serialNumber != "") {
-                                    $studentCertificate = new StudentCertificate();
-                                    $studentCertificate->student_id = $student->id;
-                                    $studentCertificate->course_id = $courseTypeVariation->courseType->course_id;
-                                    $studentCertificate->course_name = $courseTypeVariation->courseType->course->course_trans("ar")->name;
-
-                                    $quiz = $studentQuizTmp->quiz;
-                                    if (!empty($quiz)) {
-                                        $studentCertificate->exam_id = $quiz->id;
-                                        $studentCertificate->exam_name = $quiz->quiz_trans("ar")->name;
-                                    }
-                                    $teacherName = "";
-                                    $teacherName = $courseTypeVariation->teacher->user->full_name_en;
-                                    $studentCertificate->teacher_name = $teacherName;
-
-                                    $studentCertificate->serialnumber = $serialNumber;
-                                    $studentCertificate->image = $image_name;
-                                    $studentCertificate->date = date("Y-m-d");
-                                    $studentCertificate->manual = 0;
-                                    $studentCertificate->save();
-
-                                    $mime_boundary = "----MSA Shipping----" . md5(time());
-                                    $subject = "Swedish Academy : Certificate";
-                                    $headers = "From:Swedish Academy<info@swedish-academy.se> \n";
-                                    $headers .= "MIME-Version: 1.0\n";
-                                    $headers .= "Content-Type: multipart/alternative; boundary=\"$mime_boundary\"\n";
-                                    $message1 = "--$mime_boundary\n";
-                                    $message1 .= "Content-Type: text/html; charset=UTF-8\n";
-                                    $message1 .= "Content-Transfer-Encoding: 8bit\n\n";
-                                    $message1 .= "<html>\n";
-                                    $message1 .= "<body>";
-                                    $message1 .= "<table width='602'>";
-                                    $message1 .= "<tr>";
-                                    $message1 .= "<td>";
-                                    $message1 .= "<img src='https://swedish-academy.se/assets/front/img/logo-mail.png'><br>";
-                                    $message1 .= "</td>";
-                                    $message1 .= "</tr>";
-                                    $message1 .= "<tr>";
-                                    $message1 .= "<td align='right'>";
-                                    $message1 .= "مرحبا بكم
-												تعلمكم الاكاديمية السويدية للتدريب الرياضي أنكم أتممتم الدورة بنجاح و نحن نتمنى لكم الموفقية في حياتكم العملية.
-												و تجدون شهادتكم  في حسابكم  في قسم الشهادات من خلال هذا الرابط
-												<a href='https://swedish-academy.se/account/certificates'>الشهائد</a>
-                                                <br> 
-                                                و قد أرفقنا لكم الشهادة 
-                                                <a href='https://swedish-academy.se/uploads/kcfinder/upload/image/" . $studentCertificate->image . "'>انقر هنا</a><br>
-                                                <br>
-                                                
-												مع تمنياتنا لكم بالنجاح و التوفيق في قادم الأيام";
-                                    $message1 .= "</td>";
-                                    $message1 .= "</tr>";
-                                    $message1 .= '</table>';
-                                    $message1 .= '</body>';
-                                    $message1 .= '</html>';
-                                    mail($student->user->email, $subject, $message1, $headers);
-                                }
-                            }
-                        }
+                        } 
                     }
                 }
 
 
 
 
-                //with packs
+                //w
                 if ($orderProduct == "") {
-                    //echo "Afef";
 
                     $orderProductt = DB::table('order_products')
                         ->join("orderproducts_students", "order_products.id", "=", "orderproducts_students.orderproduct_id")
@@ -648,6 +624,18 @@ class CoursesController extends Controller
                         ->whereIn("order_products.order_id", $paidOrder_ids)
                         ->orderBy("order_products.order_id", "desc")->first();
 
+                        //  test 
+
+                         $orderProduct = $course->order_products()
+                                ->whereHas('orderproducts_students', function ($query) {
+                                    $query->where("student_id", Auth::user()->id);
+                                })->join("orders", "order_products.order_id", "=", "orders.id")
+                                ->whereIn("order_products.order_id", $paidOrder_ids)
+                                ->orderBy("order_products.order_id", "desc")->first();
+
+
+
+
 
                     $certificate = null;
                     if (!empty($orderProductt)) {
@@ -657,7 +645,7 @@ class CoursesController extends Controller
                         /*$courseTypeVariation_id = $orderProduct->coursetypevariation_id;*/
                         /*$courseTypeVariation = CourseTypeVariation::find($courseTypeVariation_id);*/
                         $courseTypeVariation = courseTypeVariation::where("coursetype_id", $courseType->id)->first();
-                        if (!empty($courseTypeVariation)) {
+                        if (!empty($courseTypeVariation) && $course->isCompleteQuizzes()) {
                             $certificate = $courseTypeVariation->certificate;
                             if (!empty($certificate)) {
                                 $Arabic = new I18N_Arabic('Glyphs');
@@ -743,7 +731,7 @@ class CoursesController extends Controller
                             /*$courseTypeVariation_id = $orderProduct->coursetypevariation_id;*/
                             /*$courseTypeVariation = CourseTypeVariation::find($courseTypeVariation_id);*/
                             $courseTypeVariation = courseTypeVariation::where("coursetype_id", $courseType->id)->first();
-                            if (!empty($courseTypeVariation)) {
+                            if (!empty($courseTypeVariation) && $course->isCompleteQuizzes()) {
                                 $certificate = $courseTypeVariation->certificate;
                                 if (!empty($certificate)) {
                                     $Arabic = new I18N_Arabic('Glyphs');

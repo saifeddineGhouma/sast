@@ -91,6 +91,7 @@
 <nav class="navbar navbar-expand-md main-nav " dir="{{ $dir}}">
 
 
+
         <button class="navbar-toggler col-xs-1" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 
             <span class="fa fa-bars"></span>

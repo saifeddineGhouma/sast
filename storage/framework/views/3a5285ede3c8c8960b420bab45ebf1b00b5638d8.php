@@ -4,12 +4,14 @@
 <div class="training_purchasing">
     <div class="container training_container">
         <div class="media" style="direction: <?php echo e($dir); ?>; text-align: <?php echo e($align); ?>">
+           
             <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
                 <img class="align-self-center mr-3" src="<?php echo e(asset('uploads/kcfinder/upload/image/'.$course->image)); ?>"
                      alt="<?php echo e($course_trans->name); ?>">
             </div>
             <div class="col-xs-12 col-sm-6 col-md-5 col-lg-5">
                 <div class="media-body align-self-center">
+
                     <?php echo e($course_trans->name); ?> - <?php echo e(trans('home.'.$courseType->type)); ?>
 
                     <?php
@@ -21,10 +23,8 @@
                                 ->where('coursetype_variations.date_to', '>=', $now)->get();
                     ?>
                     <?php $__currentLoopData = $courseType_variations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $courseTypeVariation): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <p class="teachernm"><?php echo app('translator')->getFromJson('navbar.coach'); ?>  : <span> 
-                             <?php echo e($courseTypeVariation->teacher->user->{'full_name_'.session()->get('locale')}); ?></span>
-                       
-                            
+                        <p class="teachernm">  <?php echo app('translator')->getFromJson('navbar.coach'); ?>  : <span>  <?php echo e($courseTypeVariation->teacher->user->{'full_name_'.session()->get('locale')}); ?></span>
+
                         <?php if(!empty($courseTypeVariation->government)): ?>
                             <span><?php echo e(isset($courseTypeVariation->government->government_trans(session()->get('locale'))->name) ? $courseTypeVariation->government->government_trans(session()->get('locale'))->name : null); ?></span>
                             <span><?php echo e($courseTypeVariation->date_from ." - ".$courseTypeVariation->date_to); ?></span>
@@ -48,7 +48,7 @@
                             <?php else: ?>
                                 <div class="alert alert-success alertweb"><i class="fa fa-exclamation-circle"></i>
                                     <strong> <?php echo app('translator')->getFromJson('navbar.sucessCertification'); ?></strong>
-                                    <br> <?php echo app('translator')->getFromJson('navbar.visitYourCertification'); ?> <a href="<?php echo e(url(App('urlLang').'account')); ?>"> <?php echo app('translator')->getFromJson('navbar.account'); ?></a>
+                                    <br> <?php echo app('translator')->getFromJson('navbar.visitYourCertification'); ?> <a href="<?php echo e(url(App('urlLang').'account')); ?>"><?php echo app('translator')->getFromJson('navbar.account'); ?></a>
                                 </div>
                             <?php endif; ?>
                         <?php endif; ?>
@@ -159,8 +159,6 @@
                     <?php endif; ?>
                 </div>
             </div>
-
-              <!----code edit ticket ta3dil chera --->
             <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
                 <div class="meta-price media-body align-self-center">
                     <?php if($courseType->points >0): ?>
@@ -208,8 +206,7 @@
 
                                     <?php if($user->user_verify->verify == 1): ?>
                                       <button class="btn btn-primary btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" data-toggle="collapse" data-target="#change-search"><span style="margin-right: 10px;">  <?php echo e(floor($first_Variation->price+$vat)); ?>$ </span></button>        
-                                  
-                                      <?php else: ?> 
+                                    <?php else: ?> 
                                       <button class="btn btn-disabled btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" disabled="disabled"><span style="margin-right: 10px;"><?php echo e(floor($first_Variation->price+$vat)); ?>$</span></button>
                                     <?php endif; ?>
 
@@ -230,13 +227,12 @@
                             <?php else: ?>
                             
                             
-                            <button class="btn btn-primary btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" data-toggle="collapse" data-target="#change-search"><span style="margin-right: 10px;"> <?php echo e(floor($first_Variation->price+$vat)); ?>$ </span></button>        
+                            <button class="btn btn-primary btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" data-toggle="collapse" data-target="#change-search"><span style="margin-right: 10px;">  <?php echo e(floor($first_Variation->price+$vat)); ?>$ </span></button>        
                             <?php endif; ?>
                         <?php endif; ?>
 
 
                     <?php else: ?>
-                    <!----------if course  paid ------>
                     <button class="btn btn-disabled btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" disabled="disabled"><span style="margin-right: 10px;"><?php echo e(floor($first_Variation->price+$vat)); ?>$</span></button>
                     <?php endif; ?>
                     <?php endif; ?>
@@ -256,8 +252,7 @@
 
                                 <div class="col-xs-12 col-sm-12 col-md-12 groups-box">
                                     <div class="gbox">
-                                        
-                                        <?php if($courseType->type=="online"): ?>
+                                    <?php if($courseType->type=="online"): ?>
                                           
                                   <?php else: ?>
                                           
@@ -266,6 +261,26 @@
                                         <form id="cart-form" class="search_form incourse" method="post" action="<?php echo e(url(App('urlLang').'cart/add-to-cart')); ?>" enctype="multipart/form-data">
                                             <?php echo e(csrf_field()); ?>
 
+                                            <?php if(Auth::check() && Auth::user()->lang()): ?>
+                                                <span> لقد قمت باختيار اللغة  <?php echo e(Auth::user()->lang()=='Fr' ?"فرنسية'" : "عربية'"); ?> سابقا</span>
+                                            <?php else: ?>
+                                                <div class="form-group">
+                                                    <label class="form-label "> إختر لغة المحتوى   </label>
+                                                    <select class="form-control country_id" name="lang" id="lang" style="width: 200px;margin: auto;">
+                                                        <option >إختر لغة</option>
+                                                       
+                                                            <option value="Fr" <?php echo e($user->lang()=="Fr" ? 'selected' :''); ?>>
+                                                               فرنسية
+                                                            </option>
+                                                             <option value="Ar" <?php echo e($user->lang()=="Ar" ? 'selected' :''); ?>>
+                                                               عربية
+                                                               </option>
+                                                        
+                                                    </select>
+                                                    
+                                                </div>
+
+                                            <?php endif; ?>
                                             <div class="form-group select_group">
                                                 <input type ="hidden" name="quantity" value="1">
                                                 
@@ -275,7 +290,6 @@
                                                        
                                                         
                                             </div>
-                                            
                                             <div class="form-group select_group">
                                                 <?php if($courseType->type=="online"): ?>
                                                 
@@ -415,7 +429,7 @@
                                                             <?php else: ?>
                                                              
                                                                 
-                                                                <?php echo e(floor($courseTypeVariation->price+App('setting')->vat*$courseTypeVariation->price/100)); ?>$
+                                                                <?php echo e(floor($courseTypeVariation->price + App('setting')->vat*$courseTypeVariation->price/100)); ?>$
 
                                                             <?php endif; ?>
                                                         </span> 
@@ -444,3 +458,50 @@
         </div><!--g-->
     </div>
 </div>
+
+
+<!-----------------modal lang ------->
+
+<div class="modal" tabindex="-1" role="dialog" id="lang_modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">ستقوم بتغيير لغة المحتوى إلى اللغة : <span id='langlabel'></span></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p style="color: red;"> احرص على الإختيار  الأول المجاني للغة المحتوى و في حال أردت تغييرها فعليك دفع 50$   </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="save_lang">أوافق</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">لا</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+<script type="text/javascript">
+    $('#lang').on('change', function() {
+        $('#langlabel').html($("#lang option:selected").text());
+        $('#lang_modal').modal('show');
+    });
+
+    $('#save_lang').on('click', function() {
+
+        var lang =$('#lang').val() ;
+        url = "<?php echo e(route('add.student.lang',['lang'=>':lang','user'=>Auth::id()])); ?>";
+        url = url.replace(':lang', lang);
+ 
+        window.location.href= url ;
+
+
+
+
+       
+
+    });
+
+
+</script>

@@ -125,27 +125,28 @@
                                 <table class="table table_striped_col">
                                 <thead>
                                 <tr>
-                                    <th scope="col" class="head_col" style="text-align: <?php echo e($alignText); ?>" width="5%">#
-                                    </th>
+                                    <th scope="col" class="head_col" style="text-align: <?php echo e($alignText); ?>" width="5%">#</th>
                                     <th scope="col" class="head_col" style="text-align: <?php echo e($alignText); ?>;"><?php echo e(trans('home.product')); ?></th>
                                     <th scope="col" class="head_col" style="text-align: <?php echo e($alignText); ?>;"><?php echo e(trans('home.product_type')); ?></th>
                                     <th scope="col" class="head_col" style="text-align: <?php echo e($alignText); ?>;" width ="15%"><?php echo e(trans('home.statut')); ?></th>
-                                    <th scope="col" class="head_col" style="text-align: <?php echo e($alignText); ?>;"><?php echo e(trans('home.nbr_student')); ?> </th>
+                                    <th scope="col" class="head_col" style="text-align: <?php echo e($alignText); ?>;"><?php echo e(trans('home.nbr_student')); ?></th>
                                     <th scope="col" class="head_col" style="text-align: <?php echo e($alignText); ?>;"><?php echo e(trans('home.total_withou_tva')); ?></th>
                                     <th scope="col " class="head_col" style="text-align: <?php echo e($alignText); ?>;" width="14%"><?php echo e(trans('home.date')); ?></th>
                                 </tr>
                                 </thead>
                                 <tbody>
+                                    
                                 <?php $__currentLoopData = $ordersProducts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $orderproduct): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr>
-                                        <?php 
+                                        <?php
                                             $page = empty(Request::get('page')) ?  1 : Request::get('page');
-                                            $i = (($page-1) * 5) + $loop->iteration ; 
+                                            $i = (($page-1) * 5) + $loop->iteration ;
                                         ?>
-                                         
-                                         
+
+
                                         <td class="row_head"><?php echo e($i); ?></td>
                                         <?php $page++; ?>
+                                        
                                         <td>
                                             <?php
                                                 $url = "";

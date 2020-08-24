@@ -455,7 +455,7 @@ return [
     //Page 
     'mon_compte_header'=>'حسابي',
     'register_now_index'=>'سجل الأن',
-    'coach' => 'المدرب',
+    'coach' => 'المحاضر',
     'opinion_students' => 'اراء الطلبة',
     'filtre_courses_index' => 'قم بالبحث عن اي دورة الأن',
     'choisir_category' => 'اختر القسم',

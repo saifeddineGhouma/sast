@@ -102,6 +102,7 @@ Admins
 											@endif
 										@else
 											@if(Auth::guard("admins")->user()->can("admins"))
+											    
 												<a href="{{url('/admin/admins/edit/'.$u->id)}}">
 													<i class="livicon" data-name="edit" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="edit admin"></i>
 												</a>

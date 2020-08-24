@@ -11,14 +11,12 @@ use App\Student;
 use App\User;
 use App\Log;
 use App\AdminHistory;
-use Illuminate\Support\Facades\Redirect ;
 use DB;
-use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
 {
 	use AuthenticatesUsers;
-	/*
+    /*
     |--------------------------------------------------------------------------
     | Login Controller
     |--------------------------------------------------------------------------
@@ -29,58 +27,47 @@ class LoginController extends Controller
     |
     */
 	protected $guard = 'admins';
-	public function __construct()
-	{
-		$this->middleware('guest:admins', ['except' => ['logout']]);
-	}
+    public function __construct()
+    {
+      $this->middleware('guest:admins', ['except' => ['logout']]);
+    }
 
-	public function getLogin()
-	{
-		return view("admin.auth.login");
-	}
+    public function getLogin()
+    {
+       
+      return view("admin.auth.login");
+    }
 
-	public function postLogin(Request $request)
-	{
-
+    public function postLogin(Request $request)
+    {
 		$this->validate($request, [
-			'login'   => 'required',
-			'password' => 'required'
+	        'login'   => 'required',
+	        'password' => 'required'
 		]);
 		if ($this->hasTooManyLoginAttempts($request)) {
 			$this->fireLockoutEvent($request);
 
 			return $this->sendLockoutResponse($request);
-		}
-
+	    }
+		
 		$field = filter_var($request->input('login'), FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
-		$request->merge([$field => $request->input('login')]);
-		if (Auth::guard("admins")->attempt($request->only($field, 'password'), $request->has('remember'))) {
+	    $request->merge([$field => $request->input('login')]);
+		
+	    if (Auth::guard("admins")->attempt($request->only($field, 'password'), $request->has('remember'))){
 
-
-			/**  code edit auth if user deleted */
-
-
-			if (Auth::guard("admins")->user()->active == 0) {
-
-				Auth::guard('admins')->logout();
-				return Redirect::back()->withErrors("you're blocked");
-				/*Session::flash('message', "don't have an account");
-				Session::flash('alert-class', 'alert-danger');
-				return redirect('admin/login');*/
-			}
-			$adminhistory = new AdminHistory;
-			$adminhistory->admin_id = Auth::guard("admins")->user()->id;
-			$adminhistory->entree = date('Y-m-d H:i:s');
-			$adminhistory->description = "Log In";
-			$adminhistory->save();
-
+			$adminhistory = new AdminHistory; 
+			$adminhistory->admin_id=Auth::guard("admins")->user()->id; 
+			$adminhistory->entree=date('Y-m-d H:i:s'); 
+			$adminhistory->description="Log In"; 
+			$adminhistory->save(); 
+			
 			$User = User::get();
 			//print_r($User);
 			foreach ($User as $users) {
-				if ($users->active == 1) {
-					$mois = date("m", strtotime($users->date_of_birth));
-					$jour = date("d", strtotime($users->date_of_birth));
-					if ($mois == date("m") and $jour == date("d") and $users->env_mail == 0) {
+				if($users->active==1){
+					$mois=date("m", strtotime($users->date_of_birth));
+					$jour=date("d", strtotime($users->date_of_birth));
+					if($mois==date("m") and $jour==date("d") and $users->env_mail==0){
 						$to = $users->email;
 						$mime_boundary = "----MSA Shipping----" . md5(time());
 						$subject = "Swedish Academy: Happy birthday";
@@ -102,35 +89,35 @@ class LoginController extends Controller
 						$message1 .= '</body>';
 						$message1 .= '</html>';
 						mail($to, $subject, $message1, $headers);
-
+						
 						$users->env_mail = 1;
 						$users->update();
 					}
 				}
 			}
-
+			
 			return $this->sendLoginResponse($request);
-		}
-
-		// if unsuccessful, then redirect back to the login with the form data
+        }
+			
+       // if unsuccessful, then redirect back to the login with the form data
 		$this->incrementLoginAttempts($request);
 
-		return $this->sendFailedLoginResponse($request);
-	}
+        return $this->sendFailedLoginResponse($request);
+    }
+    
+    public function username()
+    {
+        return 'login';
+    }
 
-	public function username()
-	{
-		return 'login';
-	}
-
-	public function logout()
-	{
-
-		$log = new Log();
-		$log->user_id = Auth::guard("admins")->user()->id;
-		$log->action = "Admin Logged out";
-		$log->save();
-		Auth::guard('admins')->logout();
-		return redirect('/');
-	}
+    public function logout()
+    {
+		 
+        $log = new Log();
+        $log->user_id = Auth::guard("admins")->user()->id;
+        $log->action = "Admin Logged out";
+        $log->save();
+        Auth::guard('admins')->logout();
+        return redirect('/');
+    }
 }

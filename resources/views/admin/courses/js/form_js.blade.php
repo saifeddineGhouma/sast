@@ -225,6 +225,7 @@ function country_select(e){
             country.parent().append("<img src='{{asset('assets/admin/img/input-spinner.gif')}}' width='20' />");
         },
         success: function(result){
+			 
             $("#variation_classroom-row"+rowId).find(".govern").html(result);
             country.parent().children('img').remove();
         }
@@ -386,6 +387,9 @@ function addStudy(){
         '</td>'+
         '<td>'+
             '<input type="text" class="form-control" name="studies['+id+'][name_en]">'+
+        '</td>'+
+         '<td>'+
+            '<select class="form-control"name="studies['+id+'][lang]"><option>لغات الدراسة</option><option value="Ar">عربية</option><option value="Fr">فرنسية</option></select>'+
         '</td>'+
         '<td>'+
             '<div class="radio-list">'+

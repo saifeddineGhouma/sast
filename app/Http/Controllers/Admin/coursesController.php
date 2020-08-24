@@ -37,6 +37,8 @@ use App\Order;
 use App\OrderOnlinepayment;
 use App\UserPoint;
 use App\Notifications\OrderCreated;
+use App\CourseStudyCase ;
+use App\CourseStage ;
 use Notification;
 
 use App\AdminHistory;
@@ -53,9 +55,9 @@ class coursesController extends Controller
     }
     
     public function index(Request $request){
-        
         $courses = Course::search($request)->get();
         $categories = Category::get();
+		
         foreach ($courses as $key=> $course) {
             $id = $course->id;
             $StudentByCourses = OrderProduct::whereHas('orderproducts_students', function ($query) use ($id)
@@ -164,6 +166,7 @@ class coursesController extends Controller
      */
     public function store(Request $request)
     {
+		
 
         DB::transaction(function() use($request){
 
@@ -187,16 +190,44 @@ class coursesController extends Controller
                     $course->active = 0;
                 $course->parent_id2 = $request->parent_id2;
 
+
+               //is langue
+                 if($request->is_lang)
+                    $course->is_lang = 1;
+                else
+                    $course->is_lang = 0;
+				
                 // description 
                 $course->description_all_exam = $request->description_all_exam;
                 $course->description_quiz = $request->description_quiz;
                 $course->desciption_exam = $request->desciption_exam;
                 $course->description_exam_video = $request->description_exam_video;
                 $course->description_stage = $request->description_stage;
-
-                $course->description_study_party = $request->description_study_party;
-
+				//  study case
+				$course->description_study_case = $request->description_study_case;
                 $course->save();
+				
+				$coursestudycase = new CourseStudyCase();
+				if($request->study_case_active)
+				{
+					$coursestudycase->active =1 ;
+				}
+					$coursestudycase->courses_id= $course->id ;
+					
+					$coursestudycase->save() ;
+					
+				// course stage
+				
+				$coursestage= new CourseStage(); 
+				
+				if($request->stage_active)
+				{
+					$coursestage->active =1 ;
+				}
+					$coursestage->courses_id= $course->id ;
+					
+					$coursestage->save() ;
+           				
 
                 $course_trans = new courseTranslation();
                 $course_trans->course_id = $course->id;
@@ -504,6 +535,7 @@ class coursesController extends Controller
                 $courseStudy->name_ar = $request->get("study_name_ar_".$courseStudy->id);
                 $courseStudy->name_en = $request->get("study_name_en_".$courseStudy->id);
                 $courseStudy->type = $request->get("study_type_".$courseStudy->id);
+                $courseStudy->lang = $request->get("study_lang_".$courseStudy->id);
                 if($request->get("study_type_".$courseStudy->id)=="pdf"){
                     $courseStudy->url = $request->get("study_pdf_".$courseStudy->id);
                 }elseif($request->get("study_type_".$courseStudy->id)=="video"){
@@ -551,6 +583,7 @@ class coursesController extends Controller
                 $courseStudy->name_ar = $study["name_ar"];
                 $courseStudy->name_en = $study["name_en"];
                 $courseStudy->type = $study["type"];
+                $courseStudy->lang = $study["lang"];
                 if($study["type"]=="pdf"){
                     $courseStudy->url = $study["pdf"];
                 }else if($study["type"]=="video"){
@@ -676,7 +709,18 @@ class coursesController extends Controller
                     $course->needsExperience = false;
                 }
                 $course->parent_id2 = $request->parent_id2;
+                
+				//is langue
 
+                 if($request->is_lang)
+                   
+                    $course->is_lang = 1;
+                 
+                else
+                 {
+                    $course->is_lang = 0;
+				  
+                 }
                 // description
                 $course->description_all_exam = $request->description_all_exam;
                 $course->description_quiz = $request->description_quiz;
@@ -684,8 +728,52 @@ class coursesController extends Controller
                 $course->description_exam_video = $request->description_exam_video;
                 $course->description_stage = $request->description_stage;
                 
+				$course->description_study_case = $request->description_study_case;
                 $course->save();
 
+//study case 
+              $coursestudycase =  CourseStudyCase::where('course_id',$id)->first();
+			  
+            if(empty($coursestudycase))
+			{
+				 $coursestudycase = new   CourseStudyCase();
+				
+			}
+				if($request->study_case_active)
+				{
+					$coursestudycase->active =1 ;
+				}else{
+					$coursestudycase->active=0 ;
+					
+				}
+					$coursestudycase->course_id= $id ;
+					
+					$coursestudycase->save() ;
+					
+					
+					
+// course stage
+				
+				$coursestage=  CourseStage::where('course_id',$id)->first();
+				 if(empty($coursestage))
+			{
+				 $coursestage = new   CourseStage();
+				
+			}
+				
+				if($request->stage_active)
+				{
+					$coursestage->active =1 ;
+				}else{
+					$coursestage->active=0 ;
+					
+				}
+					$coursestage->course_id= $id ;
+					
+					$coursestage->save() ;
+
+
+                     
                 $course_trans = $course->course_trans("en");
                 if(empty($course_trans))
                     $course_trans = new courseTranslation();
@@ -1001,7 +1089,7 @@ class coursesController extends Controller
         $request->session()->flash('alert-success', 'Users has been Imported successfully...');
         return redirect()->back();
     }
-   
+
 	public function script(Request $request){
 		$course_ids = array(1 => 15, 2 => 265, 3 => 267, 4 => 272, 5 => 277, 6 => 283, 7 => 284, 7 => 288, 7 => 293, 7 => 297, 7 => 300, 7 => 302, 7 => 303, 7 => 324);
 		

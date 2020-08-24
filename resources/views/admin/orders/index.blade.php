@@ -143,7 +143,7 @@
                                     <th>Total</th>
                                     <th>Facture</th>
                                     <th>Date added</th>
-                                    <th class="text-center">Actions </th>
+                                    <th class="text-center">Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>

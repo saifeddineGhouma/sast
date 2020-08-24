@@ -90,7 +90,18 @@ html {
 .search_input::placeholder {
         color: black;
 }
+/**********toggle block ************/
+.div_toggle{
+        background-color: #d2d4db ;
+        padding-right:15px;
+        line-height:50px;
+        height: 60px; 
+        width:100%;
+        cursor: pointer;
 
+}
+
+/***********end *****/
 .submit_search, .submit_search:hover, .submit_search:active, .submit_search:focus {
         background: transparent;
         border-radius: 0;

@@ -13,7 +13,7 @@ $totalPrice = 0;
     </tr>
     </thead>
     <tbody>
-
+	
     @foreach($cart as $key=>$cart_pro)
         <?php
         $type = "book";
@@ -87,9 +87,6 @@ $totalPrice = 0;
                     $vat = $setting->vat*($cart_pro["price"]/100);
                 ?>
                 ${{ floor($cart_pro["price"]+$vat) }}
-
-
-                
             </td>
             <td data-th="@lang('navbar.qte')">
                 <input type="number" class="form-control text-center input_qte"  

@@ -8,6 +8,7 @@
 
     <div class="col-6 curriculum_exam_title">
 
+    
 
         @if($type!="video")
 
@@ -59,11 +60,11 @@
 
                 @if(Auth::check())
 
-                    {{ $quiz->students_quizzes()->where("student_id",Auth::user()->id)->count() }}
+                    {{ $quiz->students_quizzes()->where("student_id",Auth::user()->id)->count() }} 
 
                 @else
 
-                    0
+                    0  
 
                 @endif 
 
@@ -182,14 +183,14 @@
                             @if($completedcount>0)
 
                                 @if(!empty($currentQuiz))
-
-                                        <button class="startquiz" data-id="{{ $quiz->id }}" data-type="{{ $type }}">@lang('navbar.completetest')</button>
+                             
+                                    <button class="startquiz" data-id="{{ $quiz->id }}" data-type="{{ $type }}">@lang('navbar.completetest')</button>
 
                                 @else
 
                                     @if(!empty($studentQuiz) || $type!="video")
 
-                                        @if($studentQuizTmp->successfull)
+                                        @if($studentQuizTmp->successfull && $studentQuizTmp->status=="completed")
 
                                             <p class="success">@lang('navbar.succeded')</p>
 
@@ -203,7 +204,7 @@
 
 
 
-                                        @if(!($studentQuizTmp->successfull || $type=="video"))
+                                        @if(!(($studentQuizTmp->successfull && $studentQuizTmp->status=="completed")|| $type=="video"))
 
                                                 @if($type!="video" && $quiz->num_questions==0)
 
@@ -270,9 +271,12 @@
                                     <p>@lang('navbar.noquestionPleaseWait')</p>
 
                                 @else
+                                    @if($type=="video" && !$course->isFinishedFinalExam())
+                                        <p class="failed">للابد من إتمام إمتحان النظري النهائي   </p>
+                                    @else    
+                                        <button class="startquiz" data-id="{{ $quiz->id }}" data-type="{{ $type }}">@lang('navbar.starttest')</button>
 
-                                    <button class="startquiz" data-id="{{ $quiz->id }}" data-type="{{ $type }}">@lang('navbar.starttest')</button>
-
+                                    @endif
                                 @endif
 
                             @endif

@@ -356,5 +356,11 @@ class Quiz extends Model
         return $datediff;
     }
 
+    public function scopeLangue($query, $lang)
+    {
+        return $query->where('lang', $lang);
+    }
+
+
 }
    

@@ -140,6 +140,10 @@ class Course extends Model
     {
         return $this->hasOne("App\UserVerify", "course_id");
     }
+    public function stage()
+    {
+        return $this->hasOne("App\CourseStage", "course_id");
+    }
     public function course_questions()
     {
         return $this->hasMany("App\CourseQuestion");
@@ -149,6 +153,18 @@ class Course extends Model
     {
         return $this->hasMany("App\CourseVideoExam");
     }
+     public function courses_stage()
+     {
+           return $this->hasMany("App\CourseStage");
+
+     }
+
+      public function courses_study_case()
+     {
+           return $this->hasOne("App\CourseStudyCase");
+
+     }
+
 
     public function videoexams()
     {
@@ -192,7 +208,7 @@ class Course extends Model
 
     public function courseStudies()
     {
-        return $this->hasMany("App\CourseStudy");
+        return $this->hasMany("App\CourseStudy")->where('lang', Auth::check() ? ( $this->is_lang ? Auth::user()->lang() : 'Ar' ) : 'Ar');
     }
 
     public function views()
@@ -224,7 +240,15 @@ class Course extends Model
     {
         return $this->hasMany("App\StudentCertificate", "course_id");
     }
-
+ public function students_stage()
+    {
+        return $this->hasMany("App\StudentStage", "course_id");
+    }
+    ///  many ot many   students and  studycase
+    public function students_study_case()
+    {
+        return $this->hasMany("App\SujetCourse", "course_id");
+    }
 
     public static function numStudents()
     {
@@ -538,65 +562,189 @@ class Course extends Model
         $isComplete = true;
         if (Auth::check()) {
             $student = Auth::user()->student;
-            $quizzes = $this->quizzes()->where("quizzes.is_exam", 0)->get();
+
+           $lang= ($this->is_lang) ? Auth::user()->lang() : 'Ar' ;
+            $quizzes = $this->quizzes()->where("quizzes.is_exam", 0)->Langue($lang)->where("active", 1)->get();
             //print_r($quizzes);
             foreach ($quizzes as $quiz) {
                 if (!empty($student)) {
                     $studentQuiz = $student->student_quizzes()->where("quiz_id", $quiz->id)
-                        ->where("status", "=", "completed")->first();
+                        ->where("status", "=", "completed")->where('successfull',1)->first();
 
                     if (empty($studentQuiz))
                         $isComplete = false;
                 }
             }
 
-            $exams = $this->quizzes()->where("quizzes.is_exam", 1)->get();
-            foreach ($exams as $exam) {
+            $exams = $this->quizzes()->Langue($lang)->where("quizzes.is_exam", 1)->get();
+              foreach ($exams as $exam) {
                 if (!empty($student)) {
                     $studentExam = $student->student_quizzes()->where("quiz_id", $exam->id)
-                        ->where("status", "=", "completed")->first();
+                        ->where("status", "=", "completed")->where('successfull',1)->first();
 
                     if (empty($studentExam))
                         $isComplete = false;
-                }
-            }
+                            }
+                       }
         } else {
             $isComplete = false;
         }
         return $isComplete;
     }
 
-
-    public function isCompleteQuizzes()
-    {
-        $isComplete = true;
+    public function isFinishedFinalExam(){
         if (Auth::check()) {
+
+
             $student = Auth::user()->student;
-            $quizzes = $this->quizzes()->where("quizzes.is_exam", 0)->get();
-            //print_r($quizzes);
+           $lang= ($this->is_lang) ? Auth::user()->lang() : 'Ar' ;
+
+            $quizzes = $this->quizzes()->where("quizzes.is_exam", 1)->Langue($lang)->where("active", 1)->get();
+            
+            // condition valid quiz
+
             foreach ($quizzes as $quiz) {
                 if (!empty($student)) {
-                    $studentQuiz = $student->student_quizzes()->where("quiz_id", $quiz->id)
-                        ->where("status", "=", "completed")->first();
+                     $studentQuiz = $student->student_quizzes()->where("quiz_id", $quiz->id)
+                        ->where("status", "=", "completed")->where('successfull',1)->first();
 
-                    if (empty($studentQuiz))
-                        $isComplete = false;
+                    if (empty($studentQuiz) || !$studentQuiz->successfull)
+                    { 
+                       return  false;
+                    }
+                }
+            }
+        }else{
+            return false;
+        }
+        return true;
+    }
+   
+    public function isFinishedQuizzes(){
+        if (Auth::check()) {
+
+          // add  condition langue 
+
+            $student = Auth::user()->student;
+          $lang= ($this->is_lang) ? Auth::user()->lang() : 'Ar' ;
+
+            $quizzes = $this->quizzes()->where("quizzes.is_exam", 0)->Langue($lang)->where("active", 1)->get();
+            
+        // condition valid quiz
+
+            foreach ($quizzes as $quiz) {
+                if (!empty($student)) {
+                     $studentQuiz = $student->student_quizzes()->where("quiz_id", $quiz->id)
+                        ->where("status", "=", "completed")->where('successfull',1)->first();
+
+                    if (empty($studentQuiz) || !$studentQuiz->successfull)
+                    { 
+                       return  false;
+                    }
+                }
+            }
+        }else{
+            return false;
+        }
+        return true;
+    }
+
+ 
+
+    public function isCompleteQuizzes($student=null)
+    {
+       
+
+    
+		
+        if (Auth::check() || !empty($student)) {
+
+            if(empty($student))
+            {
+                $student = Auth::user()->student;
+                $lang= ($this->is_lang) ? Auth::user()->lang() : 'Ar' ;
+
+            } else{
+                $lang= ($this->is_lang) ? $student->user->lang() : 'Ar' ;
+            } 
+
+            /*Quizzes*/
+           
+
+			$quizzes = $this->quizzes()->where("quizzes.is_exam", 0)->Langue($lang)->where("active", 1)->get();
+			
+            // condition valid quiz
+
+            foreach ($quizzes as $quiz) {
+                if (!empty($student)) {
+                     $studentQuiz = $student->student_quizzes()->where("quiz_id", $quiz->id)
+                        ->where("status", "=", "completed")->where('successfull',1)->first();
+
+
+                    if (empty($studentQuiz)  )
+					{ 
+                        
+
+				       return  false;
+					}
+                       
                 }
             }
 
+            /* Final exam */
+            $quizzes = $this->quizzes()->Langue($lang)->where("quizzes.is_exam", 1)->where("active", 1)->get();
+            
+            // condition valid quiz
+
+            foreach ($quizzes as $quiz) {
+                if (!empty($student)) {
+                     $studentQuiz = $student->student_quizzes()->where("quiz_id", $quiz->id)
+                        ->where("status", "=", "completed")->first();
+
+                    if (empty($studentQuiz))
+                    { 
+                       return  false;
+                    }
+                       
+                }
+            }
+
+            /* Video exam */
+
             $videoExams = $this->videoexams()->get();
+           
             foreach ($videoExams as $videoExam) {
                 if (!empty($videoExam)) {
                     $studentVideo = $student->student_videoexams()->where("videoexam_id", $videoExam->id)
                         ->where("status", "=", "completed")->where("successfull", 1)->first();
+
                     if (empty($studentVideo))
-                        $isComplete = false;
+                        return  false;
                 }
             }
+        
+            /*Stage*/
+
+            if(!$this->ValidStage())
+            {
+                return false ;
+                 
+            }
+           
+           /* study case */
+
+             if(!$this->ValidStudycase())
+            {
+                return false ;
+                 
+            }
+
+
         } else {
-            $isComplete = false;
+           return  false;
         }
-        return $isComplete;
+
+        return true ;
     }
 
 
@@ -605,7 +753,8 @@ class Course extends Model
         $isComplete = true;
         if (Auth::check()) {
             $student = Auth::user()->student;
-            $quizzes = $this->quizzes()->where("quizzes.is_exam", 0)->get();
+            $lang= ($this->is_lang) ? Auth::user()->is_lang : 'Ar' ;
+            $quizzes = $this->quizzes()->Langue($lang)->where("quizzes.is_exam", 0)->get();
             //print_r($quizzes);
             foreach ($quizzes as $quiz) {
                 if (!empty($student)) {
@@ -613,13 +762,13 @@ class Course extends Model
                         ->where("status", "=", "completed")->first();
 
                     if (empty($studentQuiz))
-                        $isComplete = false;
+                        return false;
                 }
             }
         } else {
-            $isComplete = false;
+            return  false;
         }
-        return $isComplete;
+        return true;
     }
 
 
@@ -628,7 +777,8 @@ class Course extends Model
         $isComplete = true;
         if (Auth::check()) {
             $student = Auth::user()->student;
-            $quizzesFr = $this->quizzes()->whereIn('quizzes.id', [328, 329, 330, 331, 332])->where("quizzes.is_exam", 0)->get();
+
+            $quizzesFr = $this->quizzes()->Langue('Fr')->where("quizzes.is_exam", 0)->get();
             $quizzesAr  = $this->quizzes()->whereIn('quizzes.id', [312, 366, 367, 368, 369, 370])->where("quizzes.is_exam", 0)->get();
             //print_r($quizzes);
             if ($student->user->user_lang()->exists()) {
@@ -679,7 +829,14 @@ class Course extends Model
                 } else {
 
                     $courseQuiz = $this->courses_quizzes()->where("quiz_id", $quiz->id)->first();
-                    $quizzesCount = $courseQuiz->attempts;
+					if(isset($courseQuiz))
+                    {
+					$quizzesCount = $courseQuiz->attempts;}
+				else {
+					$quizzesCount ='';
+				}
+					
+				
                     $successQuizzesCount = $student->student_quizzes()->where("quiz_id", $quiz->id)->where("successfull", 1)->count();
                     $studentQuizzesCount = $student->student_quizzes()->where("quiz_id", $quiz->id)->count();
 
@@ -726,6 +883,7 @@ class Course extends Model
         }
         return $isValid;
     }
+
     // fitness assistant 
     public function validateExam($type, &$messageValid)
     {
@@ -755,17 +913,21 @@ class Course extends Model
         return ['isValid' => $isValid, 'isValidQuiz' => $isValidQuiz];
     }
 
+    /////// valid 50 quiz 
+
     public function validateQuiz($type, &$messageValid)
     {
+       
         $isValid = false;
         $isRegistered = $this->isRegistered();
         //echo $isRegistered;
         if ($isRegistered) {
             if ($type != "exam" || ($type == "exam" && $this->isTotalPaid())) {
-                if ($type != "exam" || ($type == "exam" && $this->isCompleteQuizzes())) {
+
+                if ($type != "exam" || ($type == "exam" && $this->isFinishedQuizzes())) {
                     $isValid = true;
                 } else {
-                    $messageValid = ' <p class="failed">لابد من إتمام جميع الكويزات والفيديو لإتمام الاختبار النهائي</p>';
+                    $messageValid = ' <p class="failed">للابد من إتمام جميع الكويزات لإتمام الاختبار النهائي  </p>';
                 }
             } else {
                 $messageValid = '<p class="failed">برجاء إكمال باقي الأقساط لأداء الاختبار النهائي</p>';
@@ -849,4 +1011,42 @@ class Course extends Model
         $orderProductStudent->student_id = $user->student->id;
         $orderProductStudent->save();
     }
+    public function finalExam(){
+
+       return $this->quizzes()->Langue('Ar')->where("quizzes.is_exam", 1)->where("active", 1)->get();
+
+     }
+
+    private function ValidStage()
+     {
+
+        if(isset($this->CourseStage) && $this->CourseStage->active)
+        {
+            $query=  $this->students_stage()->where('user_id',Auth::user()->id)->first() ;
+
+              if(isset($query) && $query->valider==1)
+           
+               return true ;
+               
+            return false ;
+        }
+        return true ;
+           
+        
+     }
+
+    private function ValidStudycase()
+     {
+        if( isset($this->courses_study_case) && $this->courses_study_case->active)
+        {
+            $query = $this->students_study_case()->where('user_id',Auth::user()->id)->first() ;
+           if(isset($query) && $query->successful)
+           
+                 return true ;
+             return false ;
+        }else
+           {
+            return true ;
+           }
+     }
 }
