@@ -24,6 +24,7 @@ class CategoriesController extends Controller
 	private $numCourses = 12;
 	
 	public function getView($slug){
+		
         $type="category";
         $category=null;
         if($slug=='all-courses'){
@@ -67,6 +68,7 @@ class CategoriesController extends Controller
                         ->where('coursetype_variations.date_from', '>=', $now);
                 });
             });
+
         if($slug!='all-courses') {
             $countCourses = $countCourses->where('courses_categories.category_id', $category->id);
             if($category->id==1){
@@ -81,7 +83,6 @@ class CategoriesController extends Controller
             }
         }
         $countCourses = $countCourses->distinct()->get(["course_types.*"])->count();
-
         $courseTypes = CourseType::orderBy('created_at', 'desc')->join("courses","courses.id","=","course_types.course_id")
             ->leftJoin("courses_categories","courses_categories.course_id","=","courses.id")
             ->where("courses.active",1)
@@ -94,7 +95,6 @@ class CategoriesController extends Controller
                             ->where('coursetype_variations.date_from', '>=', $now);
                     });
             });
-
         if($slug!='all-courses') {
             $courseTypes = $courseTypes->where('courses_categories.category_id', $category->id);
             if($category->id==1){
@@ -109,7 +109,6 @@ class CategoriesController extends Controller
             }
         }
         $courseTypes = $courseTypes->distinct()->take($this->numCourses)->get(["course_types.*"]);
-
 
         return view('front.categories.view',array(
 			"category"=>$category,"minPrice"=>$minPrice,"maxPrice"=>$maxPrice,
@@ -308,6 +307,7 @@ class CategoriesController extends Controller
                 $courseTypes = $courseTypes->orderBy('coursetype_variations.price','asc');
             }
         }
+        $courseTypes = $courseTypes->orderBy('created_at', 'desc');
         $courseTypes = $courseTypes->skip($start_at);
         $courseTypes = $courseTypes->distinct()->take($this->numCourses)->get(['course_types.*']);
 

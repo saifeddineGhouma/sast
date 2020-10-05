@@ -212,7 +212,7 @@ class coursesController extends Controller
 				{
 					$coursestudycase->active =1 ;
 				}
-					$coursestudycase->courses_id= $course->id ;
+					$coursestudycase->course_id= $course->id ;
 					
 					$coursestudycase->save() ;
 					
@@ -224,7 +224,7 @@ class coursesController extends Controller
 				{
 					$coursestage->active =1 ;
 				}
-					$coursestage->courses_id= $course->id ;
+					$coursestage->course_id= $course->id ;
 					
 					$coursestage->save() ;
            				

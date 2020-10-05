@@ -23,6 +23,12 @@
 					<div class="panel-body">
 
 						<div class="form-group">
+							<label class="col-md-2 control-label">Live Exam</label>
+							<div class="col-md-10">
+								<input type="checkbox" class="" name='live' value='live' {{ ($videoExam->live==1)?'checked':'' }}>
+							</div>
+						</div>
+						<div class="form-group">
 							<label class="col-md-2 control-label">name <span style="color:red;">*</span></label>
 							<div class="col-md-10">
 								<input type="text" name="ar_name" class="form-control" value="{{$videoExam_trans_ar->name}}">

@@ -119,7 +119,8 @@ function formFilter(e){
             $('.deleterecord').on('click', deleteRecord);
             $('.restore').on('click', restoreRecord);
             $('#table1').DataTable(options);
-            $('.activeIcon').on('click',activeIcon_click);
+            //$('.activeIcon').on('click',activeIcon_click);
+			//$('.btn_active').on('click',function(){alert('ici')});
             $(".livicon").addLivicon();
         },
         error: function(error){
@@ -139,6 +140,7 @@ $("#search_form").submit();
 //************************* Change Active *********************************
 
 function activeIcon_click(){
+	
     var id = $(this).data('id');
     var this1 =$(this);
     swap(id,'active',this1);
@@ -148,7 +150,7 @@ function swap(state,field,this1){
     var newsate = true;
     var onstate = "on";
     var offstate = "off";
-
+   
     if(sp[0]==onstate){
         this1.html('<span class="label label-sm label-danger"> not active</span>');
         this1.data('id',state.replace(sp[0],offstate));

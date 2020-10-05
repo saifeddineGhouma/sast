@@ -11,9 +11,11 @@ use App\Http\Controllers\Controller;
 use App\User;
 use App\Course;
 use App\StudentStage;
-
+use App\StudentStudyCase ;
 use Image;
 use Illuminate\Support\Facades\Input;
+use App\Notifications\StageFinished;
+use Notification;
 
 class StudentStageController extends Controller
 {
@@ -39,13 +41,43 @@ class StudentStageController extends Controller
             Input::file('evaluation_stage')->move($path, $name);
             $studentStage->evaluation_stage = $name;
         }
+        $admins = \App\Admin::get();
+        Notification::send($admins, new StageFinished($user->username, $studentStage));
 
         if ($studentStage->save()) {
+            session()->flash('message', 'لقد تم رفع الملفات ');
+           // $request->session()->flash('alert-success', 'course updated successfully...');
             return redirect()->back();
         } else {
 
             return redirect()->back()->withErrors("يجب عليك تحميل الملفين");
         }
+    }
+    public function deleteStage($id)
+    {
+        $path = 'uploads/kcfinder/upload/image/stage/';
+        $studentstage = StudentStage::findOrFail($id);
+        if(!empty($studentstage->demande_stage))
+            unlink($path.$studentstage->demande_stage);
+        if(!empty($studentstage->evaluation_stage))
+            unlink($path.$studentstage->evaluation_stage);
+        $studentstage->delete();
+       // $request->session()->flash('alert-success', 'course updated successfully...');
+       session()->flash('message', 'لقد تم مسح  الملفات ') ;
+        return back() ;
+    }
+     public function deleteStudycase($id)
+    {
+        $path = 'uploads/kcfinder/upload/image/studycase/';
+        $studenttudycase = StudentStudyCase::findOrFail($id);
+        if(!empty($studenttudycase->document))
+            unlink($path.$studenttudycase->document);
+       
+        $studenttudycase->document='';
+        $studenttudycase->update() ;
+       // $request->session()->flash('alert-success', 'course updated successfully...');
+       session()->flash('message', 'لقد تم مسح  الملفات ') ;
+        return back() ;
     }
 }
 // /test.swedish-academy.se/uploads/kcfinder/upload/image/stage

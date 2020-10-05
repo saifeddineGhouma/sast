@@ -40,37 +40,37 @@
 
         <?php if($type!="video"): ?>
 
-             <?php if($type=="pdf"): ?>
+            <?php if($type=="pdf"): ?>
 
-            
-
-           <?php else: ?>
-
-
-
-            <p><?php echo e($quiz->num_questions); ?> <?php echo app('translator')->getFromJson('navbar.question'); ?></p>
-
-            <?php if($type=="exam"): ?>
-
-                <?php echo app('translator')->getFromJson('navbar.numrepetition'); ?>
-
-                <?php if(Auth::check()): ?>
-
-                    <?php echo e($quiz->students_quizzes()->where("student_id",Auth::user()->id)->count()); ?> 
-
-                <?php else: ?>
-
-                    0  
-
-                <?php endif; ?> 
+                
 
             <?php else: ?>
 
+
+
+                <p><?php echo e($quiz->num_questions); ?> <?php echo app('translator')->getFromJson('navbar.question'); ?></p>
+
+                <?php if($type=="exam"): ?>
+
+                    <?php echo app('translator')->getFromJson('navbar.numrepetition'); ?>
+
+                    <?php if(Auth::check()): ?>
+
+                        <?php echo e($quiz->students_quizzes()->where("student_id",Auth::user()->id)->count()); ?> 
+
+                    <?php else: ?>
+
+                        0  
+
+                    <?php endif; ?> 
+
+                <?php else: ?>
+
             
 
-            <?php endif; ?>
+                <?php endif; ?>
 
-        <?php endif; ?> 
+            <?php endif; ?> 
 
         <?php endif; ?>
 
@@ -250,8 +250,11 @@
 
                                         <?php if(!empty($studentQuizTmp)): ?>
 
-                                            <a class="startquiz" href="<?php echo e(url(App('urlLang').'courses/quiz-result?studentQuiz_id='.$studentQuizTmp->id.'&type='.$type)); ?>"><?php echo app('translator')->getFromJson('navbar.showresult'); ?></a>
-
+                                            <?php if($type!="video"): ?>
+                                                <a style="margin-right: 10px;" class="startquiz" href="<?php echo e(url(App('urlLang').'courses/quiz-result?studentQuiz_id='.$studentQuizTmp->id.'&type='.$type)); ?>"><?php echo app('translator')->getFromJson('navbar.showresult'); ?></a>
+                                            <?php else: ?>
+                                                <a style="margin-right: 10px;" class="startquiz" href="<?php echo e(url(App('urlLang').'courses/quiz-result?studentQuiz_id='.$studentQuizTmp->id.'&type='.$type)); ?>">   أعد المحاولة   </a>
+                                            <?php endif; ?>
                                         <?php endif; ?>
 
                                         </p> 

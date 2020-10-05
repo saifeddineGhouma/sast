@@ -5,6 +5,7 @@
             <th>Full Name En </th>
             <th>Email</th>
             <th>Username</th>
+            <th>Langue </th>
             <th>Created_at</th>
             <th class="text-center"> Actions </th>
         </tr>
@@ -30,6 +31,12 @@
 	            <td>
 	            	<a href="{{url('admin/users/view/'.$u->id)}}">{{$u->user->username}}</a>				         	
 	            </td>
+	            <td><i class="fa fa-language lang_edit" aria-hidden="true" data-id="{{$u->user->id}}" style="cursor: pointer;"></i>
+	            	@php 
+	            	$lang=(!empty($u->user->user_lang)) ? $u->user->user_lang->lang_stud : '' ;
+
+	            	@endphp
+                    <span  id="lang_value_{{$u->user->id}}">{{$lang}}</span></td>
 	            <td class="center"> 
 	            	{{ date("Y-m-d",strtotime($u->created_at)) }}
 	            </td>
@@ -69,3 +76,28 @@
        @endif
     </tbody>
 </table>
+
+<script type="text/javascript">
+$('.lang_edit').click(function(){
+
+	let id=$(this).attr("data-id");
+	editlang(id);
+});
+function editlang(id)
+{
+	$.ajax({
+		 url: '{{ route('update.lang') }}',
+		 data: {id},
+		 type: "get",
+		
+		success: function(data){
+
+             $('#lang_value_'+id).text(data.result)
+            // $('#lang_value_'+id).append(data.result)test_return
+             console.log(data.result)
+		}
+	});
+
+}
+
+	</script>

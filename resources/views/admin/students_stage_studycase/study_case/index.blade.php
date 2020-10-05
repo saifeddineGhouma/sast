@@ -1,4 +1,17 @@
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 @extends('admin/layouts/master')
 
 @section('title')
@@ -59,7 +72,7 @@
 	                </div>
 
 					<div class="well table-toolbar">
-						<form   action="{{route('students.stage')}}" method="get">
+						<form   action="{{route('students.studycase')}}" method="get">
 							<div class="row">
 								<div class="col-md-4 col-sm-4">
 									<div class="form-group">
@@ -118,123 +131,57 @@
 
 
 
-					<div class="table-toolbar">
-	                    <div class="row" style="margin-top: 20px;">
-
-
-	                    </div>
-	                </div>
-
-
-	                <div id="reloaddiv" class="block_stage" >
+				<div id="reloaddiv" >
 						<table class="table table-striped table-bordered" id="table1">
 							<thead>
 							<tr>
 								<th>Username</th>
 								<th>Email</th>
 								<th>Course </th>
-								<th>Demande de stage</th>
-								<th>Evaluation de stage</th>
+								<th>sujet</th>
+								<th>Fichie Pdf</th>
 								<th>Status</th>
 								<th class="text-center"> Date added </th>
 								<th > Actions </th>
 							</tr>
 							</thead>
 							<tbody>
-								@foreach($stages as $stage)
+								@foreach($study_cases as $study_case)
 								<tr>
-									<td>{{$stage->user->full_name_ar}}</td>
-									<td>{{$stage->user->email}}</td>
-									<td>{{$stage->course->course_trans('ar')->name}}</td>
+									<td>{{$study_case->student->user->full_name_ar}}</td>
+									<td>{{$study_case->student->user->email}}</td>
+									<td>{{$study_case->course->course_trans('ar')->name}}</td>
 									<td>
-									   @foreach($stage->user->user_stage as $stage_user)
-                                              
-                                               <a href="{{asset('uploads/kcfinder/upload/image/stage/'.$stage_user->demande_stage)}}" target="_blank">
-											
-											 stage   
-
-									        	</a> <br/>
-
-										@endforeach
-									
-										
+										{{$study_case->sujet->description}}
 
 										</td>
 										<td>
-										
-										
-										 @foreach($stage->user->user_stage as $stage_user)
-                                              
-                                               <a href="{{asset('uploads/kcfinder/upload/image/stage/'.$stage_user->evaluation_stage)}}" target="_blank">
+											 
 											
-											 Evalution de stage 
 
-									        	</a> <br/>
+										
+										<a href="{{asset('uploads/kcfinder/upload/image/studyCase/'.$study_case->document)}}" target="_blank">
+											
+											Document  
 
-										@endforeach
+										</a>
+										
 
 										</td>
 								
 								
 									<td> 
-										@php 
-									
-										if($stage->valider==1)
-										{
-											$badge='success';
-											$status='Valid' ;
-										}elseif($stage->valider==0){
-										    $badge='info';
-										    $status='EnCours';
 
-
-									}else{
-									        $badge='danger';
-										    $status='Invalid';
-
-								}
 										
+										{{($study_case->successful==1) ? 'success':'Refus'}}
 										
-
-										@endphp
-										
-											
-										
-										<span class="badge badge-{{$badge}}">{{$status}}</span>
 
 									</td>
-										<td>{{\Carbon\Carbon::parse($stage->created_at)->format('m-d-Y')}}</td>
+										<td>{{\Carbon\Carbon::parse($study_case->created_at)->format('m-d-Y')}}</td>
 									<td>
-								@php 
-									
-										if($stage->valider==1)
-										{
-											$badge='success';
-											$status='Valid' ;
-										}elseif($stage->valider==0){
-										    $badge='info';
-										    $status='EnCours';
-
-
-									}else{
-									        $badge='danger';
-										    $status='Invalid';
-
-								}
-										
-										
-
-										@endphp
-										
-											<form method="GET" action ="{{route('students.stage.update',$stage->id)}}">
-											<select class="form-control" name="valider" >
-												<option class="bg-info" value="0"{{($stage->valider==0)?'selected':''}} >Encours</option>
-												<option class="bg-success" value="1"{{($stage->valider==1)?'selected':''}}>Valid</option>
-												<option class="bg-danger" value="-1"{{($stage->valider==-1)?'selected':''}}>Invalid</option>
-
-											</select>
-											<button type="submit" class="btn btn-secondary" onclick="return confirm('Are you sure?')">save</button>
-										
+										<a href="{{route('students.studycase.edit',$study_case->id)}}">
+                        <i class="livicon" data-name="edit" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="edit student exam"></i>
+					</a>
 									</td>
 
 								</tr>
@@ -244,13 +191,8 @@
 
 							</tbody>
 						</table>
-						{{ $stages->links() }}
+						{{ $study_cases->links() }}
                 	</div>
-
-
-
-
-	            </div>
 	         </div>
 	    </div>
 	</div>
@@ -293,29 +235,54 @@
 	<script src="{{asset('assets/admin/js/pages/components-date-time-pickers.js')}}" type="text/javascript"></script>
 	<script src="{{asset('assets/admin/vendors/select2/select2.min.js')}}" type="text/javascript"></script>
 
+	<script type="text/javascript">
+	    $('.select2').select2();
+	</script>
 
-<script type="text/javascript">
-    $('.valid_stage').on('change', function() {
-    	alert('test')
-        $('#label_stage').html($(".valid_stage option:selected").text());
-        $('#modal_stage').modal('show');
-    });
-
-    $('#save_valid').on('click', function() {
-alert('test')
-        var lang =$('#lang').val() ;
-        url = "{{route('add.student.lang',['lang'=>':lang','user'=>Auth::id()])}}";
-        url = url.replace(':lang', lang);
- 
-        window.location.href= url ;
-
-
-
-
-       
-
-    });
-
-
-</script>
 @endsection
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

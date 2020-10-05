@@ -91,7 +91,6 @@
 											<option value="quiz">Quizzes</option>
 											<option value="video">Video Exams</option>
 											<option value="exam">Final Exams</option>
-											<option value="stage">Stage</option>
 										</select>
 									</div>
 								</div>

@@ -10,6 +10,7 @@ $students = App\Student::paginate(4) ;
             <th>Full Name En </th>
             <th>Email</th>
             <th>Username</th>
+            <th>Langue</th>
             <th>Created_at</th>
             <th class="text-center"> Actions </th>
         </tr>
@@ -35,6 +36,7 @@ $students = App\Student::paginate(4) ;
 	            <td>
 	            	<a href="{{url('admin/users/view/'.$u->id)}}">{{$u->user->username}}</a>				         	
 	            </td>
+	            <td>{{$u->lang()}}</td>
 	            <td class="center"> 
 	            	{{ date("Y-m-d",strtotime($u->created_at)) }}
 	            </td>

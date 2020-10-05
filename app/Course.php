@@ -210,7 +210,10 @@ class Course extends Model
     {
         return $this->hasMany("App\CourseStudy")->where('lang', Auth::check() ? ( $this->is_lang ? Auth::user()->lang() : 'Ar' ) : 'Ar');
     }
-
+     public function Studies()
+    {
+        return $this->hasMany("App\CourseStudy");
+    }
     public function views()
     {
         return $this->hasMany("App\CourseView");
@@ -592,12 +595,20 @@ class Course extends Model
         return $isComplete;
     }
 
-    public function isFinishedFinalExam(){
-        if (Auth::check()) {
+    public function isFinishedFinalExam($student=null){
+        if (Auth::check() || !empty($student)) {
+
+             if(empty($student))
+            {
+                $student = Auth::user()->student;
+                $lang= ($this->is_lang) ? Auth::user()->lang() : 'Ar' ;
+
+            } else{
+                $lang= ($this->is_lang) ? $student->user->lang() : 'Ar' ;
+            } 
 
 
-            $student = Auth::user()->student;
-           $lang= ($this->is_lang) ? Auth::user()->lang() : 'Ar' ;
+         
 
             $quizzes = $this->quizzes()->where("quizzes.is_exam", 1)->Langue($lang)->where("active", 1)->get();
             
@@ -620,13 +631,19 @@ class Course extends Model
         return true;
     }
    
-    public function isFinishedQuizzes(){
-        if (Auth::check()) {
+    public function isFinishedQuizzes($student=null){
+         if (Auth::check() || !empty($student)) {
 
-          // add  condition langue 
+             if(empty($student))
+            {
+                $student = Auth::user()->student;
+                $lang= ($this->is_lang) ? Auth::user()->lang() : 'Ar' ;
 
-            $student = Auth::user()->student;
-          $lang= ($this->is_lang) ? Auth::user()->lang() : 'Ar' ;
+            } else{
+                $lang= ($this->is_lang) ? $student->user->lang() : 'Ar' ;
+            } 
+
+
 
             $quizzes = $this->quizzes()->where("quizzes.is_exam", 0)->Langue($lang)->where("active", 1)->get();
             

@@ -176,7 +176,7 @@
                                                                 <p><?php echo app('translator')->getFromJson('navbar.accompanetransfertphoto'); ?></p>
 
                                                                 <div class="form-group">
-                                                                    <input type="file" name="banktransfer_image" accept="image/x-png,image/gif,image/jpeg,image/jpg" />
+                                                                    <input type="file" name="banktransfer_image"  />
                                                                 </div>
                                                                 <p><?php echo app('translator')->getFromJson('navbar.accepttrasfertafterverification'); ?></p>
 

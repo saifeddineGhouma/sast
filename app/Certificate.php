@@ -118,7 +118,6 @@ class Certificate extends Model
 
     public function export($student, $Arabic, &$serialnumber, &$new_image_name, $date = null)
     {
-
         include_once "assets/phpqrcode/qrlib.php";
         if (!isset($date)) {
             $date = $this->date;
@@ -127,16 +126,11 @@ class Certificate extends Model
         $image_path = asset($dir . $this->image);
         $file_temp = $_SERVER['DOCUMENT_ROOT'] . "/" . $dir . $this->image;
 
-        // code de test 
-         //   $serialnumber = rand(1000000, 9999999) . rand(10000, 99999);
-
         if (file_exists($file_temp)) {
             $img = Image::make($image_path);
             $x = pathinfo($this->image);
 
             $serialnumber = rand(1000000, 9999999) . rand(10000, 99999);
-
-         
             // $new_image_name = 'students certificates/' . $serialnumber . '.' . $x['extension'];
             $new_image_name = 'students certificates/' . $serialnumber . ' - ' . $student->user->full_name_en . '.' . $x['extension'];  //TODO badalt nom certificat
             foreach ($this->certificate_contents()->where("showoncertificate", 1)->get() as $certificate_content) {

@@ -82,7 +82,7 @@ class studentsController extends Controller
 			11=>"نوفمبر",
 			12=>"ديسمبر",
 		);
-		$studentsData = Student::NotBlocked()->get();
+		$studentsData = Student::get();
         $countries = Country::get();
     	return view('teachers.students.create',array(
     		"users"=>$users,"monthsArr"=>$monthsArr,

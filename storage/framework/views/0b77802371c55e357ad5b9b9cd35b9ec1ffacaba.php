@@ -125,6 +125,7 @@
 
         
         $("#info_form").bootstrapValidator({
+            alert('test');
             excluded: [':disabled'],
             fields: {
                 /* full_name_ar: {
@@ -204,6 +205,7 @@
                             url: "<?php echo e(url('/home/unique-email')); ?>",
                             type: 'GET',
                             data: function(validator) {
+                                
                                 return {
                                     id: '<?php echo e($user->id); ?>'
                                 };
@@ -237,6 +239,7 @@
                 },
             }
         }).on('success.form.bv', function(e) {
+            
             var points = $("#points").val();
             var max_points_replace = <?php echo e(App('setting')->max_points_replace); ?>;
             var userpoints = <?php echo e($userpoints); ?>;

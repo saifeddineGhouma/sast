@@ -81,19 +81,19 @@ class videoexamsController extends Controller
 
             // save posted data
             if ($request->isMethod('post')) {
-                $videoExam = new VideoExam();
-
+                $videoExam        = new VideoExam();
+                $videoExam->live  = isset($request->live) ? 1 : 0;
                 $rules = $videoExam->rules();
                 $this->validate($request, $rules);
 
                 //$videoExam->fill($request->all());
                 $videoExam->save();
 		
-				$adminhistory = new AdminHistory; 
-				$adminhistory->admin_id=Auth::guard("admins")->user()->id; 
-				$adminhistory->entree=date('Y-m-d H:i:s'); 
-				$adminhistory->description="Insert new video Exam"; 
-				$adminhistory->save(); 
+        				$adminhistory = new AdminHistory; 
+        				$adminhistory->admin_id=Auth::guard("admins")->user()->id; 
+        				$adminhistory->entree=date('Y-m-d H:i:s'); 
+        				$adminhistory->description="Insert new video Exam"; 
+        				$adminhistory->save(); 
 
                 $videoExam_trans = new VideoExamTranslation();
                 $videoExam_trans->videoExam_id = $videoExam->id;
@@ -175,18 +175,18 @@ class videoexamsController extends Controller
             // save posted data
             if ($request->isMethod('patch')) {
                 $rules = $videoExam->rules();
-
+                $videoExam->live  = isset($request->live) ? 1 : 0;
                 $this->validate($request, $rules);
 
                 // Save videoExam
                 //$videoExam->fill($request->all());
                 $videoExam->save();
 		
-				$adminhistory = new AdminHistory; 
-				$adminhistory->admin_id=Auth::guard("admins")->user()->id; 
-				$adminhistory->entree=date('Y-m-d H:i:s'); 
-				$adminhistory->description="Update video Exam"; 
-				$adminhistory->save(); 
+        				$adminhistory = new AdminHistory; 
+        				$adminhistory->admin_id=Auth::guard("admins")->user()->id; 
+        				$adminhistory->entree=date('Y-m-d H:i:s'); 
+        				$adminhistory->description="Update video Exam"; 
+        				$adminhistory->save(); 
 
                 $videoExam_trans = $videoExam->videoExam_trans("en");
                 if(empty($videoExam_trans))

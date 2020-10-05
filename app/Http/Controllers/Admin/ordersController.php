@@ -38,7 +38,6 @@ class ordersController extends Controller
 
 	public function getIndex()
 	{
-		
 		$users = User::orderBy("created_at", "desc")->get();
 		$courses = Course::get();
 		$categoris = Category::all();

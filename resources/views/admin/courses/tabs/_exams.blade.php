@@ -90,7 +90,7 @@ else{
   </div>
 
 
-<h3 class="form-section">is Langue </h3>
+<h3 class="form-section">Multi-lang </h3>
 	@php 
 
 	 if(isset($course))
@@ -109,7 +109,7 @@ else{
 
 <div class="form-check">
     <input type="checkbox" name="is_lang" value="1" class="form-check-input" id="is_lang" {{ $checked_islangue}}>
-    <label class="form-check-label" for="is_Lang">Is Langue </label>
+    <label class="form-check-label" for="is_Lang">Multi-lang  </label>
   </div>
 
 

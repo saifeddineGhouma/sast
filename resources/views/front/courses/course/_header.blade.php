@@ -212,7 +212,9 @@
                                 @endif
                             @endif
                         @else
-                            @if($course->categories->first()->id ==  5)
+							
+                            @if( !empty($course->categories->first()) && $course->categories->first()->id ==  5)
+								/**********/
                               @if(!$user)
                               <button class="btn btn-disabled btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" disabled="disabled"><span style="margin-right: 10px;">{{ floor($first_Variation->price+$vat) }}$</span></button>
                               @else
@@ -291,25 +293,26 @@
                                       
                                         <form id="cart-form" class="search_form incourse" method="post" action="{{ url(App('urlLang').'cart/add-to-cart') }}" enctype="multipart/form-data">
                                             {{ csrf_field() }}
-                                            @if(Auth::check() && isset(Auth::user()->user_lang->lang_stud))
-                                                <span> لقد قمت باختيار اللغة  {{  Auth::user()->lang()=='Fr' ?"فرنسية'" : "عربية'"}} سابقا</span>
-                                            @else
-                                                <div class="form-group">
-                                                    <label class="form-label "> إختر لغة المحتوى   </label>
-                                                    <select class="form-control country_id" name="lang" id="lang" style="width: 200px;margin: auto;">
-                                                        <option >إختر لغة</option>
-                                                       
-                                                            <option value="Fr" {{$user->lang()=="Fr" ? 'selected' :'' }}>
-                                                               فرنسية
-                                                            </option>
-                                                             <option value="Ar" {{$user->lang()=="Ar" ? 'selected' :''  }}>
-                                                               عربية
-                                                               </option>
-                                                        
-                                                    </select>
-                                                    
-                                                </div>
-
+                                            @if(Auth::check() )
+												@if(isset(Auth::user()->user_lang->lang_stud))
+													<span> لقد قمت باختيار اللغة  {{  Auth::user()->lang()=='Fr' ?"فرنسية'" : "عربية'"}} سابقا</span>
+												@else
+													<div class="form-group">
+														<label class="form-label "> إختر لغة المحتوى   </label>
+														<select class="form-control country_id" name="lang" id="lang" style="width: 200px;margin: auto;">
+															<option >إختر لغة</option>
+														   
+																<option value="Fr" {{$user->lang()=="Fr" ? 'selected' :'' }}>
+																   فرنسية
+																</option>
+																 <option value="Ar" {{$user->lang()=="Ar" ? 'selected' :''  }}>
+																   عربية
+																   </option>
+															
+														</select>
+														
+													</div>
+                                                @endif
                                             @endif
                                             <div class="form-group select_group">
                                                 <input type ="hidden" name="quantity" value="1">
@@ -508,7 +511,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">ستقوم بتغيير لغة المحتوى إلى اللغة : <span id='langlabel'></span></h5>
+        <h5 class="modal-title"> سنقوم بتغيير لغة المنهج و الاختبارات إلى اللغة  :<span id='langlabel'></span></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

@@ -1,5 +1,5 @@
 <script type="text/javascript">
- 
+ $('.btn_active').on('click',function(){alert('Ok')});
 //init maxlength handler
 $('.maxlength-handler').maxlength({
     limitReachedClass: "label label-danger",

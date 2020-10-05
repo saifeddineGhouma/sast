@@ -339,7 +339,7 @@ class CheckoutController extends Controller
     {
 
         $this->validate($request, [
-            'banktransfer_image' => '|mimes:jpeg,bmp,png|max:5120',
+            'banktransfer_image' => '|mimes:jpeg,bmp,png,pdf|max:5120',
             'agent_banktransfer_image' => '|mimes:jpeg,bmp,png|max:5120',
         ], [
             'banktransfer_image.max' => 'صورة الإيداع البنكي لابد أن تكون أقل من 5 ميجا'
@@ -584,8 +584,8 @@ class CheckoutController extends Controller
                 }
             }
         } else {
-            $user->notify(new OrderCreatedCartPay($order->id, $order->total, $user->username, $order, $orderProduct->coursetype_variation->coursetype_id));
-        }
+            $user->notify(new OrderCreatedCartPay($order->id, $order->total, $user->username, $order, isset($orderProduct->coursetype_variation) ? $orderProduct->coursetype_variation->coursetype_id : null));
+        } 
 
         // 09 06 2020 
         // $user->notify(new CourseStudy($order->id, $order->total, $user->username, $order));

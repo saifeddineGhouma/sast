@@ -72,7 +72,7 @@
 
 					<a href="#tab_studies" data-toggle="tab"> Studies
 
-						<span class="badge badge-success"> {{$course->courseStudies->count()}} </span>
+						<span class="badge badge-success"> {{$course->studies->count()}} </span>
 
 					</a>
 

@@ -42,39 +42,39 @@
 
         @if($type!="video")
 
-             @if($type=="pdf")
+            @if($type=="pdf")
 
-            {{-- <p> <a href = "{{url(App('urlLang').'download_stage')}}"> استمارة مطلب التربص </a>  <br/>
+                {{-- <p> <a href = "{{url(App('urlLang').'download_stage')}}"> استمارة مطلب التربص </a>  <br/>
 
                 استمارة التقييم</p>   --}}
 
-           @else
+            @else
 
 
 
-            <p>{{ $quiz->num_questions }} @lang('navbar.question')</p>
+                <p>{{ $quiz->num_questions }} @lang('navbar.question')</p>
 
-            @if($type=="exam")
+                @if($type=="exam")
 
-                @lang('navbar.numrepetition')
+                    @lang('navbar.numrepetition')
 
-                @if(Auth::check())
+                    @if(Auth::check())
 
-                    {{ $quiz->students_quizzes()->where("student_id",Auth::user()->id)->count() }} 
+                        {{ $quiz->students_quizzes()->where("student_id",Auth::user()->id)->count() }} 
+
+                    @else
+
+                        0  
+
+                    @endif 
 
                 @else
 
-                    0  
-
-                @endif 
-
-            @else
-
             
 
-            @endif
+                @endif
 
-        @endif 
+            @endif 
 
         @endif
 
@@ -254,8 +254,11 @@
 
                                         @if(!empty($studentQuizTmp))
 
-                                            <a class="startquiz" href="{{ url(App('urlLang').'courses/quiz-result?studentQuiz_id='.$studentQuizTmp->id.'&type='.$type) }}">@lang('navbar.showresult')</a>
-
+                                            @if($type!="video")
+                                                <a style="margin-right: 10px;" class="startquiz" href="{{ url(App('urlLang').'courses/quiz-result?studentQuiz_id='.$studentQuizTmp->id.'&type='.$type) }}">@lang('navbar.showresult')</a>
+                                            @else
+                                                <a style="margin-right: 10px;" class="startquiz" href="{{ url(App('urlLang').'courses/quiz-result?studentQuiz_id='.$studentQuizTmp->id.'&type='.$type) }}">   أعد المحاولة   </a>
+                                            @endif
                                         @endif
 
                                         </p> 

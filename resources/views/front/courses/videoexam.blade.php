@@ -69,69 +69,34 @@ if(empty($videoExam_trans))
 					{!! csrf_field() !!}
 					<input type="hidden" name="course_id" value="{{ $course->id }}"/>
 					<input type="hidden" name="videoExam_id" value="{{ $videoExam->id }}"/>
-					@if(in_array($course->id, [496, 502]))
+					
+
+					
 					
 					<div>
 						<div class="form-group">
-							<p style="text-align: justify;" >	الاختبارالعملي لدورة مدرب اللياقة البدنية المعتمدة من الاكاديمية السويدية للتدريب الرياضي وفقا للمواصفات القياسية لسجل المدربين المحترفين التونسي (TN REPS).
-سوف یتكون من التفسیروالأداء العملي لممارسة جلسة تدريبية تقيمية تنفذها بمفردك،وسوف یقوم
-معلمك بعرض الزمن الذي استغرقته مباشرة.
-
-تتبع الخطوات التالیة: </p>  
-<p style="text-align: justify;">
-الإعداد: <br>
-<ol>
-	<li style="text-align: justify;"> اقرأالحالة المذكورة في الاسفل. </li>
-	<li style="text-align: justify;"> 	صمم جلسة تدریبیة مناسبة تنفذها بنفسك مشتملة على اختیار نوع التمرین و ترتیب التمارین و الأحمال و الشدة و الامتداد الممكن أو نقطة الإثارة العضلیة. </li>
-</ol>
-</p>
-<p style="text-align: justify;">
-عندالاختبار :
-<ol>
-	<li style="text-align: justify;">	اشرح تصمیم برنامجك. </li> 
-	<li style="text-align: justify;"> قم بأداء جلسة التدریب وفقا لما تخطط له، ويجب أداء الإحماء بحيث تكون جاهزا قبل الاختبار. </li>
+							<p style="text-align: justify;" >	
+							الاختبارالعملي لدورة مدرب اللياقة البدنية المعتمدة من الاكاديمية السويدية للتدريب الرياضي وفقا للمواصفات القياسية للسجل التونسي للمدربين المحترفين REPS TUNISIA  . سوف یتكون من التفسیر والأداء العملي لممارسة جلسة تدريبية تقيمية تنفذها بمفردك،وسوف یقوم معلمك بعرض الزمن الذي استغرقته مباشرة. تتبع الخطوات التالی:</p>  
+							<p style="text-align: justify;">
+							الإعداد: <br>
+							<ol>
+								<li style="text-align: justify;"> اقرأالحالة المذكورة في الاسفل. </li>
+								<li style="text-align: justify;"> 	.	صمم جلسة تدریبیة مناسبة تنفذها بنفسك مشتملة على اختیار نوع التمرین و ترتیب التمارین و الأحمال و الشدة و الامتداد الممكن أو نقطة الإثارة العضلیة. </li>
+							</ol>
+							</p>
+							<p style="text-align: justify;">
+							عندالاختبار :
+								<ol>
+							<!--li style="text-align: justify;">	اشرح تصمیم برنامجك. </li--> 
+								<li style="text-align: justify;"> قم بأداء جلسة التدریب وفقا لما تخطط له، ويجب أداء الإحماء بحيث تكون جاهزا قبل الاختبار.</li>
 
 							</p>
 						</div>
 						<div class="form-group">
-							<label class="col-md-4"> الحالة التدريبية لتصوير الفيديو  :  <span></span></label>
+							<label class="col-md-4"> الحالة التدريبية هي  :  <span></span></label>
 							<div class="col-md-12">
-								{{ $casExamPratique->name }}
-							</div>
-						</div> 
-					</div>
-					<button type="submit" class="quiz_question_end">انهاء الاختبار الأن </button>
-				</div>
-					</div>
-					@else
-					@if(in_array($course->id, [17, 532]) )
-					
-					<div>
-						<div class="form-group">
-							<p style="text-align: justify;" >	الاختبارالعملي لدورة مدرب اللياقة البدنية المعتمدة من الاكاديمية السويدية للتدريب الرياضي وفقا للمواصفات القياسية لسجل المدربين المحترفين التونسي (TN REPS).
-سوف یتكون من التفسیروالأداء العملي لممارسة جلسة تدريبية تقيمية تنفذها بمفردك،وسوف یقوم
-معلمك بعرض الزمن الذي استغرقته مباشرة.
-
-تتبع الخطوات التالیة: </p>  
-<p style="text-align: justify;">
-الإعداد: <br>
-<ol>
-	<li style="text-align: justify;"> اقرأالحالة المذكورة في الاسفل. </li>
-	<li style="text-align: justify;"> 	صمم جلسة تدریبیة مناسبة تنفذها بنفسك مشتملة على اختیار نوع التمرین و ترتیب التمارین و الأحمال و الشدة و الامتداد الممكن أو نقطة الإثارة العضلیة. </li>
-</ol>
-</p>
-<p style="text-align: justify;">
-عندالاختبار :
-<ol>
-	<li style="text-align: justify;">	اشرح تصمیم برنامجك. </li> 
-	<li style="text-align: justify;"> قم بأداء جلسة التدریب وفقا لما تخطط له، ويجب أداء الإحماء بحيث تكون جاهزا قبل الاختبار. </li>
-
-							</p>
-						</div>
-						<div class="form-group">
-							<label class="col-md-4"> الحالة التدريبية لتصوير الفيديو  :  <span></span></label>
-							<div class="col-md-12">
-								{{ $casExamPratique->name }}
+								<b>{{ $casExamPratique->name }}</b>
+								<input type="hidden" name="subject" value="{{ $casExamPratique->name }}">
 							</div>
 						</div> 
 					</div>
@@ -141,47 +106,33 @@ if(empty($videoExam_trans))
 							<div class="col-md-12">
 							</div>
 						</div>
-						<div class="form-group">
-							<label class="col-md-2 control-label">رابط الفيديو <span>*</span></label>
-							<div class="col-md-10">
-								<input type="text" name="video" class="form-control">
+						@if($videoExam->live == 0)
+							<div class="form-group">
+								<label class="col-md-2 control-label">رابط الفيديو <span>*</span></label>
+								<div class="col-md-10">
+									<input type="text" name="video" class="form-control">
+								</div>
 							</div>
-						</div>
+						@else
+							<div class="form-group">
+								<div class="col-md-12">
+									<b>يمكنك الاتصال بلاكاديمية لطلب تعيين موعد إمتحان مباشرة مع أحد المدربين من <a href="{{ url(App('urlLang').'contact') }}" target="_blank">هنا  </a>ثم النقر على "طلب إمتحان مباشر" </b>
+								</div>
+							</div>
+						@endif
 						<div class="form-group">
 							<label class="col-md-2 control-label">ملاحظاتك</label>
 							<div class="col-md-10">
 								<textarea cols="60" name="user_message"  class="form-control"></textarea>
 							</div>
 						</div>
-						<button type="submit" class="quiz_question_end">انهاء الاختبار الأن </button>
+						<button type="submit" class="quiz_question_end">{{$videoExam->live == 0 ? 'انهاء الاختبار الأن ' : ' طلب إمتحان مباشر   ' }}</button>
 					</div>
 				</div>
 					</div>
 
 
-					@else
-					<div id="accordion">
-						<div class="form-group">
-							<label class="col-md-4 control-label"><span></span></label>
-							<div class="col-md-12">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-md-2 control-label">رابط الفيديو <span>*</span></label>
-							<div class="col-md-10">
-								<input type="text" name="video" class="form-control">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-md-2 control-label">ملاحظاتك</label>
-							<div class="col-md-10">
-								<textarea cols="60" name="user_message"  class="form-control"></textarea>
-							</div>
-						</div>
-						<button type="submit" class="quiz_question_end">انهاء الاختبار الأن </button>
-					</div>
-					@endif
-					@endif
+				
 				</form>
 			</div>
 		</div>
@@ -194,21 +145,23 @@ if(empty($videoExam_trans))
 
 @section('scripts')
 	<script src="{{asset('assets/front/vendors/validation/js/bootstrapValidator.min.js')}}" type="text/javascript"></script>
-<script>
-    $("#form-video").bootstrapValidator({
-        excluded: [':disabled'],
-        fields: {
-            video: {
-                validators: {
-                    notEmpty: {
-                        message: 'رابط الفيديو مطلوب'
-                    }
-                },
-                required: true
-            },
-        }
-    }).on('success.form.bv', function(e) {
+	@if($videoExam->live == 0)
+		<script>
+		    $("#form-video").bootstrapValidator({
+		        excluded: [':disabled'],
+		        fields: {
+		            video: {
+		                validators: {
+		                    notEmpty: {
+		                        message: 'رابط الفيديو مطلوب'
+		                    }
+		                },
+		                required: true
+		            },
+		        }
+		    }).on('success.form.bv', function(e) {
 
-    });
-</script>
+		    });
+		</script>
+	@endif
 @stop

@@ -4,13 +4,13 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label class="form-label">{{trans('home.full_name')}} <span>*</span></label>
-                <input type="text" class="form-control" name="full_name_en" value="{{ $user->full_name_en }}"  >
+                <input type="text" class="form-control" name="full_name_en" value="{{ $user->full_name_en }}"  required>
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label class="form-label">{{trans('home.email')}} <span>*</span></label>
-                <input type="text" class="form-control" name="email" value="{{ $user->email }}">
+                <input type="text" class="form-control" name="email" value="{{ $user->email }}" required>
             </div>
         </div>
     </div>
@@ -49,13 +49,41 @@
 
 
     <div class="row userlogedin">
-        <div class="col-md-6">
+                <div clas="col-md-4">
+                    <div class="form-group">
+                          <label class="form-label"> <span>{{trans('home.date_birth')}} *</span> : اليوم<span></span></label>
+                        <select name="day" >@php for($i= 01;$i<=31;$i++) { @endphp
+                         <option value="{{$i}}" {{ ((date("d", strtotime($user->date_of_birth)))==$i) ? 'selected' :'null'}} >{{$i}}</option>
+                         @php }@endphp
+                        </select>
+                    </div>
+                </div>
+                <div clas="col-md-4">
+                    <div class="form-group">
+                          <label class="form-label"> الشهر     <span style="margin-left: 2px"></span></label>
+                        <select name="month">@php for($i= 01;$i<=12;$i++) { @endphp
+                         <option value="{{$i}}" {{ ((date("m", strtotime($user->date_of_birth)))==$i) ? 'selected' :'null'}} >{{$i}}</option>
+                         @php }@endphp
+                        </select>
+                    </div>
+                </div>
+                <div clas="col-md-4">
+                    <div class="form-group">
+                         <label class="form-label">  السنة      <span style="margin-left: 2px"></span></label>
+                        <select name="years">@php for($i= 2020;$i>=1900;$i--) { @endphp
+                         <option value="{{$i}}" {{ ((date("Y", strtotime($user->date_of_birth)))==$i) ? 'selected' :'null'}} >{{$i}}</option>
+                         @php }@endphp
+                        </select>
+                    </div>
+                </div>
+            <div class="col-md-6" style="display: none;">
             <div class="form-group">
-                <label class="form-label">{{trans('home.date_birth')}}  <span>*</span></label>
+                <label class="form-label">{{trans('home.date_birth')}}  <span></span></label>
                 <input class="form-control date-picker" name="date_of_birth" placeholder="yyyy-m-d" value="{{ $user->date_of_birth }}" type="text"/>
             </div>
         </div>
-        <div class="col-md-6">
+     
+        <div class="col-md-12">
             <div class="form-group">
                 <label class="form-label">{{trans('home.country_info')}} <span>*</span></label>
                 <select class="form-control country_id" name="country_id">

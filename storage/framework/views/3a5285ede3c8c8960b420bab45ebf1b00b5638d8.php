@@ -197,7 +197,9 @@
                                 <?php endif; ?>
                             <?php endif; ?>
                         <?php else: ?>
-                            <?php if($course->categories->first()->id ==  5): ?>
+							
+                            <?php if( !empty($course->categories->first()) && $course->categories->first()->id ==  5): ?>
+								/**********/
                               <?php if(!$user): ?>
                               <button class="btn btn-disabled btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" disabled="disabled"><span style="margin-right: 10px;"><?php echo e(floor($first_Variation->price+$vat)); ?>$</span></button>
                               <?php else: ?>
@@ -261,25 +263,26 @@
                                         <form id="cart-form" class="search_form incourse" method="post" action="<?php echo e(url(App('urlLang').'cart/add-to-cart')); ?>" enctype="multipart/form-data">
                                             <?php echo e(csrf_field()); ?>
 
-                                            <?php if(Auth::check() && Auth::user()->lang()): ?>
-                                                <span> لقد قمت باختيار اللغة  <?php echo e(Auth::user()->lang()=='Fr' ?"فرنسية'" : "عربية'"); ?> سابقا</span>
-                                            <?php else: ?>
-                                                <div class="form-group">
-                                                    <label class="form-label "> إختر لغة المحتوى   </label>
-                                                    <select class="form-control country_id" name="lang" id="lang" style="width: 200px;margin: auto;">
-                                                        <option >إختر لغة</option>
-                                                       
-                                                            <option value="Fr" <?php echo e($user->lang()=="Fr" ? 'selected' :''); ?>>
-                                                               فرنسية
-                                                            </option>
-                                                             <option value="Ar" <?php echo e($user->lang()=="Ar" ? 'selected' :''); ?>>
-                                                               عربية
-                                                               </option>
-                                                        
-                                                    </select>
-                                                    
-                                                </div>
-
+                                            <?php if(Auth::check() ): ?>
+												<?php if(isset(Auth::user()->user_lang->lang_stud)): ?>
+													<span> لقد قمت باختيار اللغة  <?php echo e(Auth::user()->lang()=='Fr' ?"فرنسية'" : "عربية'"); ?> سابقا</span>
+												<?php else: ?>
+													<div class="form-group">
+														<label class="form-label "> إختر لغة المحتوى   </label>
+														<select class="form-control country_id" name="lang" id="lang" style="width: 200px;margin: auto;">
+															<option >إختر لغة</option>
+														   
+																<option value="Fr" <?php echo e($user->lang()=="Fr" ? 'selected' :''); ?>>
+																   فرنسية
+																</option>
+																 <option value="Ar" <?php echo e($user->lang()=="Ar" ? 'selected' :''); ?>>
+																   عربية
+																   </option>
+															
+														</select>
+														
+													</div>
+                                                <?php endif; ?>
                                             <?php endif; ?>
                                             <div class="form-group select_group">
                                                 <input type ="hidden" name="quantity" value="1">
@@ -466,7 +469,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">ستقوم بتغيير لغة المحتوى إلى اللغة : <span id='langlabel'></span></h5>
+        <h5 class="modal-title"> سنقوم بتغيير لغة المنهج و الاختبارات إلى اللغة  :<span id='langlabel'></span></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

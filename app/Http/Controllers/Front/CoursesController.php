@@ -33,6 +33,7 @@ use Notification;
 use App\Log;
 use App\Sujet;
 use App\StudentStudyCase;
+
 use App\Notifications\UserQuiz;
 
 include "assets/I18N/Arabic.php";
@@ -64,19 +65,22 @@ class CoursesController extends Controller
 
         $sujetsUse = StudentStudyCase::where('courses_id', $courseType->course->id)->pluck('sujets_id');
 
-        $sujet = Sujet::/* whereNotIn('id', $sujetsUse)-> */orderByRaw("RAND()")->first();
+        $sujet = Sujet::orderByRaw("RAND()")->first();
         
         $courseType = CourseType::findOrFail($courseType_id);
         $course     = $courseType->course;
-
+            $passed = 0;
+            $lang   = 'Ar' ;
+		
+		//StudentStudyCase::where('courses_id', $course->id)->where('students_id', $student->id)->where('document','!=','')->get();
         if (Auth::check()) {
             $student = Auth::user()->student;
             $lang    = $course->is_lang ? Auth::user()->lang() : 'Ar';
-            $passed = StudentStudyCase::where('courses_id', $courseType->course->id)->where('students_id', $student->id)->count();
-        } else {
-            $passed = 0;
-            $lang   = 'Ar' ;
-        }
+            $passed = StudentStudyCase::where('courses_id', $course->id)->where('students_id', Auth::id())->where('document','!=','')->count();
+            $sujet = Sujet::orderByRaw("RAND()")->where('lang',Auth::user()->lang())->first();
+
+        } 
+		
 		
        
         $topCourseTypes = CourseType::join("courses", "courses.id", "=", "course_types.course_id")
@@ -137,6 +141,31 @@ class CoursesController extends Controller
         $isRegistered = $course->isRegistered();
 
         //$this->views($courseType->course->id);
+          if(Auth::check())
+          {
+            $isStudy=StudentStudyCase::where('students_id',Auth::id())->where('courses_id',$course->id)->get();
+            if(!empty($course->courses_study_case->active) && empty($isStudy))
+            {
+                        
+                  $studentstudycase= new StudentStudyCase();
+                  $studentstudycase->students_id=Auth::id();
+                  $studentstudycase->sujets_id=$sujet->id ;
+                  $studentstudycase->courses_id = $course->id ;
+                  $studentstudycase->save();  
+                  $sujet=Sujet::where('id',$studentstudycase->sujets_id)->first();
+            } 
+            else
+            {
+				if(!empty($user->studycase))
+				{
+					$sujet_id= $user->studycase()->where('courses_id',$course->id)->pluck('sujets_id')->first() ;
+                  $sujet=Sujet::where('id', $sujet_id)->first();
+				}
+            }
+
+            
+          }
+           
 
         $comment = Comment::get();
 		
@@ -179,23 +208,23 @@ class CoursesController extends Controller
         ]);
         $student = Auth::user()->student;
         if ($student->id != null) {
-
-            $studentstudycase =  StudentStudyCase::where('students_id', $student->id)->where('courses_id', $request->courses_id)->first();
-          
+                         
+            $studentstudycase =  StudentStudyCase::where('students_id', Auth::id())->where('courses_id', $request->courses_id)->first();
+                 
             $studentstudycase->user_message = $request->user_message;
 
             $name = Auth::user()->username;
 
             $document =  $this->uploadFile($request->file('document'), $name . '_' . $request->courses_id);
 
-            $sujetCourse->document = $name . '_' . $request->courses_id . '_' . $document;
-
+            $studentstudycase->document = $name . '_' . $request->courses_id . '_' . $document;
+           
             $studentstudycase->save();
 
             $user = Auth::user();
             $admins = \App\Admin::get();
 
-            Session::flash('alert-success', 'تم إنشاء الإختبار بنجاح...');
+            Session::flash('message', 'تم إنشاء الإختبار بنجاح...');
             return back();
             
         } else {
@@ -545,8 +574,6 @@ class CoursesController extends Controller
 
                                             $certificate->export($student, $Arabic, $serialNumber, $image_name, date("Y-m-d"));
 
-                                            $serialNumber="new certif ";
-
                                             if ($serialNumber != "") {
 
                                                 $studentCertificate = new StudentCertificate();
@@ -818,6 +845,38 @@ class CoursesController extends Controller
         }
     }
 
+    public function VVV(Request $request)
+    {
+        $course = Course::findOrFail($request->course_id);
+        $videoExam = $course->videoexams()->where("active", 1)
+            ->where("video_exams.id", $request->videoexam_id)->firstOrFail();
+             $type = "video";
+
+        $validQuiz = $course->validateQuiz($type, $messageValid);
+         $student = Auth::user()->student;
+         $casExam = ($course->is_lang) ? CasExamPratique::where("lang", "=",Auth::user()->lang() )->inRandomOrder()->take(1)->first(): CasExamPratique::where("lang", "=",'Ar' )->inRandomOrder()->take(1)->first();
+          if (!$student->user_cas_exam()->exists()) {
+                $userCas = new UserCasExamPratique;
+                $userCas->user_id = $student->id;
+                $userCas->cas_exam_pratique_id = $casExamAr->id;
+                $userCas->save();
+            }
+            $userCasExam  = UserCasExamPratique::where('user_id', '=', $student->id)->first();
+            $casExamPratique = CasExamPratique::where('id', '=', $userCasExam->cas_exam_pratique_id)->first();
+            $studentVideo = $student->student_videoexams()->where("videoexam_id", $videoExam->id)->where("course_id", $course->id)
+                    ->where("status", "completed")->where("successfull", 1)->first();
+                if (!empty($studentVideo)) {
+                    session()->flash("alert-danger", "لقد تجاوزت هذا الاختبار بنجاح لا يمكنك إعادة الاختبار");
+                    return redirect()->back();
+                }
+                return view("front.courses.videoexam", [
+                    "videoExam" => $videoExam, "course" => $course,
+                    "userCasExam" => $userCasExam, "casExamPratique" => $casExamPratique,
+                ]);
+
+
+    }
+
     public function videoExam(Request $request)
     {
         $course = Course::findOrFail($request->course_id);
@@ -850,23 +909,21 @@ class CoursesController extends Controller
                     "userCasExam" => $userCasExam, "casExamPratique" => $casExamPratique,
                 ]);
             }
-        } elseif (in_array($request->course_id, [496, 502, 532])) {
+        } elseif (true) {
             //lehna l code student saave ........... 
             $casExamAr = CasExamPratique::where("lang", "=", "ar")->inRandomOrder()->take(1)->first();
             $casExamFr = CasExamPratique::where("lang", "=", "fr")->inRandomOrder()->take(1)->first();
 
             if (!$student->user_cas_exam()->exists()) {
-                if ($student->user->user_lang->lang_stud == "fr") {
-                    $userCas = new UserCasExamPratique;
-                    $userCas->user_id = $student->id;
+                
+                $userCas = new UserCasExamPratique;
+                $userCas->user_id = $student->id;
+				if (isset($student->user->user_lang) && $student->user->user_lang->lang_stud == "fr") {
                     $userCas->cas_exam_pratique_id = $casExamFr->id;
-                    $userCas->save();
-                } else {
-                    $userCas = new UserCasExamPratique;
-                    $userCas->user_id = $student->id;
-                    $userCas->cas_exam_pratique_id = $casExamAr->id;
-                    $userCas->save();
-                }
+				} else {
+					$userCas->cas_exam_pratique_id = $casExamAr->id;
+				}
+                $userCas->save();
             }
             $userCasExam  = UserCasExamPratique::where('user_id', '=', $student->id)->first();
             $casExamPratique = CasExamPratique::where('id', '=', $userCasExam->cas_exam_pratique_id)->first();
@@ -912,30 +969,17 @@ class CoursesController extends Controller
         $student = Auth::user()->student;
         if ($student->id != null) {
 
-            if (in_array($request->course_id, [496, 502])) {
-                $studentVideoExam = new StudentVideoExam();
-                $studentVideoExam->student_id = $student->id;
-                $studentVideoExam->videoexam_id = $request->videoExam_id;
-                $studentVideoExam->course_id = $course->id;
-                $studentVideoExam->video_exam_name = $videoExam->videoexam_trans("ar")->name;
-                $studentVideoExam->course_name = $course->course_trans("ar")->name;
-                $studentVideoExam->status = "pending";
-                $studentVideoExam->save();
-            } else {
-                $this->validate($request, [
-                    'video' => 'required'
-                ]);
-                $studentVideoExam = new StudentVideoExam();
-                $studentVideoExam->student_id = $student->id;
-                $studentVideoExam->videoexam_id = $request->videoExam_id;
-                $studentVideoExam->course_id = $course->id;
-                $studentVideoExam->video_exam_name = $videoExam->videoexam_trans("ar")->name;
-                $studentVideoExam->course_name = $course->course_trans("ar")->name;
-                $studentVideoExam->video = $request->video;
-                $studentVideoExam->user_message = $request->user_message;
-                $studentVideoExam->status = "pending";
-                $studentVideoExam->save();
-            }
+            $studentVideoExam = new StudentVideoExam();
+            $studentVideoExam->student_id   = $student->id;
+            $studentVideoExam->subject      = $request->subject;
+            $studentVideoExam->videoexam_id = $request->videoExam_id;
+            $studentVideoExam->course_id    = $course->id;
+            $studentVideoExam->video_exam_name = $videoExam->videoexam_trans("ar")->name;
+            $studentVideoExam->course_name  = $course->course_trans("ar")->name;
+            $studentVideoExam->video        = $videoExam->live == 0 ? $request->video : '';
+            $studentVideoExam->user_message = $request->user_message;
+            $studentVideoExam->status       = "pending";
+            $studentVideoExam->save();
 
 
             $user = Auth::user();
@@ -943,11 +987,21 @@ class CoursesController extends Controller
             Notification::send($admins, new ExamFinished($user->username, $studentVideoExam->id, "video", $studentVideoExam->video_exam_name));
 
             Session::flash('alert-success', 'تم إنشاء الإختبار بنجاح...');
+            session()->flash('message', 'لقد تم رفع الفيديو بنجاح  ') ;
             return redirect(App('urlLang') . 'account');
         } else {
             abort(404);
         }
     }
+
+    public function postUpdateVideo($studentVideoExam_id, Request $request){
+        $student_video_exam = studentVideoExam::findOrFail($studentVideoExam_id);
+        $student_video_exam->video = $request->video;
+        $student_video_exam->save();
+        Session::flash('alert-success', '  تم تحيين الاختبار بنجاح ');
+        session()->flash('message', '  تم تحيين الاختبار بنجاح   ') ;
+        return redirect(App('urlLang') . 'account');
+    }   
 
     public function quizResult(Request $request)
     {
@@ -985,13 +1039,15 @@ class CoursesController extends Controller
         } else {
             $studentQuiz = $student->student_quizzes()->where("students_quizzes.id", $request->studentQuiz_id)
                 ->firstOrFail();
-
+                $querys = $student->student_quizzes()->where("course_id",532)->where('is_exam',1)
+                ->get();
+               
             $course = $studentQuiz->course;
             $quiz = $studentQuiz->quiz;
             if (empty($course) || empty($quiz))
                 abort(404);
             return view("front.courses.quizresult", [
-                "studentQuiz" => $studentQuiz, "course" => $course, "quiz" => $quiz
+                "studentQuiz" => $studentQuiz, "course" => $course, "quiz" => $quiz,'querys'=>$querys
             ]);
         }
     }
@@ -1089,4 +1145,5 @@ class CoursesController extends Controller
 
         return redirect()->back();
     }
+    
 }

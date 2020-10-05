@@ -13,10 +13,11 @@ use App\Student;
 use App\User;
 use App\Teacher;
 use App\Country;
-
+use App\UserStudieLang;
 use App\AdminHistory;
 use File;
 use DB;
+use Response ;
 
 class studentsController extends Controller
 {
@@ -346,6 +347,29 @@ class studentsController extends Controller
 		}
 		
 	} 
+	
+		public function updateLang(Request $request)
+	{
+		$user_id=$request->id;
+         $user_lang= UserStudieLang::where('user_id',$user_id)->first();
+         if(!empty($user_lang))
+         {
+         	if($user_lang->lang_stud=="Fr")
+         		$lang="Ar";
+         	else
+         		$lang="Fr";
+         	$user_lang->lang_stud=$lang ;
+         	$user_lang->update();
+
+         }else{
+         	$user_lang = new UserStudieLang();
+         	$user_lang->lang_stud="Ar";
+         	$user_lang->user_id=$user_id ;
+         	$user_lang->save();
+         }
+          return Response::json(array('success'=>true,'result'=>$user_lang->lang_stud));
+		
+	}
   
 
 }

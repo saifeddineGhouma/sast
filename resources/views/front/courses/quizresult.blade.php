@@ -60,8 +60,7 @@ if(empty($quiz_trans))
 <div class="quiz_result">
 	<div class="container quiz_container">
 
-		<button  onclick="js:window.location.href='{{ url(App("urlLang")."courses/".$courseType->id.'#curriculum_exam') }}'" class="btn btn-success" style="margin-right: 45%;margin-bottom: 20px;"> بقية الاختبارات  </button>
-			<button  onclick="geToExam( {{$courseType->id }} )" class="btn btn-success" style="margin-right: 45%;margin-bottom: 20px;"> بقية الاختبارات  </button>
+		<button  onclick="js:window.location.href='{{ url(App("urlLang")."courses/".$courseType->id) }}'" class="btn btn-success" style="margin-right: 45%;margin-bottom: 20px;"> بقية الاختبارات  </button>
 
 	</div>
 	<div class="container quiz_container">
@@ -163,22 +162,11 @@ if(empty($quiz_trans))
 	</div>
 </div>
 
-<script type="text/javascript">
-	function geToExam(url)
-	{
-		js:window.location.href='<?php  url(App("urlLang")."courses/328")."#div_stage";?>'
 
-		//window.location.href="http://newURL.com";
-		
-	}
-	
-</script>
 
 @stop
 
 @section('scripts')
-
-	
 
 
 @stop

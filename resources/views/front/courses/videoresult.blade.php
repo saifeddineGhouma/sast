@@ -66,13 +66,13 @@ if(empty($videoExam_trans))
 	<div class="container quiz_container">
 		<div class="row">
 			{{-- les cas  --}}
-				@if(in_array($course->id, [496, 502, 17, 532]))
+				@if(!empty($studentVideoExam->subject))
 				<div>
 					<div class="form-group">
 						<label class="col-md-4"> الحالة التدريبية لتصوير الفيديو  :  <span></span></label>
 						
 						<div class="col-md-12">
-							{{ $casExamPratique->name }}
+							{{ $studentVideoExam->subject }}
 						</div>
 					</div> 
 				</div>
@@ -83,12 +83,16 @@ if(empty($videoExam_trans))
 					<div class="content_header_one">
 						<i class="fa fa-bookmark" aria-hidden="true"></i>
 						<span class="quiz_text">نتيجة الاختبار : </span> 
-						<i class="fa fa-check-circle-o" aria-hidden="true"></i>
+						
 						<span class="quiz_result_statues">
 							@if($studentVideoExam->successfull)
+								<i class="fa fa-check-circle-o" aria-hidden="true"></i>
 								ناجح
 							@else
-								راسب
+								<span style='color: red;'
+									<i class="fa fa-times-circle-o" aria-hidden="true"></i>
+									راسب
+								</span>
 							@endif
 						</span>
 					</div>
@@ -106,6 +110,18 @@ if(empty($videoExam_trans))
 		<div class="row result_table">
 			{!! \App\VideoExam::showVideo($studentVideoExam->video) !!}
 		</div>
+		@if($studentVideoExam->status != "completed" && $studentVideoExam->videoexam->live == 0)
+			<form method="post" id="form-video" action='{{url(App("urlLang")."courses/edit-video/".$studentVideoExam->id)}}'>
+				{!! csrf_field() !!}
+				<div class="form-group">
+					<label class="col-md-2 control-label">  أعد المحاولة  </label>
+					<div class="col-md-10">
+						<input type="text" name="video" class="form-control" placeholder="  رابط الفيديو  ">
+					</div>
+				</div>
+				<input type="submit" class="quiz_question_end" class="btn btn-success" value="أعد المحاولة " />
+			</form>
+		@endif
 		<div class="row">
 			@if(!empty($studentVideoExam->manager_message))
 				<p><span>رسالة المدير :</span>{{ $studentVideoExam->manager_message }}</p>

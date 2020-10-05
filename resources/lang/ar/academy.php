@@ -4,7 +4,6 @@
 
 return [
     "academyWelcomeParagraph"=> ":academyWelcomeParagraph",
-    "more"=> "المزيد",
-    "quiz" =>"الكويزات",
+    "more"=> "المزيد"
         
 ];

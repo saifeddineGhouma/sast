@@ -151,6 +151,11 @@ class AccountController extends Controller
 
     public function postInfo(Request $request)
     {
+        $day= ((int)$request->day>9) ? $request->day : "0".$request->day ;
+        $month=((int)$request->month>9) ? $request->month : "0".$request->month ;
+        $years = $request->years ;
+        $request->date_of_birth=$years."-".$month."-".$day ;
+        
         $user = Auth::user();
         $this->validate($request, [
             'passport' => '|mimes:jpeg,bmp,png|max:5120',

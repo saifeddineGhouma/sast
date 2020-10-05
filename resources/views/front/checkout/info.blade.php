@@ -125,16 +125,10 @@
 
         
         $("#info_form").bootstrapValidator({
+			
             excluded: [':disabled'],
             fields: {
-                /* full_name_ar: {
-                    validators: {
-                        notEmpty: {
-                            message: '{{trans("home.this_field_required")}}'
-                        }
-                    },
-                    required: true
-                }, */
+               
                 full_name_en: {
                     validators: {
                         notEmpty: {
@@ -143,14 +137,14 @@
                     },
                     required: true
                 },
-                date_of_birth: {
+                /*date_of_birth: {
                     validators: {
                         notEmpty: {
                             message: '{{trans("home.this_field_required")}}'
                         }
                     },
-                    required: true
-                },
+                    required: false
+                },*/
                 gender: {
                     validators: {
                         notEmpty: {

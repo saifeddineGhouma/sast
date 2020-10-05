@@ -74,13 +74,15 @@ switch ($loop->index%8){
                                
                                 
                                   <p style="text-decoration: line-through;color:yellow"><?php echo e(floor($first_Variation->pricesale+$vat2)); ?> <b>$</b></p>
-                                  <?php echo e(floor($first_Variation->price+$vat)); ?> <b>$</b>
+                                  <?php echo e(floor($first_Variation->price+$vat)); ?><b>$</b>
                                 
                         </span>
                         <?php else: ?>
                         <span class="badge badge-pill badge-warning">
                             <span>
-                            <?php echo e(floor($first_Variation->price+$vat)); ?> <b>$</b>
+                            <?php echo e(floor($first_Variation->price+$vat)); ?><b>$</b><br>
+                            <?php echo e($first_Variation->id); ?>
+
                             </span>
                         </span>
                         <?php endif; ?>

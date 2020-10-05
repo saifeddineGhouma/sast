@@ -177,7 +177,7 @@
                                                                 <p>@lang('navbar.accompanetransfertphoto')</p>
 
                                                                 <div class="form-group">
-                                                                    <input type="file" name="banktransfer_image" accept="image/x-png,image/gif,image/jpeg,image/jpg" />
+                                                                    <input type="file" name="banktransfer_image" <!--accept="image/x-png,image/gif,image/jpeg,image/jpg"!--> />
                                                                 </div>
                                                                 <p>@lang('navbar.accepttrasfertafterverification')</p>
 
@@ -188,7 +188,7 @@
                                                                     <strong>@lang('navbar.remarque')</strong> @lang('navbar.maxsizephoto').
                                                                 </div>
                                                                 <div class="alert alert-danger">
-                                                                    <strong>@lang('navbar.remarque')</strong> @lang('navbar.accaptedtypeofphoto') ( jpg , jpeg , png ,gif )
+                                                                    <strong>@lang('navbar.remarque')</strong> @lang('navbar.accaptedtypeofphoto') ( jpg , jpeg , png ,gif ,pdf)
                                                                 </div>
                                                             </div>
                                                         </div>

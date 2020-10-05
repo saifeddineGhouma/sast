@@ -55,65 +55,34 @@ class studentsexamsController extends Controller
             "table_name" => $this->table_name, "record_name" => $this->record_name
         ));
     }
-    public function editstudycase($id)
-    {
-        $study_case=StudentStudyCase::findOrFail($id);    
-            return  view('admin.students_stage_studycase.study_case.edit',array('study_case'=>$study_case,'table_name'=>$this->table_name,'record_name'=>$this->record_name)); 
-    }
-	  public function editstage($id)
-    {
-        $stage=StudentStage::findOrFail($id);    
-            return  view('admin.students_stage_studycase.edit',array('stage'=>$stage,'table_name'=>$this->table_name,'record_name'=>$this->record_name)); 
-    }
-
-    public function indexStage(Request $request)
-    {
-
-
-        $query       = StudentStage::where('user_id', '>' ,0);
-        
-        if(!empty($request->student_id)){
-            $query = $query->where('user_id', $request->student_id);
-        }
-        if(!empty($request->course_id)){
-            $query = $query->where('course_id', $request->course_id);
-        }
-        if(!empty($request->created_at)){
-            $query = $query->where('created_at', '>' ,$request->course_id);
-        }
-
-        $students    = Student::orderBy("id", "desc")->get();
-        $courses     = Course::get();
-        $stages      = $query->paginate(10);
-
-        return view('admin.students_stage_studycase.index', array(
-            "students" => $students, "courses" => $courses,"stages"=>$stages,
-            "table_name" => "students-Stage-StudyCase"
-        ));
-    }
     
-        public function indexStudycase(Request $request)
+    public function indexStageStudycase(Request $request)
     {
-    
-        $query       = StudentStudyCase::where('id', '>' ,0);
+
+
+        $stages=StudentStage::paginate(10) ;
+        $study_cases=StudentStudyCase::paginate(10);
+       $_stageshow=true;
+
+         if (isset($_GET['search'])){
+
+
+             if(isset($request->types))
+             {
+                 $_StageShow=($request->types=="stage") ? true : false ;
+
+             }
+            
+            }
+            
         
-        if(!empty($request->student_id)){
-            $query = $query->where('students_id', $request->student_id);
-        }
-        if(!empty($request->course_id)){
-            $query = $query->where('courses_id', $request->course_id);
-        }
-        if(!empty($request->created_at)){
-            $query = $query->where('created_at', '>' ,$request->course_id);
-        }
+       
+        $students = Student::orderBy("id", "desc")->get();
 
-        $students     = Student::orderBy("id", "desc")->get();
-        $courses      = Course::get();
-        $study_cases  = $query->paginate(10);
-
-        return view('admin.students_stage_studycase.study_case.index', array(
-            "students" => $students, "courses" => $courses,'study_cases'=>$study_cases,
-            "table_name" => "students-StudyCase"
+        $courses = Course::get();
+        return view('admin.students-stage-studycase.index', array(
+            "students" => $students, "courses" => $courses,"stages"=>$stages,'study_cases'=>$study_cases,
+            "table_name" => "students-Stage-StudyCase", "record_name" => $this->record_name,"_StageShow"=>$_stageshow
         ));
     }
     /**
@@ -280,137 +249,19 @@ class studentsexamsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function EditStatusStudycase(Request $request,$id)
-    {
-        $StudentStudyCase= StudentStudyCase::findOrFail($id);
-
-       
-
-         if ($request->successful)
-                 $StudentStudyCase->successful = 1;
-            else
-                 $StudentStudyCase->successful = 0;
-             $StudentStudyCase->save();
-
-             /*course*/
-            $course = $StudentStudyCase->course ;
-
-              /*student */
-            $student = $StudentStudyCase->student;
-        
-            if ($course->isCompleteQuizzes($student) ) {   
-          
-                if ($StudentStudyCase->successful == 1) {
-
-
-                    
-
-                    $courseTypeVariation = $student->order_products()->where('course_id', $course->id)->first()->coursetype_variation()->first();
-                   
-                    $existCertif = StudentCertificate::where('student_id', $student->id)->where('course_id', $course->id)->count();
-
-
-                    $Arabic = new I18N_Arabic('Glyphs');
-                    //Create certif 
-                    $certificate = $courseTypeVariation->certificate;
-
-                    if (!empty($certificate)) {
-
-                        
-                        $serialNumber = "";
-                        $image_name = "";
-                        if ($existCertif == 0) {
-                            $certificate->export($student, $Arabic, $serialNumber, $image_name, date("Y-m-d"));
-                        }
-                   
-                  $serialNumber="saif";
-                        if ($serialNumber != "") {
-                           
-                            $studentCertificate = new StudentCertificate();
-                            $studentCertificate->student_id = $student->id;
-                            // new code 
-                            $studentCertificate->course_id = $course->id;
-                            // old code 
-                            $studentCertificate->course_name = $courseTypeVariation->courseType->course->course_trans("ar")->name;
-
-                            $quiz = $course->finalExam()->first();
-                            if (!empty($quiz)) {
-                                $studentCertificate->exam_id = $quiz->id;
-                                $studentCertificate->exam_name = $quiz->quiz_trans("ar")->name;
-                            }
-                            $teacherName = "";
-                            $teacherName = $courseTypeVariation->teacher->user->full_name_en;
-                            $studentCertificate->teacher_name = $teacherName;
-
-                            $studentCertificate->serialnumber = $serialNumber;
-                            $studentCertificate->image = $image_name;
-                            $studentCertificate->date = date("Y-m-d");
-                            $studentCertificate->manual = 0;
-                            $studentCertificate->save();
-
-                            $mime_boundary = "----MSA Shipping----" . md5(time());
-                            $subject = "Swedish Academy : Certificate";
-                            $headers = "From:Swedish Academy<info@swedish-academy.se> \n";
-                            $headers .= "MIME-Version: 1.0\n";
-                            $headers .= "Content-Type: multipart/alternative; boundary=\"$mime_boundary\"\n";
-                            $message1 = "--$mime_boundary\n";
-                            $message1 .= "Content-Type: text/html; charset=UTF-8\n";
-                            $message1 .= "Content-Transfer-Encoding: 8bit\n\n";
-                            $message1 .= "<html>\n";
-                            $message1 .= "<body>";
-                            $message1 .= "<table width='602'>";
-                            $message1 .= "<tr>";
-                            $message1 .= "<td>";
-                            $message1 .= "<img src='https://swedish-academy.se/assets/front/img/logo-mail.png'><br>";
-                            $message1 .= "</td>";
-                            $message1 .= "</tr>";
-                            $message1 .= "<tr>";
-                            $message1 .= "<td align='right'>";
-                            $message1 .= "مرحبا بكم
-                                تعلمكم الاكاديمية السويدية للتدريب الرياضي أنكم أتممتم الدورة بنجاح و نحن نتمنى لكم الموفقية في حياتكم العملية.
-                                و تجدون شهادتكم  في حسابكم  في قسم الشهادات من خلال هذا الرابط
-                                <a href='https://swedish-academy.se/account/certificates'>الشهائد</a>
-                                <br> 
-                                و قد أرفقنا لكم الشهادة 
-                                <a href='https://swedish-academy.se/uploads/kcfinder/upload/image/" . $studentCertificate->image . "'>انقر هنا</a><br>
-                                <br>
-                                مع تمنياتنا لكم بالنجاح و التوفيق في قادم الأيام";
-                            $message1 .= "</td>";
-                            $message1 .= "</tr>";
-                            $message1 .= '</table>';
-                            $message1 .= '</body>';
-                            $message1 .= '</html>';
-                            mail($student->user->email, $subject, $message1, $headers);
-                        }
-                    }
-                }
-            }
-
-  $request->session()->flash('alert-success', "study case has been edit");
-
-
-
-       return back() ;
-
-
-
-
-
-    }
    public function EditStatusStage(Request $request,$id)
    {
- $message ="" ;
+
 
         $studentsatge= StudentStage::findOrFail($id);
-        $studentsatge->valider=1 ;
+        $studentsatge->valider=$request->valider ;
 
         $studentsatge->update();
         $course = $studentsatge->course()->first();
         $student = $studentsatge->user()->first()->student()->first();
-		
-            //dd($course->isCompleteQuizzes($student));
+
         if ($course->isCompleteQuizzes($student) ) {   
-               
+          
                 if ($studentsatge->valider == 1) {
 
 
@@ -495,12 +346,10 @@ class studentsexamsController extends Controller
                         }
                     }
                 }
-                $message = "study case  has been Saved Successfully...";
             }
 
 
-  $request->session()->flash('alert-success', $message);
-      //  return redirect()->action('Admin\studentsexamsController@edit', [$id, "type" => $request->type]);
+
 
        return back() ;
 
@@ -545,7 +394,7 @@ class studentsexamsController extends Controller
             $course  = $studentVideo->course()->first() ;
             /* creation certif */
              
-           if ($course->isCompleteQuizzes($student))  {   
+           if ($course->isCompleteQuizzes($student)) ) {   
              /* if ($studentVideo->successfull==1 && $studentVideo->status=="completed" ) { */
                 if ($studentVideo->successfull == 1) {
 

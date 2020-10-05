@@ -60,14 +60,12 @@
 
                         <div class="panel">
                             {{-- cas d'exam pratique  --}}
-                            @if(in_array($studentVideo->course->id, [496, 502]))
                             <div class="form-group">
-                                <label class="col-md-2 control-label">Cas d'examen pratique</label>
+                                <label class="col-md-2 control-label">Subject</label>
                                 <div class="col-md-10">
-                                    <input  type="text"  name="student_name" class="form-control" value="{{ $casExamPratique->name }}" readonly>
+                                    <b>{{ $studentVideo->subject }}</b>
                                 </div>
                             </div>
-                            @endif
                             <div class="form-group">
                                 <label class="col-md-2 control-label">Student Full Name</label>
                                 <div class="col-md-10">
@@ -111,14 +109,14 @@
                                     <textarea cols="60"  name="user_message"  class="form-control">{{$studentVideo->user_message}} </textarea>
                                 </div>
                             </div>
-
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">Video</label>
-                                <div class="col-md-10">
-                                    {!! \App\VideoExam::showVideo($studentVideo->video) !!}
+                            @if( $studentVideo->videoexam->live == 0 )
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">Video</label>
+                                    <div class="col-md-10">
+                                        {!! \App\VideoExam::showVideo($studentVideo->video) !!}
+                                    </div>
                                 </div>
-                            </div>
-
+                            @endif
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">Status</label>
                                 <div class="col-sm-9">

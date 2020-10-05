@@ -87,3 +87,43 @@
        @endif
     </tbody>
 </table>
+<!-------------js ajax change status courses------------------->
+
+<script type="text/javascript">
+	
+	$('.activeIcon').click(activeIcon_click)
+	function activeIcon_click(){
+    
+    var id = $(this).data('id');
+    var this1 =$(this);
+    swap(id,'active',this1);
+   }
+function swap(state,field,this1){
+    var sp = state.split('-');
+    var newsate = true;
+    var onstate = "on";
+    var offstate = "off";
+
+    if(sp[0]==onstate){
+        this1.html('<span class="label label-sm label-danger"> not active</span>');
+        this1.data('id',state.replace(sp[0],offstate));
+        newsate = false;
+    }else{
+        this1.html('<span class="label label-sm label-success"> active </span>');
+        this1.data('id',state.replace(sp[0],onstate));
+        newsate = true;
+    }
+    var _token = '<?php echo csrf_token(); ?>';
+
+    $.ajax({
+        url: "{{ url('/admin/courses/updatestateajax') }}",
+        type:  'POST',
+        data: {_token:  _token,sp: sp[1],newsate: newsate,field: field},
+        success: function(result){
+        }
+
+    });
+
+}
+
+</script>

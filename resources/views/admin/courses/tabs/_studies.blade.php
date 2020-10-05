@@ -2,7 +2,7 @@
 	<table id="studies" class="table table-striped table-bordered table-hover">
       <thead>
         <tr>
-          <td>name ar</td>
+          <td>name ar </td>
           <td>name en</td>
           <td>Lang</td>
           <td>type</td>
@@ -12,7 +12,7 @@
         </tr>
       </thead>
       <tbody>
-	  	@foreach($course->courseStudies as $courseStudy)
+	  	@foreach($course->studies as $courseStudy)
 		       <tr id="study-row{{$courseStudy->id}}" data-id="{{$courseStudy->id}}">
 		          <td>
 					   <input type="text" class="form-control" name="study_name_ar_{{$courseStudy->id}}" value="{{$courseStudy->name_ar}}">

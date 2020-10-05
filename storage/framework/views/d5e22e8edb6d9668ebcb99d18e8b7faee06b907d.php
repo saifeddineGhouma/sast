@@ -49,13 +49,41 @@
 
 
     <div class="row userlogedin">
-        <div class="col-md-6">
+                <div clas="col-md-4">
+                    <div class="form-group">
+                          <label class="form-label"> <span><?php echo e(trans('home.date_birth')); ?> *</span> : اليوم<span></span></label>
+                        <select name="day"><?php for($i= 01;$i<=31;$i++) { ?>
+                         <option value="<?php echo e($i); ?>" <?php echo e(((date("d", strtotime($user->date_of_birth)))==$i) ? 'selected' :'null'); ?> ><?php echo e($i); ?></option>
+                         <?php }?>
+                        </select>
+                    </div>
+                </div>
+                <div clas="col-md-4">
+                    <div class="form-group">
+                          <label class="form-label"> الشهر     <span style="margin-left: 2px"></span></label>
+                        <select name="month"><?php for($i= 01;$i<=12;$i++) { ?>
+                         <option value="<?php echo e($i); ?>" <?php echo e(((date("m", strtotime($user->date_of_birth)))==$i) ? 'selected' :'null'); ?> ><?php echo e($i); ?></option>
+                         <?php }?>
+                        </select>
+                    </div>
+                </div>
+                <div clas="col-md-4">
+                    <div class="form-group">
+                         <label class="form-label">  السنة      <span style="margin-left: 2px"></span></label>
+                        <select name="years"><?php for($i= 2020;$i>=1900;$i--) { ?>
+                         <option value="<?php echo e($i); ?>" <?php echo e(((date("Y", strtotime($user->date_of_birth)))==$i) ? 'selected' :'null'); ?> ><?php echo e($i); ?></option>
+                         <?php }?>
+                        </select>
+                    </div>
+                </div>
+            <div class="col-md-6" style="display: none;">
             <div class="form-group">
-                <label class="form-label"><?php echo e(trans('home.date_birth')); ?>  <span>*</span></label>
+                <label class="form-label"><?php echo e(trans('home.date_birth')); ?>  <span></span></label>
                 <input class="form-control date-picker" name="date_of_birth" placeholder="yyyy-m-d" value="<?php echo e($user->date_of_birth); ?>" type="text"/>
             </div>
         </div>
-        <div class="col-md-6">
+     
+        <div class="col-md-12">
             <div class="form-group">
                 <label class="form-label"><?php echo e(trans('home.country_info')); ?> <span>*</span></label>
                 <select class="form-control country_id" name="country_id">
@@ -74,36 +102,20 @@
 
 
     <div class="row userlogedin">
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="form-group">
                 <label class="form-label"><?php echo e(trans('home.adress_info')); ?>  <span>*</span></label>
                 <input type="text" class="form-control" name="address" value="<?php echo e($user->address); ?>" >
             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="form-group">
                 <label class="form-label"> <?php echo e(trans('home.num_tel')); ?><span>*</span></label>
                 <input type="text" class="form-control"  dir="ltr" name="mobile" id="mobile"  value="<?php echo e($user->mobile); ?>" style="direction: ltr !important;text-align: right;">
             </div>
         </div>
 
-        <div class="col-md-4">
-            <div class="form-group">
-                <label class="form-label ">لغات الدراسة</label>
-                <select class="form-control country_id" name="lang">
-                    <option >إختر لغة</option>
-                   
-                        <option value="Fr" <?php echo e($user->lang()=="Fr" ? 'selected' :''); ?>>
-                           فرنسية
-                        </option>
-                         <option value="Ar" <?php echo e($user->lang()=="Ar" ? 'selected' :''); ?>>
-                           عربية
-                           </option>
-                    
-                </select>
-                
-            </div>
-        </div>
+      
 
     </div>
 

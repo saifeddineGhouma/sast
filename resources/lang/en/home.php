@@ -626,7 +626,7 @@ return [
   "reject_desc"=>"Reject",
   "agree_desc"=>"Agree",
   "desc_cancel"=>"Cancelling order",
- 
+  
    //Partnership
    "paragraphe_partnership"=>"The Swedish Academy of Sport Training (SAST) is a sport academy established in Sweden by international experts,
    academic professors, trainers, various sports disciplines based on the highest educational levels.
@@ -654,3 +654,5 @@ return [
   ""=>"",
   ""=>"",
 ];
+
+

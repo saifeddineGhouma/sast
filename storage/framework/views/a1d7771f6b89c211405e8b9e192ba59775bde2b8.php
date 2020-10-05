@@ -18,6 +18,8 @@
     <link rel="icon" type="image/png" sizes="96x96" href="<?php echo e(asset('assets/front/img/favicon/favicon-96x96.png')); ?>">
     <link rel="icon" type="image/png" sizes="16x16" href="<?php echo e(asset('assets/front/img/favicon/favicon-16x16.png')); ?>">
     <link rel="manifest" href="<?php echo e(asset('assets/front/img/favicon/manifest.json')); ?>">
+	<link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
+
 	<meta name="msapplication-TileColor" content="#ffffff">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="msapplication-TileImage" content="<?php echo e(asset('assets/front/img/favicon/ms-icon-144x144.png')); ?>">

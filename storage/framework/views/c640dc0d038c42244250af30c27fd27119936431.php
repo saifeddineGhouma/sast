@@ -56,21 +56,21 @@
                                         <?php else: ?>
                                             <?php if($course->isRegistered()): ?>
                                                 <?php if($courseStudy->type == "html"||$courseStudy->type == "pdf"): ?>
-                                                    <?php if($courseStudy->type == "html"): ?>
-                                                        <button onclick="location.href='<?php echo e(url(App('urlLang').'courses/studies?courseStudy_id='.$courseStudy->id)); ?>'" target="_blank">مشاهدة</button>
-                                                <?php elseif($courseStudy->type == "pdf"): ?>
-                                                <?php if($user->user_lang['lang_stud'] == "ar" ): ?>
-                                                        <button onclick="location.href='<?php echo e(url(App('urlLang').'/uploads/kcfinder/upload/file/'. $courseStudy->url )); ?>'" target="_blank">مشاهدة</button>
-                                                        <?php else: ?>
-                                                        <button onclick="location.href='<?php echo e(url(App('urlLang').'/uploads/kcfinder/upload/file/new book/FITNESS INSTRUCTOR FR.pdf')); ?>'" target="_blank">مشاهدة</button>
-                                                    <?php endif; ?> 
-                                                        <?php endif; ?>
+													<?php if($courseStudy->type == "html"): ?>
+															<button onclick="location.href='<?php echo e(url(App('urlLang').'courses/studies?courseStudy_id='.$courseStudy->id)); ?>'" target="_blank">مشاهدة</button>
+													<?php elseif($courseStudy->type == "pdf"): ?>
+														<?php if($user->user_lang['lang_stud'] == "ar" ): ?>
+															<button onclick="location.href='<?php echo e(url(App('urlLang').'/uploads/kcfinder/upload/file/'. $courseStudy->url )); ?>'" target="_blank">مشاهدة</button>
+														<?php else: ?>
+															<button onclick="location.href='<?php echo e(url(App('urlLang').'/uploads/kcfinder/upload/file/new book/FITNESS INSTRUCTOR FR.pdf')); ?>'" target="_blank">مشاهدة</button>
+														<?php endif; ?> 
+													<?php endif; ?>
                                                     <a href="https://swedish-academy.se/telecharge.php?pdf=<?php echo e($courseStudy->url); ?>" download="<?php echo e($courseStudy->url); ?>" target="_blank" style="float: left;">
                                                         <img src="<?php echo e(asset('assets/front/img/icon-download.png')); ?>" /> 
                                                         تحميل
                                                     </a>
                                                 <?php else: ?>
-                                                    <button onclick="location.href='<?php echo e(url(App('urlLang').'uploads/kcfinder/upload/file/'.$courseStudy->url)); ?>'" target="_blank">مشاهدة</button>
+                                                    <button href="<?php echo e(url(App('urlLang').'uploads/kcfinder/upload/file/'.$courseStudy->url)); ?>" target="_blank">مشاهدة</button>
                                                 <?php endif; ?>
                                             <?php else: ?>
                                                 <button onclick="location.href='<?php echo e(url(App('urlLang').'login')); ?>'">للمسجلين فقط</button>
@@ -90,7 +90,7 @@
         <?php else: ?>
             <?php if(in_array($courseType->id, [299, 300, 301, 302])): ?>
              <p>   انقر على هذه الصورة اذا اردت شراء احد كتبتنا  </p> <br>
-             <a href="<?php echo e(url(App('urlLang').'books')); ?>"> <img src=""> </a>
+             <a href="<?php echo e(url(App('urlLang').'books')); ?>"> المكتبة  </a>
 
             <?php else: ?> 
                 <div id="accordion">

@@ -22,6 +22,9 @@ Route::get('testSendEmail', 'SendEmailTotalController@sendMailTest');
 
 Route::post('postAddStage/{course}/{user}', 'StudentStageController@addStage');
 Route::post('addVerify/{user}/{course}', 'Front\UserVerifyCertif@addVerify');
+Route::get('delete-stage/{id}','StudentStageController@deleteStage')->name('delete.stage');
+/*********study delete*****/
+Route::get('delete-studycase/{id}','StudentStageController@deleteStudycase')->name('delete.studycase');
 
 Route::get('payement_all_crs', 'Front\PayementAllCourses@payementAllCourse');
 
@@ -119,6 +122,7 @@ Route::group([
     /*************end blocked *** */
     Route::get('/students/user-details', 'studentsController@getUserDetails');
     Route::get('/students/unique-user', 'studentsController@getUniqueUser');
+    Route::get('/students/update-lang','studentsController@updateLang')->name('update.lang');
 
     Route::get('/teachers', 'teachersController@getIndex');
     Route::get('/teachers/create', 'teachersController@getCreate');
@@ -273,13 +277,15 @@ Route::group([
     Route::post('students-exams/delete/{id}', 'studentsexamsController@delete');
     Route::resource('students-exams', 'studentsexamsController');
     /****stage and study case *****/
-    Route::get('students-stages','studentsexamsController@indexStageStudycase')->name('students.stage') ;
-     Route::get('students-studycase','studentsexamsController@indexStudycase')->name('students.studycase') ;
+    Route::get('students-stages','studentsexamsController@indexStage')->name('students.stage') ;
+    Route::get('students-studycase','studentsexamsController@indexStudycase')->name('students.studycase') ;
 
-     Route::get('students-studycase-edit/{id}','studentsexamsController@editstudycase')->name('students.studycase.edit');
+    Route::get('students-studycase-edit/{id}','studentsexamsController@editstudycase')->name('students.studycase.edit');
+	Route::get('students-stage-edit/{id}','studentsexamsController@editstage')->name('students.stage.edit');
+
     /********update*******/
-     Route::get('students-stage-update/{id}','studentsexamsController@EditStatusStage')->name('students.stage.update') ;
-      Route::post('students-studycase-update/{id}','studentsexamsController@EditStatusStudycase')->name('students.studycase.update') ;
+    Route::post('students-stage-update/{id}','studentsexamsController@EditStatusStage')->name('students.stage.update') ;
+    Route::post('students-studycase-update/{id}','studentsexamsController@EditStatusStudycase')->name('students.studycase.update') ;
 
      
     Route::get('/testimonials', 'testimonialsController@getIndex');
@@ -599,6 +605,7 @@ Route::group([
     Route::post('courses/save-course-review/{course_id}', 'CoursesController@postSaveCourseReview');
     Route::get('courses/video-exam', 'CoursesController@videoExam');
     Route::post('courses/submit-video', 'CoursesController@postSubmitVideo');
+    Route::post('courses/edit-video/{studentVideoExam_id}', 'CoursesController@postUpdateVideo');
     Route::post('courses/save-reply/{courseQuestion_id}', 'CoursesController@postSaveReply');
     Route::post('courses/submit-quiz/{studentQuiz_id}', 'CoursesController@postSubmitQuiz');
     Route::get('courses/studies', 'CoursesController@getStudies');

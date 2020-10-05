@@ -1,9 +1,9 @@
 
 
 <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
-                      <script type="text/javascript">
-                      $( document ).ready( function() {
-						  
+<script type="text/javascript">
+                    $( document ).ready( function() {
+                          
                         
                         $('#div_exam_final').click(function(){
                             var link = $(this);
@@ -20,10 +20,10 @@
         
                             });   
                           })
-						  
-						  
-						  
-					   $('#div_examn_vedio_2').click(function(){
+                          
+                          
+                          
+                       $('#div_examn_vedio_2').click(function(){
                         var link = $(this);
                         $('.examn_vedio_2_block').slideToggle('slow', function() {
                             if ($(this).is(':visible')) {
@@ -37,8 +37,8 @@
     
                         });   
                       })
-						  
-					  $('#div_exam_final_thorique').click(function(){
+                          
+                      $('#div_exam_final_thorique').click(function(){
                         var link = $(this);
                         $('.exam_final_thorique_block').slideToggle('slow', function() {
                             if ($(this).is(':visible')) {
@@ -70,7 +70,7 @@
 
 
                     $('#div_stage').click(function(){
-						
+                        
                         var link = $(this);
                         $('.stage_block').slideToggle('slow', function() {
                             if ($(this).is(':visible')) {
@@ -120,13 +120,29 @@
 
                         });
 
-                      </script>
-					  
+</script>
+                      
 
 <div class="col-lg-12 course_curriculum_exam courses_more_info_content">
     <div class="content_header_one">
         <p>الامتحانات</p>
         {!! $course->description_all_exam !!}
+        @if(Session::has('message'))
+            <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+            <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+            <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+            <script>
+                toastr.success("{{ Session::get('message') }}");
+                swal({
+                  title: "{{ Session::get('message') }}",
+                  text: "",
+                  icon: "success",
+                  button: "Ok",
+                });
+            </script>
+          
+        @endif
      
     </div>
     <div id="accordion">
@@ -134,28 +150,20 @@
             <div class="card-header" id="headingTen">
                 <h5 class="mb-0">
                     <p class=" btn-link ">
-                        إجتياز الاختبارات التالية قبل البدأ في الاختبار النهائي للحصول على الشهادة
-						
-					
+                        إجتياز الاختبارات التالية قبل البدأ في الاختبار النهائي للحصول على الشهادة 
                 </h5>
-             
-				
-				
             </div>
-
             <div>
-                
-
                 <div class="card-body">
-				  
-						
-				
+                  
+                        
+                
                     <h3 class="form-section"  style="line-height:50px;padding-right:15px;background-color: #006aa8 ;color:white; height: 60px; width:100% ; cursor: pointer;" id="div_quiz"> <span style="float: left;padding-left:10px;"> + </span>الكويزات</h3> 
                     <div class="content_header_one quiz_block" style="display: none">
-                    {!! $course->description_quiz	 !!}
-				   
-				   
-				   
+                    {!! $course->description_quiz    !!}
+                   
+                   
+                   
                     @if($quizzes->count()>0) 
 
                         @foreach($quizzes as $quiz)
@@ -166,7 +174,7 @@
                     @endif
                     
                     </div>
-					
+                    
 
                     <?php
                         $messageValid = "";
@@ -177,13 +185,16 @@
                            
                         $validateExam = $course->validateExam("quiz",$messageValid);
                     ?>
-
+                    
+                    
+                    
                     @if(isset($course->stage))
+                        
                         @if($course->stage->active)
 
                         <h3 class="form-section "style="line-height:50px;padding-right:15px;background-color: #006aa8 ;color:white; height: 60px; width:100% ; cursor: pointer;" id="div_stage"> <span style="float: left;padding-left:10px;"> + </span> التدريب العملي  </h3>    
                         <div class="content_header_one stage_block" style="display:none">
-                        {!! $course->description_stage	!!}
+                        {!! $course->description_stage  !!}
                         
                             @if(!empty($user)) 
 
@@ -192,14 +203,19 @@
                                     <p class="text-danger"> لقد قمت برفع الملف  </p>
 
                                     <p class="text-success">{{($course->students_stage()->where('user_id',$user->id)->first()->valider==1)? 'ناجح' : 'إنتظار'}}</p>
+                                    <ul class="list-group" style="width: 500px;margin:auto;">
+                                        @foreach($user->user_stage()->where('course_id',$course->id)->get() as $stage)
+                                      <li class="list-group-item"> التقرير<span style="float: left" onclick="return confirm('Are you sure you want to delete this file?');"><a href="{{route('delete.stage',$stage->id)}}"><i class="fa fa-trash"></i></a></span>
+
+                                      </li>
+                                       @endforeach
+                                     
+                                    </ul>
+
+                                   @else
 
 
-                                @endif
-
-            					
-                                
-                                           
-                                <form method="post"  action='{{url(App("urlLang")."postAddStage",[$courseType->course->id, $user->id])}}' accept-charset="utf-8" enctype="multipart/form-data">
+                                   <form method="post"  action='{{url(App("urlLang")."postAddStage",[$courseType->course->id, $user->id])}}' accept-charset="utf-8" enctype="multipart/form-data">
                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                         <div class="row">
                                             <div class="col-1 curriculum_exam_type">                                    
@@ -239,16 +255,17 @@
                                                 </div>     
 
                                                 <div class="col-6 curriculum_exam_title">   
-                                                    @if($courseType->id == 328)
+                                                      @if($course->is_lang)
+                                                        
                                                         @if($user->user_lang()->exists())
-                                                            @if($user->user_lang->lang_stud == "fr" )
+                                                            @if($user->user_lang->lang_stud == "Fr" )
                                                                 <p> <a href = "{{route('downloadStage')}}"> استمارة مطلب التربص </a>  </p>
                                                             @else
                                                                 <p> <a href = "{{route('downloadDemandeStageArab')}}"> استمارة مطلب التربص </a>  </p>
                                                             @endif
-                                                        @endif
-                                                    @else
-                                                     <p> <a href = "{{route('downloadDemandeStageArab')}}"> استمارة مطلب التربص </a>  </p>
+                                                          @endif
+                                                        @else
+                                                       <p> <a href = "{{route('downloadDemandeStageArab')}}">  استمارة مطلب التربص </a>  </p>
                                                     @endif
                                                 </div>
                                     
@@ -274,11 +291,11 @@
                                                 </div>
                                                 
                                                 <div class="col-6 curriculum_exam_title">  
-                                                                                                            <p> <a href = "{{ url('download_eval_arab') }}"> استمارة التقييم </a>  </p>  
+                                                                                                           
  
-                                                    @if($course->is_langue )
+                                                    @if($course->is_lang )
                                                         @if($user->user_lang()->exists())
-                                                            @if($user->user_lang->lang_stud == "fr" )
+                                                            @if($user->user_lang->lang_stud == "Fr" )
                                                             <p> <a href = "{{ url('download_eval') }}"> استمارة التقييم </a>  </p>  
                                                             @else
                                                             <p> <a href = "{{ url('download_eval_arab') }}"> استمارة التقييم </a>  </p>  
@@ -327,6 +344,24 @@
                                 </form>
 
 
+
+
+
+
+                                @endif
+
+                                
+                                @if($user->user_stage->count()<0)
+
+
+
+                                           
+                                
+                                    @else
+
+                                    @endif  
+                                       
+
                                     
                              
                                
@@ -344,83 +379,59 @@
                             
                         </div>
                         @endif
-			  		@endif	  
+                    @endif    
 
-                    @php 
-                        $course_Study_CaseActive=\App\CourseStudyCase::where('course_id',$course->id)->first() ;
-                    @endphp
+                  
 
 
-                    @if(isset($course_Study_CaseActive) && $course_Study_CaseActive->active)
+                    @if(isset($course->courses_study_case) && $course->courses_study_case->active)
                     
                   
-                        <h3 class="form-section div_toggle"  id="div_study_case" style="line-height:50px;padding-right:15px;background-color: #006aa8 ;color:white; height: 60px; width:100%;cursor: pointer;"><span style="float: left;padding-left:10px;"> + </span> متطلبات الدورة</h3>
-                        <div class="content_header_one study_case_block" style="display: none">
-                            {!! $course->description_study_party	!!}
-                             
-                            @if($passed==0)
-                           
-                                <form method="POST" action="{{route('submit.get.sujet')}}" id="form_get_sujets">
-                                    {{ csrf_field() }}
-                                  
-                                    <input type="hidden" name="sujets_id" value="{{ $sujet->id }}" id="sujets_id">
-                                    <input type="hidden" name="courses_id" value="{{ $course->id }}" id="courses_id">
-
-                                    <button class="btn btn-info" type="button" id="submit-sujet">اختار موضوع</button>
-                                </form>
+                        <h3 class="form-section div_toggle"  id="div_study_case" style="line-height:50px;padding-right:15px;background-color: #006aa8 ;color:white; height: 60px; width:100%;cursor: pointer;"><span style="float: left;padding-left:10px;"> + </span> التقرير العلمي </h3>
+                        <div class="content_header_one study_case_block" style="display: none ; border: none;">
+                            {!! $course->description_study_party    !!}
                             
-                           
-                         
 
-                         
-                           
-                                <div id="form_sujet_upload" style="display: none">
-                                    <h5 >الموضوع  : <span id="sujets_description"></span> </h5>
-                                     <hr/>
-                                    <form action="{{route('post.study.case')}}" method="post" enctype="multipart/form-data" >
-                                        {{ csrf_field() }}
+                            @if(!empty($user))
 
+                               @if($user->lang()=="Fr")
+                                @include('front.courses.course.study_case.version_fr')
 
-                                        <input type="hidden" name="sujets_id" value="{{ $sujet->id }}">
-                                        <input type="hidden" name="course_id" value="{{ $course->id }}">
-                                         <div class="col-md-2">رفع الملفات من جهازك :</div>
-                                        <div class="custom-file col-md-10 " style="float: left">
-                                            <label class="custom-file-label" for="customFile">Upload</label>
-                                            <input type="file" name="document" class="custom-file-input" id="customFile">
-                                            
-                                        </div>
-                                        <div class="form-group">
-                                            <textarea class="form-control" name="user_message" rows="5" id="comment"></textarea>
-                                        </div>
+                               @else
+                               @include('front.courses.course.study_case.version_ar')
 
-                                        <button class="btn btn-success btn-block" type="submit">Save </button>
-                                    </form>                           
+                               @endif
+                        
+                            @else  
+                              <p>
+                                    إعداد تقرير علمي كتابي عن إحدى الحالات او المواضيع الرياضية المتعلقة باللياقة البدنية يتم اختياره بطريقة عشوائية من مجموعة عناوين وحالات معدة مسبقا من قبل الاكاديمية. ويتم مناقشته لمدة 15 دقيقة مع مشرف الدورة بعد تحديد موعد مسبق معه. نسبة نجاح الطالب في هذه المهمة 80%. يمكن ايجاد موضوع التقرير العلمي عند اختيار الحالة من الاسفل
                                     
-                                </div>
-                         
-                            @else 
+                                    </p>
+                            <p><a href="{{route('login')}}">سجل الدخول</a></p>
 
-                                <p style="p color: rgb(3, 227, 172);font-size: 20px;float:left">لقد اجتزت الاختبار</p>
 
-                            @endif
+                        @endif
+                            
+
+                          
 
 
                     
                          
                         </div>
-                    @endif
+                   
                     <!---end study party---->
-					
+                    @endif
 
                     @if( $exams->count() > 0 )
 
                             <hr style="height:2px;border-width:0;color:gray;background-color:gray">
-        				
+                        
 
-        				
+                        
                             <h3 class="form-section" style="line-height:50px;padding-right:15px;background-color: #006aa8 ;color:white; height: 60px; width:100%;cursor: pointer;" id="div_exam_final">الإمتحانات النهائية <span style="float: left;padding-left:10px;"> + </span></h3>
                                 <div class="content_header_one exam_final_block" style="display: none">
-                                {!! $course->desciption_exam	!!}  
+                                {!! $course->desciption_exam    !!}  
                                 
                                
                                 @if(!empty($user))
@@ -435,11 +446,19 @@
                                     @else
                                         <p>لا يوجد امتحانات</p> 
                                     @endif 
+
+                                @else 
+
+                                <p><a href="{{route('login')}}">سجل الدخول</a></p>
                                 @endif
                                 
                                
                               
                             </div>
+
+                    @else 
+
+
                     @endif   
 
 
@@ -462,4 +481,6 @@
     </div>
 
 </div>
+
+
 

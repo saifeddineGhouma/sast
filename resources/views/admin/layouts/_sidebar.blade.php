@@ -90,7 +90,13 @@
                 <li>
                     <a href="{{route('students.stage')}}">
                         <i class="livicon" data-name="medal" data-size="18" data-c="#418BCA" data-hc="#418BCA" data-loop="true"></i>
-                        <span class="title">Students Stage&Study case</span>
+                        <span class="title">Students Stage</span>
+                    </a>
+                </li>
+				 <li>
+                    <a href="{{route('students.studycase')}}">
+                        <i class="livicon" data-name="medal" data-size="18" data-c="#418BCA" data-hc="#418BCA" data-loop="true"></i>
+                        <span class="title">Students Study case</span>
                     </a>
                 </li>
                 <li>

@@ -1,17 +1,4 @@
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 @extends('admin/layouts/master')
 
 @section('title')
@@ -78,7 +65,7 @@
 									<div class="form-group">
 										<label class="control-label bold">Student</label>
 										<select name="student_id" class="form-control select2">
-											<option value="0"></option>
+											<option value=""></option>
 											@foreach($students as $student)
 												<option value="{{$student->id}}">{{$student->user->full_name_en}}</option>
 											@endforeach
@@ -89,7 +76,7 @@
 									<div class="form-group">
 										<label class="control-label bold">Course</label>
 										<select  name="course_id" class="form-control select2">
-											<option value="0"></option>
+											<option value=""></option>
                                             @foreach($courses as $course)
 												<option value="{{$course->id}}">{{$course->course_trans("ar")->name}}</option>
 											@endforeach
@@ -100,7 +87,7 @@
 								<div class="col-md-4 col-sm-4">
 									<div class="form-group">
 										<label class="control-label bold">Type</label>
-										<select  name="types" class="form-control" id="stageOrstudycase"  onchange="location = this.value;">
+										<select  name="types" class="form-control select2" id="stageOrstudycase"  onchange="location = this.value;">
 											<option>selected Type </option>
 											<option value="{{route('students.stage')}}" {{(\Request::route()->getName()=='students.stage')?'selected':''}}>Stage</option>
 											<option value="{{route('students.studycase')}}" {{(\Request::route()->getName()=='students.studycase')?'selected':''}}>Study Case</option>
@@ -131,57 +118,121 @@
 
 
 
-				<div id="reloaddiv" >
+					<div class="table-toolbar">
+	                    <div class="row" style="margin-top: 20px;">
+
+
+	                    </div>
+	                </div>
+
+
+	                <div id="reloaddiv" class="block_stage" >
 						<table class="table table-striped table-bordered" id="table1">
 							<thead>
 							<tr>
 								<th>Username</th>
 								<th>Email</th>
 								<th>Course </th>
-								<th>sujet</th>
-								<th>Fichie Pdf</th>
+								<th>Demande de stage</th>
+								<th>Evaluation de stage</th>
 								<th>Status</th>
 								<th class="text-center"> Date added </th>
 								<th > Actions </th>
 							</tr>
 							</thead>
 							<tbody>
-								@foreach($study_cases as $study_case)
+								@foreach($stages as $stage)
 								<tr>
-									<td>{{$study_case->student->user->full_name_ar}}</td>
-									<td>{{$study_case->student->user->email}}</td>
-									<td>{{$study_case->course->course_trans('ar')->name}}</td>
+									<td>{{$stage->user->full_name_en}}</td>
+									<td>{{$stage->user->email}}</td>
+									<td>{{$stage->course->course_trans('ar')->name}}</td>
 									<td>
-										{{$study_case->sujet->description}}
+									   @foreach($stage->user->user_stage as $stage_user)
+                                              
+                                               <a href="{{asset('uploads/kcfinder/upload/image/stage/'.$stage_user->demande_stage)}}" target="_blank">
+											
+											 stage   
+
+									        	</a> <br/>
+
+										@endforeach
+									
+										
 
 										</td>
 										<td>
-											 
-											
-
 										
-										<a href="{{asset('uploads/kcfinder/upload/image/studyCase/'.$study_case->document)}}" target="_blank">
-											
-											Document  
-
-										</a>
 										
+										 @foreach($stage->user->user_stage as $stage_user)
+                                              
+                                               <a href="{{asset('uploads/kcfinder/upload/image/stage/'.$stage_user->evaluation_stage)}}" target="_blank">
+											
+											 Evalution de stage 
+
+									        	</a> <br/>
+
+										@endforeach
 
 										</td>
 								
 								
 									<td> 
+										@php 
+									
+										if($stage->valider==1)
+										{
+											$badge='success';
+											$status='Valid' ;
+										}elseif($stage->valider==0){
+										    $badge='info';
+										    $status='EnCours';
 
+
+									}else{
+									        $badge='danger';
+										    $status='Invalid';
+
+								}
 										
-										{{($study_case->successful==1) ? 'success':'Refus'}}
 										
+
+										@endphp
+										
+											
+										
+										<span class="badge badge-{{$badge}}">{{$status}}</span>
 
 									</td>
-										<td>{{\Carbon\Carbon::parse($study_case->created_at)->format('m-d-Y')}}</td>
+										<td>{{\Carbon\Carbon::parse($stage->created_at)->format('m-d-Y')}}</td>
 									<td>
-										<a href="{{route('students.studycase.edit',$study_case->id)}}">
-                        <i class="livicon" data-name="edit" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="edit student exam"></i>
+								@php 
+									
+										if($stage->valider==1)
+										{
+											$badge='success';
+											$status='Valid' ;
+										}elseif($stage->valider==0){
+										    $badge='info';
+										    $status='EnCours';
+
+
+									}else{
+									        $badge='danger';
+										    $status='Invalid';
+
+								}
+										
+										
+
+										@endphp
+										
+											
+
+												<a href="{{route('students.stage.edit',$stage->id)}}">
+                        <i class="livicon" data-name="edit" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="edit student stage"></i>
 					</a>
+										
+										
 									</td>
 
 								</tr>
@@ -191,8 +242,13 @@
 
 							</tbody>
 						</table>
-						{{ $study_cases->links() }}
+						{{ $stages->links() }}
                 	</div>
+
+
+
+
+	            </div>
 	         </div>
 	    </div>
 	</div>
@@ -236,50 +292,23 @@
 	<script src="{{asset('assets/admin/vendors/select2/select2.min.js')}}" type="text/javascript"></script>
 
 
+<script type="text/javascript">
+    $('.valid_stage').on('change', function() {
+    	alert('test')
+        $('#label_stage').html($(".valid_stage option:selected").text());
+        $('#modal_stage').modal('show');
+    });
+
+    $('#save_valid').on('click', function() {
+		alert('test')
+        var lang =$('#lang').val() ;
+        url = "{{route('add.student.lang',['lang'=>':lang','user'=>Auth::id()])}}";
+        url = url.replace(':lang', lang);
+ 
+        window.location.href= url ;
+
+    });
+
+    $('.select2').select2();
+</script>
 @endsection
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

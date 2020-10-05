@@ -71,21 +71,21 @@
                                         @else
                                             @if($course->isRegistered())
                                                 @if($courseStudy->type == "html"||$courseStudy->type == "pdf")
-                                                    @if($courseStudy->type == "html")
-                                                        <button onclick="location.href='{{ url(App('urlLang').'courses/studies?courseStudy_id='.$courseStudy->id) }}'" target="_blank">مشاهدة</button>
-                                                @elseif($courseStudy->type == "pdf")
-                                                @if($user->user_lang['lang_stud'] == "ar" )
-                                                        <button onclick="location.href='{{ url(App('urlLang').'/uploads/kcfinder/upload/file/'. $courseStudy->url ) }}'" target="_blank">مشاهدة</button>
-                                                        @else
-                                                        <button onclick="location.href='{{ url(App('urlLang').'/uploads/kcfinder/upload/file/new book/FITNESS INSTRUCTOR FR.pdf') }}'" target="_blank">مشاهدة</button>
-                                                    @endif 
-                                                        @endif
+													@if($courseStudy->type == "html")
+															<button onclick="location.href='{{ url(App('urlLang').'courses/studies?courseStudy_id='.$courseStudy->id) }}'" target="_blank">مشاهدة</button>
+													@elseif($courseStudy->type == "pdf")
+														@if($user->user_lang['lang_stud'] == "ar" )
+															<button onclick="location.href='{{ url(App('urlLang').'/uploads/kcfinder/upload/file/'. $courseStudy->url ) }}'" target="_blank">مشاهدة</button>
+														@else
+															<button onclick="location.href='{{ url(App('urlLang').'/uploads/kcfinder/upload/file/new book/FITNESS INSTRUCTOR FR.pdf') }}'" target="_blank">مشاهدة</button>
+														@endif 
+													@endif
                                                     <a href="https://swedish-academy.se/telecharge.php?pdf={{$courseStudy->url}}" download="{{$courseStudy->url}}" target="_blank" style="float: left;">
                                                         <img src="{{asset('assets/front/img/icon-download.png')}}" /> 
                                                         تحميل
                                                     </a>
                                                 @else
-                                                    <button onclick="location.href='{{ url(App('urlLang').'uploads/kcfinder/upload/file/'.$courseStudy->url) }}'" target="_blank">مشاهدة</button>
+                                                    <button href="{{ url(App('urlLang').'uploads/kcfinder/upload/file/'.$courseStudy->url) }}" target="_blank">مشاهدة</button>
                                                 @endif
                                             @else
                                                 <button onclick="location.href='{{ url(App('urlLang').'login') }}'">للمسجلين فقط</button>
@@ -105,7 +105,7 @@
         @else
             @if(in_array($courseType->id, [299, 300, 301, 302]))
              <p>   انقر على هذه الصورة اذا اردت شراء احد كتبتنا  </p> <br>
-             <a href="{{url(App('urlLang').'books')}}"> <img src=""> </a>
+             <a href="{{url(App('urlLang').'books')}}"> المكتبة  </a>
 
             @else 
                 <div id="accordion">

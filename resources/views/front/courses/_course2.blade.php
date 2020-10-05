@@ -74,13 +74,14 @@ switch ($loop->index%8){
                                
                                 
                                   <p style="text-decoration: line-through;color:yellow">{{ floor($first_Variation->pricesale+$vat2) }} <b>$</b></p>
-                                  {{ floor($first_Variation->price+$vat) }} <b>$</b>
+                                  {{ floor($first_Variation->price+$vat) }}<b>$</b>
                                 
                         </span>
                         @else
                         <span class="badge badge-pill badge-warning">
                             <span>
-                            {{ floor($first_Variation->price+$vat) }} <b>$</b>
+                            {{ floor($first_Variation->price+$vat) }}<b>$</b><br>
+                            {{ $first_Variation->id }}
                             </span>
                         </span>
                         @endif
