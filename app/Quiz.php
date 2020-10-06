@@ -119,8 +119,6 @@ class Quiz extends Model
                     ->havingRaw("sum(order_onlinepayments.total)>=orders.total")
                     ->pluck("orders.id")->all();
                 $period = $course->exam_period;
-				//print_r($paidOrder_ids);
-				//echo $period;
                 if ($period > 0) {
                     $now = date("Y-m-d");
                     $before = date("Y-m-d", strtotime('-' . $period . ' day', strtotime($now)));
@@ -133,10 +131,7 @@ class Quiz extends Model
                         ->where("packs.cours_id1", $course->id)
                         ->whereIn("orders.id", $paidOrder_ids)
                         ->where(DB::raw("DATE(orders.created_at)"), ">=", $beforePack)->first();
-						
-					//print_r($order);
 					if (isset($orders)) {
-						//echo "afef".$orders->pack_id;		
 				
 						$order = \App\Order::join("order_products", "order_products.order_id", "=", "orders.id")
 							->join("orderproducts_students", "orderproducts_students.orderproduct_id", "=", "order_products.id")
@@ -164,6 +159,7 @@ class Quiz extends Model
 
 
 						}
+					
 					}else{	
 						$orders = \App\Order::join("order_products", "order_products.order_id", "=", "orders.id")
 							->join("orderproducts_students", "orderproducts_students.orderproduct_id", "=", "order_products.id")
@@ -211,16 +207,16 @@ class Quiz extends Model
 								->whereIn("orders.id", $paidOrder_ids)
 								->where(DB::raw("DATE(created_at)"), ">=", $before)->first();
 							if (empty($order)) {
-								//echo "Afeff";
 								$expired = true;
 								$successFinal_ids = $student->student_quizzes()->where("course_id", $course->id)
 									->where("is_exam", 1)->where("successfull", 1)->pluck("quiz_id")->all();
-									
+								
 								$quizOrder = \App\Order::join("order_products", "order_products.order_id", "=", "orders.id")
 									->join("orderproducts_students", "orderproducts_students.orderproduct_id", "=", "order_products.id")
 									->where("student_id", Auth::user()->id)
 									->where("order_products.quiz_id", $this->id)
 									->whereIn("orders.id", $paidOrder_ids)->first();
+								
 								if (!empty($quizOrder))
 									$expired = false;
 

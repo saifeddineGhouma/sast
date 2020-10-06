@@ -320,26 +320,27 @@ class CoursesController extends Controller
                 $startTime = $studentQuiz->startime;
                 $stopTime = $studentQuiz->stoptime;
             } else {
-                /*$completedcount = $student->student_quizzes()->where("quiz_id",$quiz->id)
-                    ->where("status","!=","not_completed")->count();
-                if($completedcount==0){*/
-                $studentQuiz = new StudentQuiz();
-                $studentQuiz->student_id = $student->id;
-                $studentQuiz->quiz_id = $quiz->id;
-                $studentQuiz->course_id = $course->id;
-                $studentQuiz->quiz_name = $quiz->quiz_trans("ar")->name;
-                $studentQuiz->course_name = $course->course_trans("ar")->name;
-                $studentQuiz->ip = $ip;
-                $studentQuiz->is_exam = $quiz->is_exam;
-                $studentQuiz->status = "pending";
-                $studentQuiz->startime = $startTime;
-                $studentQuiz->stoptime = $stopTime;
-                $studentQuiz->final_mark = $finalMark;
-                $studentQuiz->successfull = 0;
-                $studentQuiz->save();
-                //                }else{
-                //                    abort(404);
-                //                }
+                $studentQuiz = $student->student_quizzes()->where("token", $request->token)->first();
+                if(empty($studentQuiz)){
+                    $studentQuiz = new StudentQuiz();
+                    $studentQuiz->student_id = $student->id;
+                    $studentQuiz->quiz_id = $quiz->id;
+                    $studentQuiz->course_id = $course->id;
+                    $studentQuiz->quiz_name = $quiz->quiz_trans("ar")->name;
+                    $studentQuiz->course_name = $course->course_trans("ar")->name;
+                    $studentQuiz->ip = $ip;
+                    $studentQuiz->is_exam = $quiz->is_exam;
+                    $studentQuiz->status = "pending";
+                    $studentQuiz->startime = $startTime;
+                    $studentQuiz->stoptime = $stopTime;
+                    $studentQuiz->final_mark = $finalMark;
+                    $studentQuiz->successfull = 0;
+    				$studentQuiz->token    = $request->token;
+                    $studentQuiz->save();
+                }else{
+                    session()->flash("alert-danger", "لقد قمت بالإجابة على الأسئلة سابقا");
+                    return redirect()->back();
+                }
             }
             $studentquiz_answers = $studentQuiz->answers;
             $seconds = Quiz::datediff('s', date("Y-m-d H:i:s"), $stopTime, false);
@@ -373,9 +374,14 @@ class CoursesController extends Controller
 
         if (!empty($student)) {
 
+            if($studentQuizTmp->status == 'completed' or $studentQuizTmp->status == 'not_completed'){
+                session()->flash("alert-danger", "لقد قمت بالإجابة على الأسئلة سابقا");
+                return redirect(App('urlLang') . 'courses/quiz-result?studentQuiz_id=' . $studentQuizTmp->id);
+            }
+
             $currentTime = date("Y-m-d H:i:s", strtotime("-5 seconds"));
 
-            //print_r($student->student_quizzes);
+            $studentQuiz = $student->student_quizzes()->where("token", $request->token)->first();
             $studentQuiz = $student->student_quizzes()->where("students_quizzes.id", $studentQuiz_id)
                 ->where("startime", "<=", $currentTime)->where("stoptime", ">", $currentTime)
                 ->where("status", "!=", "not_completed")->first();
@@ -496,6 +502,7 @@ class CoursesController extends Controller
                     //$user->notify(new SuccessExam($user->username, $studentQuiz->quiz_name));
                 $data["message"] = "expired";
             }
+
         } else {
             abort(404);
         }

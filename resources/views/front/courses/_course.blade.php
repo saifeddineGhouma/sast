@@ -76,8 +76,7 @@ switch ($loop->index%8){
                         @else
                         <span class="badge badge-pill badge-warning">
                             <span>
-                            {{ floor($first_Variation->price+$vat) }} <b>$</b><br>
-                            {{ $first_Variation->id }}
+                            {{ floor($first_Variation->price+$vat) }} <b>$</b>
                             </span>
                         </span>
                         @endif
