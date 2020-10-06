@@ -39,7 +39,7 @@ class UserVerifyCertif extends Controller
                 return redirect()->back();
             } else {
                 return redirect()->back()->withErrors(['الرجاء التثبت من الرقم التسلسلي']);
-                //->with(['message_success' => 'الرجاء التثبت من الرقم التسلسلي']);
+              
             }
         } else {
             $userVerify = new UserVerify;
