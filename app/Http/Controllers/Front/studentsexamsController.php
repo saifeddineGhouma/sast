@@ -342,7 +342,8 @@ class studentsexamsController extends Controller
                             $message1 .= '</table>';
                             $message1 .= '</body>';
                             $message1 .= '</html>';
-                            mail($student->user->email, $subject, $message1, $headers);
+                            if(!$course->isTotalyPaid)
+                                mail($student->user->email, $subject, $message1, $headers);
                         }
                     }
                 }
@@ -474,7 +475,8 @@ class studentsexamsController extends Controller
                             $message1 .= '</table>';
                             $message1 .= '</body>';
                             $message1 .= '</html>';
-                            mail($student->user->email, $subject, $message1, $headers);
+                            if(!$course->isTotalyPaid)
+                                mail($student->user->email, $subject, $message1, $headers);
                         }
                     }
                 }
@@ -610,7 +612,8 @@ class studentsexamsController extends Controller
                             $message1 .= '</table>';
                             $message1 .= '</body>';
                             $message1 .= '</html>';
-                            mail($student->user->email, $subject, $message1, $headers);
+                            if(!$course->isTotalyPaid)
+                                mail($student->user->email, $subject, $message1, $headers);
                         }
                     }
                 }

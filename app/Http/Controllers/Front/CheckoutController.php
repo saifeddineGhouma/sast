@@ -25,7 +25,7 @@ use App\Book;
 use App\Coupon;
 use App\Student;
 use App\Packs;
-
+use PDF;
 use App\Notifications\OrderCreated;
 use App\Notifications\OrderCreatedCartPay;
 use App\Notifications\OrderBookCreated;
@@ -62,7 +62,9 @@ use Session;
 use Auth;
 use File;
 use DB;
+include "assets/I18N/Arabic.php";
 
+use I18N_Arabic;
 class CheckoutController extends Controller
 {
     /**
@@ -379,10 +381,38 @@ class CheckoutController extends Controller
             return redirect(App("urlLang") . '/checkout');
     }
 
+   public function generateFacture()
+   {
+       
+      $code = $this->getCode() ;
+       if (session()->has('checkout') && session()->has('cart')) {
+            $checkout = session()->get('checkout');
+            
+            if (isset($checkout["payment_method"])) {
+                $user = Auth::user();
+                $cart = session()->get('cart');
+                 
+                 $agent = null;
+                if (isset($checkout["agent_id"])) {
+                    $agent = \App\Agent::find($checkout["agent_id"]);
+                }
+                $Arabic = new I18N_Arabic('Glyphs');
 
+                $pdf = PDF::loadView('front.checkout.facture-test', compact('cart','user','agent','checkout','Arabic'));
+               
+              //   PDF::loadHTML('<h1>Test</h1> ')->save('http://localhost/sast/public/facture.pdf');
+               // return $pdf->download('invoice.pdf');
+                return view('front.checkout.facture-pdf', compact('cart','user','agent','checkout'));
+
+              
+           }}
+
+       
+   }
     public function getDetails()
     {
-
+          
+         
         if (session()->has('checkout') && session()->has('cart')) {
             $checkout = session()->get('checkout');
 
@@ -421,6 +451,7 @@ class CheckoutController extends Controller
         $message[0] = "error";
         $message[1] = "لا  يمكن اتمام عملية الدفع";
         $checkout = session()->get('checkout');
+
         if(empty($checkout))
             return redirect(App('urlLang') . 'checkout/confirm?error=Cart is empty');
         $orderid = 0;
@@ -441,6 +472,7 @@ class CheckoutController extends Controller
         DB::transaction(function () use ($checkout, $request, &$orderid, &$orderPaymentId) {
             $user = Auth::user();
             $student = $user->student;
+
             if (empty($student)) {
                 $student = new Student();
                 $student->id = $user->id;
@@ -462,6 +494,7 @@ class CheckoutController extends Controller
             }
             $order->total = $checkout["totalPrice"];
             $order->save();
+
             $orderid = $order->id;
 
 
@@ -528,6 +561,7 @@ class CheckoutController extends Controller
                 $orderProductStudent->orderproduct_id = $orderProduct->id;
                 $orderProductStudent->student_id = $student->id;
                 $orderProductStudent->save();
+
                 for ($i = 2; $i <= $cart_pro['quantity']; $i++) {
                     if ($request->get("std_usernames_" . $product_id . "_" . $i) != "" || $request->get("std_fullNames_" . $product_id . "_" . $i) != "") {
                         $orderProductUnStudent = new OrderproductUnStudent();
@@ -570,7 +604,7 @@ class CheckoutController extends Controller
             if (isset($orderProduct->book_id)) {
                 if ($order->payment_method == "cash" || $order->payment_method == "banktransfer") {
                     $user->notify(new OrderCreated($order->id, $order->total, $user->username, $order));
-                    Notification::send($admins, new OrderCreatedTransfer($order->id, $order->total, $user->username, $order));
+                    //Notification::send($admins, new OrderCreatedTransfer($order->id, $order->total, $user->username, $order));
                 } else {
                     $book =  Book::findOrFail($orderProduct->book_id);
                     $user->notify(new OrderBookCreated($order->id, $order->total, $user->username, $order, $book->pdf_book));
@@ -578,7 +612,7 @@ class CheckoutController extends Controller
             } else {
                 if ($order->payment_method == "cash" || $order->payment_method == "banktransfer") {
                     $user->notify(new OrderCreated($order->id, $order->total, $user->username, $order));
-                    Notification::send($admins, new OrderCreatedTransfer($order->id, $order->total, $user->username, $order));
+                   // Notification::send($admins, new OrderCreatedTransfer($order->id, $order->total, $user->username, $order));
                 } else {
                     //$user->notify(new OrderCreatedCartPay($order->id, $order->total, $user->username, $order, $orderProduct->coursetype_variation->coursetype_id));
                 }
@@ -619,6 +653,7 @@ class CheckoutController extends Controller
             $orderPayment = OrderOnlinepayment::findOrFail($orderPaymentId);
             $orderPayment->payment_status = "for_approval";
         }
+
         return $message;
     }
 
@@ -801,9 +836,9 @@ class CheckoutController extends Controller
             $token = $request->get('stripeToken');
             // Charge the user's card:
             $charge = \Stripe\Charge::create(array(
-                "amount" => round($total * 100, 0),
+                "amount" => round(500 * 100, 0),
                 "currency" => "usd",
-                "description" => "order #" . $order->id,
+                "description" => "order #" ,
                 "source" => $token,
             ));
             if ($charge['status'] == 'succeeded') {
@@ -855,7 +890,7 @@ class CheckoutController extends Controller
         return $this->payPaypalOrder($total, $orderPayment->order, $orderPayment, "ajax");
     }
 
-
+    
     public function sendEmail($name, $email, $message1, $shop, $order)
     {
 
@@ -876,6 +911,22 @@ class CheckoutController extends Controller
         return $status;
     }
 
+   private function getCode ()
+   {
+    $chars = "abcdefghijkmnopqrstuvwxyz023456789"; 
+    srand((double)microtime()*1000000); 
+    $i = 0; 
+    $code = '' ; 
+
+    while ($i <= 7) { 
+        $num = rand() % 33; 
+        $tmp = substr($chars, $num, 1); 
+        $code = $code . $tmp; 
+        $i++; 
+    } 
+
+    return $code; 
+   }
 
 
 

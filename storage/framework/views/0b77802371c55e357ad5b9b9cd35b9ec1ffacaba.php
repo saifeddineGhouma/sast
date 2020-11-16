@@ -125,17 +125,10 @@
 
         
         $("#info_form").bootstrapValidator({
-            alert('test');
+			
             excluded: [':disabled'],
             fields: {
-                /* full_name_ar: {
-                    validators: {
-                        notEmpty: {
-                            message: '<?php echo e(trans("home.this_field_required")); ?>'
-                        }
-                    },
-                    required: true
-                }, */
+               
                 full_name_en: {
                     validators: {
                         notEmpty: {
@@ -144,14 +137,14 @@
                     },
                     required: true
                 },
-                date_of_birth: {
+                /*date_of_birth: {
                     validators: {
                         notEmpty: {
                             message: '<?php echo e(trans("home.this_field_required")); ?>'
                         }
                     },
-                    required: true
-                },
+                    required: false
+                },*/
                 gender: {
                     validators: {
                         notEmpty: {
@@ -205,7 +198,6 @@
                             url: "<?php echo e(url('/home/unique-email')); ?>",
                             type: 'GET',
                             data: function(validator) {
-                                
                                 return {
                                     id: '<?php echo e($user->id); ?>'
                                 };
@@ -239,7 +231,6 @@
                 },
             }
         }).on('success.form.bv', function(e) {
-            
             var points = $("#points").val();
             var max_points_replace = <?php echo e(App('setting')->max_points_replace); ?>;
             var userpoints = <?php echo e($userpoints); ?>;

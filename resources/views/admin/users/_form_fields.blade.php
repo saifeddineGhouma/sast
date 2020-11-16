@@ -24,6 +24,14 @@
             </div>
       </div>
     </div>
+       <div class="col-md-6">
+      <div class="form-group">
+            <label class="control-label col-md-3">IsPAID<span style="color:red;">*</span></label>
+            <div class="col-md-9">
+                <input type="checkbox" class="make-switch" onclick="onClick(this)" name="paid" id="paid" value="" {{($method=='edit' && $user->paid)?'checked':''}}>
+            </div>
+      </div>
+    </div>
   </div>
    <div class="row">
 
@@ -293,3 +301,18 @@
         </div>            
     </div>
   </div>
+  <script type="text/javascript">
+      function onClick($this) {
+
+        checkPaid = document.getElementById("paid");
+          if(checkPaid.checked == true)
+              $this.value=1;
+
+         else
+         {
+              $this.value=0;
+         }
+       
+           
+}
+  </script>

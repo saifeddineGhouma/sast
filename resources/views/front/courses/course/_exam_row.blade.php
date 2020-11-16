@@ -97,9 +97,10 @@
                 $expired = false;
 
                 if($type == "exam" && !$course->isFree()){
+					
 
                     $validAttempts  = $course->validQuizAttempts($quiz);
-
+                     
                     $expired        = $exam->isExpired($course);
 
                 }
@@ -214,33 +215,7 @@
 
 													<button class="startquiz" data-id="{{ $quiz->id }}" data-type="{{ $type }}">@lang('navbar.repassexam')</button>
 
-													<!--?php
-
-														$quizzzz=$quiz->students_quizzes->where("quiz_id",$quiz->id)->where("course_id",$course->id)->where("student_id",Auth::user()->id)
-
-														->last();
-
-														$stopTimes = date("Y-m-d H:i:s");
-
-														//echo $quizzzz["stoptime"];
-
-														$currentDate = strtotime($quizzzz["stoptime"]);
-
-														$futureDate = $currentDate+(60*5);
-
-														$formatDate = date("Y-m-d H:i:s", $futureDate);
-
-														//echo $stopTimes."<br>".$formatDate;
-
-														if($stopTimes>$formatDate){
-
-													}else{ 
-
-														
-
-														<a style="color: #fff;background-color: #ce0000;border: none;width: 100px;font-family: 'helva';font-size: 9pt;margin-bottom: 5px;border-radius: 30px;transition: all ease-out 0.3s;cursor: pointer;height: 34px; display: inline-block; padding-top:5px;" onclick="alerttt()">إعادة الاختبار</a>
-
-													 } ?-->
+												
 
 													
 
@@ -321,6 +296,10 @@
                 @endif
 
             @else
+				@if(!empty($course->gettentative()))
+				
+					
+				@endif
 
                     <div class="alert alert-danger">
 

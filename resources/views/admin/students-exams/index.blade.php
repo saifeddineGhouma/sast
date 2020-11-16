@@ -109,8 +109,14 @@
 								</div>
 								<div class="col-md-4 col-sm-4">
 									<div class="form-group">
-										<label class="control-label bold">Date Added</label>
+										<label class="control-label bold">Date Added 1 </label>
 										<input class="form-control date-picker" size="16" type="text" name="created_at" />
+									</div>
+								</div>
+								<div class="col-md-4 col-sm-4">
+									<div class="form-group">
+										<label class="control-label bold">Date Added 2 </label>
+										<input class="form-control date-picker" size="16" type="text" name="created_at_2" />
 									</div>
 								</div>
 								<div class="col-md-4">

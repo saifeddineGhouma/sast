@@ -76,9 +76,7 @@ switch ($loop->index%8){
                         <?php else: ?>
                         <span class="badge badge-pill badge-warning">
                             <span>
-                            <?php echo e(floor($first_Variation->price+$vat)); ?> <b>$</b><br>
-                            <?php echo e($first_Variation->id); ?>
-
+                            <?php echo e(floor($first_Variation->price+$vat)); ?> <b>$</b>
                             </span>
                         </span>
                         <?php endif; ?>

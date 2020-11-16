@@ -121,12 +121,43 @@
                         });
 
 </script>
-                      
+				@if(Lang::locale()=="en")
+                    <style type="text/css">
+			   h3{
+				   text-align:left;
+				   padding-left:15px;
+				   
+			   }
+			   h3 span{
+				   float:right
+			   }
+			  
+			   
+</style>       
+
+				@else
+                   <style type="text/css">
+			  
+			   h3 span{
+				   float:left
+			   }
+</style>       
+
+                @endif
+               
 
 <div class="col-lg-12 course_curriculum_exam courses_more_info_content">
     <div class="content_header_one">
-        <p>الامتحانات</p>
-        {!! $course->description_all_exam !!}
+        <p>
+		@lang('navbar.exams') 
+		</p>
+		@if(Lang::locale()=="en")
+                     {!! $course->description_all_exam_en !!} 
+
+                    @else
+                    {!! $course->description_all_exam !!} 
+
+                    @endif
         @if(Session::has('message'))
             <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
             <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
@@ -143,6 +174,7 @@
             </script>
           
         @endif
+		
      
     </div>
     <div id="accordion">
@@ -150,17 +182,23 @@
             <div class="card-header" id="headingTen">
                 <h5 class="mb-0">
                     <p class=" btn-link ">
-                        إجتياز الاختبارات التالية قبل البدأ في الاختبار النهائي للحصول على الشهادة 
+                        @lang('navbar.header_exams')
                 </h5>
             </div>
             <div>
                 <div class="card-body">
                   
                         
-                
-                    <h3 class="form-section"  style="line-height:50px;padding-right:15px;background-color: #006aa8 ;color:white; height: 60px; width:100% ; cursor: pointer;" id="div_quiz"> <span style="float: left;padding-left:10px;"> + </span>الكويزات</h3> 
+               @if( $quizzes->count()>0)
+                    <h3 class="form-section"  style="line-height:50px;padding-right:15px;background-color: #006aa8 ;color:white; height: 60px; width:100% ; cursor: pointer;" id="div_quiz"> <span style="padding-left:10px;"> + </span>@lang('navbar.quizs')</h3> 
                     <div class="content_header_one quiz_block" style="display: none">
+					 @if(Lang::locale()=="en")
+                     {!! $course->description_quiz_en    !!}
+
+                    @else
                     {!! $course->description_quiz    !!}
+
+                    @endif
                    
                    
                    
@@ -170,7 +208,7 @@
                             @include("front.courses.course._exam_row",["quiz"=>$quiz,"type"=>"quiz"])
                         @endforeach
                     @else
-                        <p>لا يوجد امتحانات</p>
+                        <p>@lang('navbar.no_exam')</p>
                     @endif
                     
                     </div>
@@ -186,17 +224,29 @@
                         $validateExam = $course->validateExam("quiz",$messageValid);
                     ?>
                     
-                    
+                 @endif
                     
                     @if(isset($course->stage))
                         
                         @if($course->stage->active)
 
-                        <h3 class="form-section "style="line-height:50px;padding-right:15px;background-color: #006aa8 ;color:white; height: 60px; width:100% ; cursor: pointer;" id="div_stage"> <span style="float: left;padding-left:10px;"> + </span> التدريب العملي  </h3>    
+                        <h3 class="form-section "style="line-height:50px;padding-right:15px;background-color: #006aa8 ;color:white; height: 60px; width:100% ; cursor: pointer;" id="div_stage"> <span style="padding-left:10px;"> + </span> @lang('navbar.pratical_training')  </h3>    
                         <div class="content_header_one stage_block" style="display:none">
-                        {!! $course->description_stage  !!}
+                        @if(Lang::locale()=="en")
+                                 {!! $course->description_stage_en  !!}
+
+                                @else
+                                {!! $course->description_stage  !!}
+
+                               @endif
                         
                             @if(!empty($user)) 
+								
+							@if($course->isRegistered())
+								
+								
+							   
+								
 
                                 @if($course->students_stage()->where('user_id',$user->id)->count())
 
@@ -221,11 +271,11 @@
                                             <div class="col-1 curriculum_exam_type">                                    
                                             </div>
                                             <div class="col-6 curriculum_exam_title">
-                                                تحميل الملفات
+                                                @lang('navbar.download_file')
 
                                             </div>
                                             <div class="col-2 curriculum_exam_question_number">
-                                                رفع الملفات من جهازك
+                                                @lang('navbar.upload_from_pc')
                                             <br/>
                                             </div>
                                             <div class="col-3 curriculum_exam_watch">           
@@ -259,13 +309,13 @@
                                                         
                                                         @if($user->user_lang()->exists())
                                                             @if($user->user_lang->lang_stud == "Fr" )
-                                                                <p> <a href = "{{route('downloadStage')}}"> استمارة مطلب التربص </a>  </p>
+                                                                <p> <a href = "{{route('downloadStage')}}"> @lang('navbar.Training_application_form') </a>  </p>
                                                             @else
-                                                                <p> <a href = "{{route('downloadDemandeStageArab')}}"> استمارة مطلب التربص </a>  </p>
+                                                                <p> <a href = "{{route('downloadDemandeStageArab')}}"> @lang('navbar.Training_application_form') </a>  </p>
                                                             @endif
                                                           @endif
                                                         @else
-                                                       <p> <a href = "{{route('downloadDemandeStageArab')}}">  استمارة مطلب التربص </a>  </p>
+                                                       <p> <a href = "{{route('downloadDemandeStageArab')}}">  @lang('navbar.Training_application_form') </a>  </p>
                                                     @endif
                                                 </div>
                                     
@@ -296,13 +346,13 @@
                                                     @if($course->is_lang )
                                                         @if($user->user_lang()->exists())
                                                             @if($user->user_lang->lang_stud == "Fr" )
-                                                            <p> <a href = "{{ url('download_eval') }}"> استمارة التقييم </a>  </p>  
+                                                            <p> <a href = "{{ url('download_eval') }}"> @lang('navbar.Evaluation_form') </a>  </p>  
                                                             @else
-                                                            <p> <a href = "{{ url('download_eval_arab') }}"> استمارة التقييم </a>  </p>  
+                                                            <p> <a href = "{{ url('download_eval_arab') }}"> @lang('navbar.Evaluation_form') </a>  </p>  
                                                             @endif
                                                         @endif
                                                     @else
-                                                     <p> <a href = "{{ url('download_eval_arab') }}"> استمارة التقييم </a>  </p>  
+                                                     <p> <a href = "{{ url('download_eval_arab') }}"> @lang('navbar.Evaluation_form') </a>  </p>  
                                                     @endif
                                                 </div>
 
@@ -338,7 +388,7 @@
                                         <div class="col-2 curriculum_exam_question_number">
                                         </div>
                                         <div class="col-3 curriculum_exam_watch">           
-                                            <button type="submit" class="startquiz"> رفع الملفين </button>         
+                                            <button type="submit" class="startquiz"> @lang('navbar.upload_file') </button>         
                                         </div>
                                      </div>
                                 </form>
@@ -349,17 +399,13 @@
 
 
                                 @endif
+								
+							  @else   
+								  <p class="failed">@lang('navbar.youarenotstudent')</p>
+							  @endif
 
                                 
-                                @if($user->user_stage->count()<0)
-
-
-
-                                           
-                                
-                                    @else
-
-                                    @endif  
+                                 
                                        
 
                                     
@@ -372,7 +418,7 @@
                                     <i class="fa fa-check" aria-hidden="true"></i>
                                 </div>
                                 <div class="col-6 curriculum_exam_title">
-                                <a href="{{ url(App('urlLang').'login') }}">سجل الدخول</a>
+                                <a href="{{ url(App('urlLang').'login') }}">@lang('navbar.pleaseLogIn')</a>
                                 </div>
                                 </div>
                             @endif
@@ -387,27 +433,29 @@
                     @if(isset($course->courses_study_case) && $course->courses_study_case->active)
                     
                   
-                        <h3 class="form-section div_toggle"  id="div_study_case" style="line-height:50px;padding-right:15px;background-color: #006aa8 ;color:white; height: 60px; width:100%;cursor: pointer;"><span style="float: left;padding-left:10px;"> + </span> التقرير العلمي </h3>
+                        <h3 class="form-section div_toggle"  id="div_study_case" style="line-height:50px;padding-right:15px;background-color: #006aa8 ;color:white; height: 60px; width:100%;cursor: pointer;"><span style="padding-left:10px;"> + </span> @lang('navbar.scientific_report') </h3>
                         <div class="content_header_one study_case_block" style="display: none ; border: none;">
-                            {!! $course->description_study_party    !!}
+							  @lang('navbar.header_study_case')
                             
 
                             @if(!empty($user))
+								@if($course->isRegistered())
 
-                               @if($user->lang()=="Fr")
-                                @include('front.courses.course.study_case.version_fr')
+								   @if($user->lang()=="Fr")
+									@include('front.courses.course.study_case.version_fr')
 
-                               @else
-                               @include('front.courses.course.study_case.version_ar')
+								   @else
+								   @include('front.courses.course.study_case.version_ar')
 
-                               @endif
-                        
+								   @endif
+								@else
+									<p class="failed">
+										@lang('navbar.youarenotstudent')
+										</p>
+                                @endif                        
                             @else  
-                              <p>
-                                    إعداد تقرير علمي كتابي عن إحدى الحالات او المواضيع الرياضية المتعلقة باللياقة البدنية يتم اختياره بطريقة عشوائية من مجموعة عناوين وحالات معدة مسبقا من قبل الاكاديمية. ويتم مناقشته لمدة 15 دقيقة مع مشرف الدورة بعد تحديد موعد مسبق معه. نسبة نجاح الطالب في هذه المهمة 80%. يمكن ايجاد موضوع التقرير العلمي عند اختيار الحالة من الاسفل
-                                    
-                                    </p>
-                            <p><a href="{{route('login')}}">سجل الدخول</a></p>
+                              
+                            <p><a href="{{route('login')}}">@lang('navbar.pleaseLogIn')</a></p>
 
 
                         @endif
@@ -429,10 +477,16 @@
                         
 
                         
-                            <h3 class="form-section" style="line-height:50px;padding-right:15px;background-color: #006aa8 ;color:white; height: 60px; width:100%;cursor: pointer;" id="div_exam_final">الإمتحانات النهائية <span style="float: left;padding-left:10px;"> + </span></h3>
+                            <h3 class="form-section" style="line-height:50px;padding-right:15px;background-color: #006aa8 ;color:white; height: 60px; width:100%;cursor: pointer;" id="div_exam_final">@lang('navbar.final_exams') <span style="padding-left:10px;"> + </span></h3>
                                 <div class="content_header_one exam_final_block" style="display: none">
-                                {!! $course->desciption_exam    !!}  
-                                
+                                 @if(Lang::locale()=="en")
+                                     {!! $course->desciption_exam_en    !!}
+
+                                 @else
+                                     {!! $course->desciption_exam    !!}
+
+                                 @endif  
+								 
                                
                                 @if(!empty($user))
                                     @if($exams->count()>0)
@@ -444,12 +498,12 @@
                                         @endforeach
                                                    
                                     @else
-                                        <p>لا يوجد امتحانات</p> 
+                                        <p>@lang('navbar.no_exam')</p> 
                                     @endif 
 
                                 @else 
 
-                                <p><a href="{{route('login')}}">سجل الدخول</a></p>
+                                <p><a href="{{route('login')}}">@lang('navbar.pleaseLogIn')</a></p>
                                 @endif
                                 
                                
@@ -463,9 +517,15 @@
 
 
                     @if($videoExams->count()>0) 
-                        <h3 class="form-section"  style="line-height:50px;padding-right:15px;background-color: #006aa8 ;color:white; height: 60px; width:100%;cursor: pointer;" id="div_video"><span style="float: left;padding-left:10px;"> + </span>إمتحانات الفيديو</h3>
+                        <h3 class="form-section"  style="line-height:50px;padding-right:15px;background-color: #006aa8 ;color:white; height: 60px; width:100%;cursor: pointer;" id="div_video"><span style="padding-left:10px;"> + </span>@lang('navbar.video_exams')</h3>
                         <div class="content_header_one video_block" style="display: none ">
-                        {!! $course->description_exam_video !!}
+                        @if(Lang::locale()=="en")
+                                     {!! $course->description_exam_video_en !!}
+
+                                 @else
+                                     {!! $course->description_exam_video !!}
+
+                                 @endif
                        
                             @foreach($videoExams as $videoExam)
                                 @include("front.courses.course._exam_row",["quiz"=>$videoExam,"type"=>"video"])

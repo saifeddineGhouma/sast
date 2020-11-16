@@ -36,7 +36,7 @@
 						</div>
 
 						<div class="form-group">
-							<label class="col-md-2 control-label">short description</label>
+							<label class="col-md-2 control-label">short description </label>
 							<div class="col-md-10">
 								<textarea cols="60"  name="ar_short_description"  class="form-control maxlength-handler" maxlength="160">{{$course_trans_ar->short_description}} </textarea>
 								<span class="help-block"> max legnth 160 char </span>
@@ -61,7 +61,7 @@
 						</div>
 						
 
-						{{--  --}}
+						{{-- add quizzes --}}
 						<div class="form-group">
 							<label class="col-md-2 control-label">Description the quizzes</label>
 							<div class="col-md-10">
@@ -101,6 +101,8 @@
 								<textarea cols="60"  name="description_study_case" id="description_study_case" class="ckeditor">{{$course->description_study_case}} </textarea>
 							</div>
 						</div>
+									
+						
 								<!---end --->
 
 
@@ -164,6 +166,7 @@
 				</div>
 			</div>
         </div>
+        <!---- anglais-->
         <div class="tab-pane fade" id="tab_2">
 			<div class="col-lg-12">
 				<div class="panel">
@@ -184,7 +187,7 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-md-2 control-label">short description</label>
+							<label class="col-md-2 control-label">short description En</label>
 							<div class="col-md-10">
 								<textarea cols="60"  name="en_short_description"  class="form-control maxlength-handler" maxlength="160">{{$course_trans_en->short_description}} </textarea>
 								<span class="help-block"> max legnth 160 char </span>
@@ -197,6 +200,60 @@
 								<textarea cols="60"  name="en_ad"  class="form-control">{{$course_trans_en->ad}} </textarea>
 							</div>
 						</div>
+						<!----anglais ---->
+							{{-- add description  --}}
+
+						
+						<div class="form-group">
+							<label class="col-md-2 control-label">Description the exams </label>
+							<div class="col-md-10">
+								<textarea cols="60"  name="description_all_exam_en" id="description_all_exam_en"  class="ckeditor">{{$course->description_all_exam_en}} </textarea>
+							</div>
+						</div>
+						
+
+						{{-- add quizzes --}}
+						<div class="form-group">
+							<label class="col-md-2 control-label">Description the quizzes</label>
+							<div class="col-md-10">
+								<textarea cols="60"  name="description_quiz_en" id="description_quiz_en" class="ckeditor">{{$course->description_quiz_en}} </textarea>
+							</div>
+						</div>
+						
+							{{--  --}}
+						
+						<div class="form-group">
+							<label class="col-md-2 control-label">Description final exam</label>
+							<div class="col-md-10">
+								<textarea cols="60"  name="desciption_exam_en" id="desciption_exam_en" class="ckeditor">{{$course->desciption_exam_en}} </textarea>
+							</div>
+						</div>
+						
+							{{--  --}}
+						
+						<div class="form-group">
+							<label class="col-md-2 control-label">Description video exam</label>
+							<div class="col-md-10">
+								<textarea cols="60"  name="description_exam_video_en" id="description_exam_video_en" class="ckeditor">{{$course->description_exam_video_en}} </textarea>
+							</div>
+						</div> 
+
+						<div class="form-group">
+							<label class="col-md-2 control-label">Description Stage</label>
+							<div class="col-md-10">
+								<textarea cols="60"  name="description_stage_en" id="description_stage_en" class="ckeditor">{{$course->description_stage_en}} </textarea>
+							</div>
+						</div>
+						     <!---start study case description--->
+						<div class="form-group">
+							<label class="col-md-2 control-label">Description Study case</label>
+							<div class="col-md-10">
+								<textarea cols="60"  name="description_study_case_en" id="description_study_case_en" class="ckeditor">{{$course->description_study_case_en}} </textarea>
+							</div>
+						</div>
+
+
+						<!--end -->
 
 						<ul class="nav nav-tabs">
 							<li class="active">
@@ -228,6 +285,16 @@
 									</div>
 								</div>
 							</div>
+
+
+
+
+
+
+
+
+
+
 						</div>
 
 						<div class="form-group">

@@ -74,9 +74,21 @@ class Course extends Model
                 $query1->where('name', 'like', '%' . $request->name . '%');
             });
         }
-        if (!empty($request->created_at)) {
-            $created_at =  date("y-m-d", strtotime($request->created_at));
-            $query = $query->where(DB::raw("DATE(created_at)"), $created_at);
+        if (!empty($request->created_at_1)) {
+             if(!(empty($request->created_at_2)))
+             {
+                $created_at_1 =  date("y-m-d", strtotime($request->created_at_1));
+                $created_at_2 =  date("y-m-d", strtotime($request->created_at_2));
+
+                $query = $query->whereBetween(DB::raw("DATE(created_at)"), [$created_at_1,$created_at_2]);
+                
+
+             }else{
+                $created_at =  date("y-m-d", strtotime($request->created_at_1));
+                $query = $query->where(DB::raw("DATE(created_at)"), $created_at);
+              
+             }
+            
         }
         if ($request->trashed) {
             $query = $query->onlyTrashed();
@@ -180,6 +192,11 @@ class Course extends Model
     {
         return $this->belongsToMany("App\Quiz", "courses_quizzes", "course_id", "quiz_id")->where("active", 1);
     }
+    ///*all quizzes**/
+    public function quizzesAll()
+    {
+        return $this->belongsToMany("App\Quiz", "courses_quizzes", "course_id", "quiz_id");
+    }
 
     public function course_trans($lang)
     {
@@ -259,7 +276,7 @@ class Course extends Model
             1, 2, 3, 4, 5
         ];
     }
-
+ /*open course*/
     public function isRegistered($user = null)
     {
         $isRegistered = false;
@@ -272,7 +289,10 @@ class Course extends Model
                     $query->where("student_id", $user->id);
                 })->join("orders", "order_products.order_id", "=", "orders.id")
                 ->join("order_onlinepayments", "order_onlinepayments.order_id", "=", "orders.id")
-                ->where("order_onlinepayments.payment_status", "paid")
+                ->where(function ($query) {
+                     $query->where("order_onlinepayments.payment_status", "paid")
+                           ->orWhere("order_onlinepayments.engaged", "engaged");
+                })
                 ->having(DB::raw("sum(order_onlinepayments.total)"), ">=", 0)
                 ->groupBy("orders.id")->count();
 
@@ -284,7 +304,10 @@ class Course extends Model
                     ->join("orders", "order_products.order_id", "=", "orders.id")
                     ->join("packs", "order_products.pack_id", "=", "packs.id")
                     ->join("order_onlinepayments", "order_onlinepayments.order_id", "=", "order_products.order_id")
-                    ->where("order_onlinepayments.payment_status", "paid")
+                    ->where(function ($query) {
+                          $query->where("order_onlinepayments.payment_status", "paid")
+                                ->orWhere("order_onlinepayments.engaged", "engaged");
+                      })
                     ->where("packs.cours_id1", $this->id)
                     ->where("orderproducts_students.student_id", $user->id)
                     ->having(DB::raw("sum(order_onlinepayments.total)"), ">=", 0)
@@ -299,7 +322,10 @@ class Course extends Model
                         ->join("orders", "order_products.order_id", "=", "orders.id")
                         ->join("packs", "order_products.pack_id", "=", "packs.id")
                         ->join("order_onlinepayments", "order_onlinepayments.order_id", "=", "order_products.order_id")
-                        ->where("order_onlinepayments.payment_status", "paid")
+                        ->where(function ($query) {
+                              $query->where("order_onlinepayments.payment_status", "paid")
+                                    ->orWhere("order_onlinepayments.engaged", "engaged");
+                          })
                         ->where("packs.cours_id2", $this->id)
                         ->where("orderproducts_students.student_id", $user->id)
                         ->having(DB::raw("sum(order_onlinepayments.total)"), ">=", 0)
@@ -310,7 +336,10 @@ class Course extends Model
                         ->join("orders", "order_products.order_id", "=", "orders.id")
                         ->join("packs", "order_products.pack_id", "=", "packs.id")
                         ->join("order_onlinepayments", "order_onlinepayments.order_id", "=", "order_products.order_id")
-                        ->where("order_onlinepayments.payment_status", "paid")
+                        ->where(function ($query) {
+                              $query->where("order_onlinepayments.payment_status", "paid")
+                                    ->orWhere("order_onlinepayments.engaged", "engaged");
+                          })
                         ->where("packs.cours_id2", $this->id)
                         ->where("orderproducts_students.student_id", $user->id)->first();
                     if ($countOrdersss == 1) {
@@ -330,6 +359,82 @@ class Course extends Model
         return $isRegistered;
     }
 
+    public function isTotalyPaid($user = null){
+        $isTotalyPaid = false;
+        if (is_null($user)) {
+            $user = Auth::user();
+        }
+        if ($user) {
+            $countOrders = $this->order_products()
+                ->whereHas('orderproducts_students', function ($query) use ($user) {
+                    $query->where("student_id", $user->id);
+                })->join("orders", "order_products.order_id", "=", "orders.id")
+                ->join("order_onlinepayments", "order_onlinepayments.order_id", "=", "orders.id")
+                ->where(function ($query) {
+                     $query->where("order_onlinepayments.payment_status", "paid");
+                })
+                ->having(DB::raw("sum(order_onlinepayments.total)"), ">=", 0)
+                ->groupBy("orders.id")->count();
+
+            if ($countOrders > 0)
+                $isTotalyPaid = true;
+            else {
+                $countOrderss = DB::table('order_products')
+                    ->join("orderproducts_students", "order_products.id", "=", "orderproducts_students.orderproduct_id")
+                    ->join("orders", "order_products.order_id", "=", "orders.id")
+                    ->join("packs", "order_products.pack_id", "=", "packs.id")
+                    ->join("order_onlinepayments", "order_onlinepayments.order_id", "=", "order_products.order_id")
+                    ->where(function ($query) {
+                          $query->where("order_onlinepayments.payment_status", "paid");
+                      })
+                    ->where("packs.cours_id1", $this->id)
+                    ->where("orderproducts_students.student_id", $user->id)
+                    ->having(DB::raw("sum(order_onlinepayments.total)"), ">=", 0)
+                    ->groupBy("order_products.order_id")->count();
+
+                //if($countOrderss==1) echo $this->id." - ".$countOrderss;
+                if ($countOrderss == 1) {
+                    $isTotalyPaid = true;
+                } else {
+                    $countOrdersss = DB::table('order_products')
+                        ->join("orderproducts_students", "order_products.id", "=", "orderproducts_students.orderproduct_id")
+                        ->join("orders", "order_products.order_id", "=", "orders.id")
+                        ->join("packs", "order_products.pack_id", "=", "packs.id")
+                        ->join("order_onlinepayments", "order_onlinepayments.order_id", "=", "order_products.order_id")
+                        ->where(function ($query) {
+                              $query->where("order_onlinepayments.payment_status", "paid");
+                          })
+                        ->where("packs.cours_id2", $this->id)
+                        ->where("orderproducts_students.student_id", $user->id)
+                        ->having(DB::raw("sum(order_onlinepayments.total)"), ">=", 0)
+                        ->groupBy("order_products.order_id")->count();
+
+                    $countOrderssss = DB::table('order_products')
+                        ->join("orderproducts_students", "order_products.id", "=", "orderproducts_students.orderproduct_id")
+                        ->join("orders", "order_products.order_id", "=", "orders.id")
+                        ->join("packs", "order_products.pack_id", "=", "packs.id")
+                        ->join("order_onlinepayments", "order_onlinepayments.order_id", "=", "order_products.order_id")
+                        ->where(function ($query) {
+                              $query->where("order_onlinepayments.payment_status", "paid");
+                          })
+                        ->where("packs.cours_id2", $this->id)
+                        ->where("orderproducts_students.student_id", $user->id)->first();
+                    if ($countOrdersss == 1) {
+                        $coursprec = DB::table('students_certificates')
+                            ->where("course_id", $countOrderssss->cours_id1)
+                            ->where("student_id", $user->id)
+                            ->where("active", "1")->count();
+                        //echo $coursprec;
+                        if ($coursprec > 0) {
+                            $isTotalyPaid = true;
+                        }
+                    }
+                }
+            }
+        }
+        return $isTotalyPaid;
+    }
+
     public function isPayCourse($user = null)
     {
         $isPayCourse = false;
@@ -340,11 +445,13 @@ class Course extends Model
             $countOrderss = DB::table('orders')
                 ->where("orders.user_id", $user->id)
                 ->join("order_products", "order_products.order_id", "=", "orders.id")
-                ->where("order_products.course_id", 18)
+                ->where("order_products.course_id", $this->id)
                 ->join("order_onlinepayments", "order_onlinepayments.order_id", "=", "order_products.order_id")
                 ->where("order_onlinepayments.payment_status", "paid")
+                ->orWhere("order_onlinepayments.engaged", "engaged")
                 ->whereIn("order_onlinepayments.total", ['0.00', '150.00', '250.00', '200.00', '300.00', '480.00'])
                 ->count();
+               
             // ->groupBy("order_products.order_id")
             // $countOrderss =    $this->order_products()
             //     ->whereHas('orderproducts_students', function ($query) use ($user) {
@@ -374,6 +481,7 @@ class Course extends Model
                 ->where("orderproducts_students.student_id", $user->id)
                 ->join("order_onlinepayments", "order_onlinepayments.order_id", "=", "order_products.order_id")
                 ->where("order_onlinepayments.payment_status", "paid")
+               //  ->orWhere("order_onlinepayments.engaged", "engaged")
                 ->where("order_onlinepayments.total", '=', '150.00')
                 // ->orWhere("order_onlinepayments.total", '=', '200.00')
                 ->count();
@@ -410,54 +518,6 @@ class Course extends Model
         }
     }
 
-
-
-    //    public function examExpired(){
-    //        $expired = false;
-    //        if(Auth::check()){
-    //            $isRegistered = $this->isRegistered();
-    //            $user = Auth::user();
-    //            $student = $user->student;
-    //            if($isRegistered){
-    //                $paidOrder_ids = \App\Order::join("order_onlinepayments", "order_onlinepayments.order_id", "=", "orders.id")
-    //                    ->where("order_onlinepayments.payment_status", "paid")
-    //                    ->groupBy("orders.id","orders.total")
-    //                    ->havingRaw("sum(order_onlinepayments.total)>=orders.total")
-    //                    ->pluck("orders.id")->all();
-    //                $period = $this->exam_period;
-    //                if($period>0){
-    //                    $now = date("Y-m-d");
-    //                    $before = date("Y-m-d",strtotime('-'.$period.' day',strtotime($now)));
-    //                    $order = \App\Order::join("order_products", "order_products.order_id", "=", "orders.id")
-    //                        ->join("orderproducts_students", "orderproducts_students.orderproduct_id", "=", "order_products.id")
-    //                        ->where("student_id", Auth::user()->id)
-    //                        ->where("order_products.course_id", $this->id)
-    //                        ->whereIn("orders.id",$paidOrder_ids)
-    //                        ->where(DB::raw("DATE(created_at)"),">=",$before)->first();
-    //                    if(empty($order)){
-    //                        $expired = true;
-    //                        $successFinal_ids = $student->student_quizzes()->where("course_id",$this->id)
-    //                            ->where("is_exam",1)->where("successfull",1)->pluck("quiz_id")->all();
-    //                        $billQuiz = $this->quizzes()->where("is_exam",1)->where("active",1)
-    //                            ->whereNotIn("quizzes.id",$successFinal_ids)->first();
-    //                        if(!empty($billQuiz)){
-    //                            $quizOrder = \App\Order::join("order_products", "order_products.order_id", "=", "orders.id")
-    //                                ->join("orderproducts_students", "orderproducts_students.orderproduct_id", "=", "order_products.id")
-    //                                ->where("student_id", Auth::user()->id)
-    //                                ->where("order_products.quiz_id", $billQuiz->id)
-    //                                ->whereIn("orders.id",$paidOrder_ids)->first();
-    //                            if(!empty($quizOrder))
-    //                                $expired = false;
-    //                        }else{
-    //                            $expired = false;
-    //                        }
-    //
-    //                    }
-    //                }
-    //            }
-    //        }
-    //        return $expired;
-    //    }
     public function isRegisteredParent()
     {
         $isRegistered = true;
@@ -517,6 +577,8 @@ class Course extends Model
                 })->join("orders", "order_products.order_id", "=", "orders.id")
                 ->join("order_onlinepayments", "order_onlinepayments.order_id", "=", "orders.id")
                 ->where("order_onlinepayments.payment_status", "paid")
+               // ->orWhere("order_onlinepayments.engaged", "engaged")
+
                 ->select(DB::raw("sum(order_onlinepayments.total) as sumPayments"), "orders.id", "orders.total")
                 ->groupBy("orders.id", "orders.total")
                 ->havingRaw("sum(order_onlinepayments.total)>=orders.total")
@@ -532,6 +594,7 @@ class Course extends Model
                     ->join("packs", "order_products.pack_id", "=", "packs.id")
                     ->join("order_onlinepayments", "order_onlinepayments.order_id", "=", "order_products.order_id")
                     ->where("order_onlinepayments.payment_status", "paid")
+                   // ->orWhere("order_onlinepayments.engaged", "engaged")
                     ->where("packs.cours_id1", $this->id)
                     ->where("orderproducts_students.student_id", $user->id)
                     ->having(DB::raw("sum(order_onlinepayments.total)"), ">=", 0)
@@ -545,6 +608,7 @@ class Course extends Model
                         ->join("packs", "order_products.pack_id", "=", "packs.id")
                         ->join("order_onlinepayments", "order_onlinepayments.order_id", "=", "order_products.order_id")
                         ->where("order_onlinepayments.payment_status", "paid")
+                      //  ->orWhere("order_onlinepayments.engaged", "engaged")
                         ->where("packs.cours_id2", $this->id)
                         ->where("orderproducts_students.student_id", $user->id)
                         ->having(DB::raw("sum(order_onlinepayments.total)"), ">=", 0)
@@ -711,7 +775,7 @@ class Course extends Model
             /* Final exam */
             $quizzes = $this->quizzes()->Langue($lang)->where("quizzes.is_exam", 1)->where("active", 1)->get();
             
-            // condition valid quiz
+            // condition valid quiz*/
 
             foreach ($quizzes as $quiz) {
                 if (!empty($student)) {
@@ -739,8 +803,10 @@ class Course extends Model
                         return  false;
                 }
             }
+
         
             /*Stage*/
+
 
             if(!$this->ValidStage())
             {
@@ -833,6 +899,18 @@ class Course extends Model
     {
         return $this->courseTypes()->first()->couseType_variations()->orderBy("price", "asc")->first()->price == 0;
     }
+    /**nbr tentative in exam 50question */
+    public function gettentative()
+    {
+        if(Auth::check())
+        { 
+                $count = $this->student_quizzes()->where('is_exam',1)
+                                                 ->where('student_id',Auth::id())
+                                                 ->count();
+                                                 return $count;
+        }
+           return null;
+    }
 
     public function validQuizAttempts($quiz)
     {
@@ -896,7 +974,7 @@ class Course extends Model
                 $messageValid = '<p class="failed">برجاء إكمال باقي الأقساط لأداء الاختبار النهائي</p>';
             }
         } else {
-            $messageValid = '<p class="failed">أنت غير مشترك في هذه الدورة</p>';
+            $messageValid = '<p     >أنت غير مشترك في هذه الدورة</p>';
         }
         return $isValid;
     }

@@ -297,6 +297,15 @@ function addVariation(type){
                 @endforeach
             '</select>'+
         '</td>'+
+         ' <td class="text-right">'+
+            '<select name="variations'+type+'['+id+'][certificate_id_2]" class="form-control">'+
+                @foreach($certificates as $certificate)
+                     '<option>إختار الشهادة </option>'+
+                    '<option value="{{$certificate->id}}">{{ trim($certificate->name_ar) }}</option>'+
+                @endforeach
+            '</select>'+
+        '</td>'+
+
         '<td class="text-left"><button type="button" onclick="$(\'#variation_'+type+'-row'+id+'\').remove();" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Remove"><i class="fa fa-minus-circle"></i></button></td>'+
         '</tr> ';
     lastRow.append(htmltmp);

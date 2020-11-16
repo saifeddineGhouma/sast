@@ -4,13 +4,13 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label class="form-label"><?php echo e(trans('home.full_name')); ?> <span>*</span></label>
-                <input type="text" class="form-control" name="full_name_en" value="<?php echo e($user->full_name_en); ?>"  >
+                <input type="text" class="form-control" name="full_name_en" value="<?php echo e($user->full_name_en); ?>"  required>
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label class="form-label"><?php echo e(trans('home.email')); ?> <span>*</span></label>
-                <input type="text" class="form-control" name="email" value="<?php echo e($user->email); ?>">
+                <input type="text" class="form-control" name="email" value="<?php echo e($user->email); ?>" required>
             </div>
         </div>
     </div>
@@ -52,7 +52,7 @@
                 <div clas="col-md-4">
                     <div class="form-group">
                           <label class="form-label"> <span><?php echo e(trans('home.date_birth')); ?> *</span> : اليوم<span></span></label>
-                        <select name="day"><?php for($i= 01;$i<=31;$i++) { ?>
+                        <select name="day" ><?php for($i= 01;$i<=31;$i++) { ?>
                          <option value="<?php echo e($i); ?>" <?php echo e(((date("d", strtotime($user->date_of_birth)))==$i) ? 'selected' :'null'); ?> ><?php echo e($i); ?></option>
                          <?php }?>
                         </select>

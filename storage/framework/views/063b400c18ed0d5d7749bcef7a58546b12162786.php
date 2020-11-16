@@ -168,7 +168,7 @@
 								<input type="checkbox" class="form-check-input" name="agreement">
 								<label class="form-check-label" for="Check">
 								<?php echo e(trans('home.accepter_cond')); ?>	
-									<a href="/pages/usage-policy">
+									<a href="/pages/privacy-policy">
 									<?php echo e(trans('home.condition_term')); ?> <?php echo e(trans('home.and')); ?> <?php echo e(trans('home.privacy_police')); ?>
 
 									</a>

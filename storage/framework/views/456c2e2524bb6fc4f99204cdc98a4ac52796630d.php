@@ -121,13 +121,43 @@
                         });
 
 </script>
-                      
+				<?php if(Lang::locale()=="en"): ?>
+                    <style type="text/css">
+			   h3{
+				   text-align:left;
+				   padding-left:15px;
+				   
+			   }
+			   h3 span{
+				   float:right
+			   }
+			  
+			   
+</style>       
+
+				<?php else: ?>
+                   <style type="text/css">
+			  
+			   h3 span{
+				   float:left
+			   }
+</style>       
+
+                <?php endif; ?>
+               
 
 <div class="col-lg-12 course_curriculum_exam courses_more_info_content">
     <div class="content_header_one">
-        <p>الامتحانات</p>
-        <?php echo $course->description_all_exam; ?>
+        <p>
+		<?php echo app('translator')->getFromJson('navbar.exams'); ?> 
+		</p>
+		<?php if(Lang::locale()=="en"): ?>
+                     <?php echo $course->description_all_exam_en; ?> 
 
+                    <?php else: ?>
+                    <?php echo $course->description_all_exam; ?> 
+
+                    <?php endif; ?>
         <?php if(Session::has('message')): ?>
             <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
             <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
@@ -144,6 +174,7 @@
             </script>
           
         <?php endif; ?>
+		
      
     </div>
     <div id="accordion">
@@ -151,18 +182,25 @@
             <div class="card-header" id="headingTen">
                 <h5 class="mb-0">
                     <p class=" btn-link ">
-                        إجتياز الاختبارات التالية قبل البدأ في الاختبار النهائي للحصول على الشهادة 
+                        <?php echo app('translator')->getFromJson('navbar.header_exams'); ?>
                 </h5>
             </div>
             <div>
                 <div class="card-body">
                   
                         
-                
-                    <h3 class="form-section"  style="line-height:50px;padding-right:15px;background-color: #006aa8 ;color:white; height: 60px; width:100% ; cursor: pointer;" id="div_quiz"> <span style="float: left;padding-left:10px;"> + </span>الكويزات</h3> 
+               <?php if( $quizzes->count()>0): ?>
+                    <h3 class="form-section"  style="line-height:50px;padding-right:15px;background-color: #006aa8 ;color:white; height: 60px; width:100% ; cursor: pointer;" id="div_quiz"> <span style="padding-left:10px;"> + </span><?php echo app('translator')->getFromJson('navbar.quizs'); ?></h3> 
                     <div class="content_header_one quiz_block" style="display: none">
+					 <?php if(Lang::locale()=="en"): ?>
+                     <?php echo $course->description_quiz_en; ?>
+
+
+                    <?php else: ?>
                     <?php echo $course->description_quiz; ?>
 
+
+                    <?php endif; ?>
                    
                    
                    
@@ -172,7 +210,7 @@
                             <?php echo $__env->make("front.courses.course._exam_row",["quiz"=>$quiz,"type"=>"quiz"], array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     <?php else: ?>
-                        <p>لا يوجد امتحانات</p>
+                        <p><?php echo app('translator')->getFromJson('navbar.no_exam'); ?></p>
                     <?php endif; ?>
                     
                     </div>
@@ -188,18 +226,31 @@
                         $validateExam = $course->validateExam("quiz",$messageValid);
                     ?>
                     
-                    
+                 <?php endif; ?>
                     
                     <?php if(isset($course->stage)): ?>
                         
                         <?php if($course->stage->active): ?>
 
-                        <h3 class="form-section "style="line-height:50px;padding-right:15px;background-color: #006aa8 ;color:white; height: 60px; width:100% ; cursor: pointer;" id="div_stage"> <span style="float: left;padding-left:10px;"> + </span> التدريب العملي  </h3>    
+                        <h3 class="form-section "style="line-height:50px;padding-right:15px;background-color: #006aa8 ;color:white; height: 60px; width:100% ; cursor: pointer;" id="div_stage"> <span style="padding-left:10px;"> + </span> <?php echo app('translator')->getFromJson('navbar.pratical_training'); ?>  </h3>    
                         <div class="content_header_one stage_block" style="display:none">
-                        <?php echo $course->description_stage; ?>
+                        <?php if(Lang::locale()=="en"): ?>
+                                 <?php echo $course->description_stage_en; ?>
 
+
+                                <?php else: ?>
+                                <?php echo $course->description_stage; ?>
+
+
+                               <?php endif; ?>
                         
                             <?php if(!empty($user)): ?> 
+								
+							<?php if($course->isRegistered()): ?>
+								
+								
+							   
+								
 
                                 <?php if($course->students_stage()->where('user_id',$user->id)->count()): ?>
 
@@ -224,11 +275,11 @@
                                             <div class="col-1 curriculum_exam_type">                                    
                                             </div>
                                             <div class="col-6 curriculum_exam_title">
-                                                تحميل الملفات
+                                                <?php echo app('translator')->getFromJson('navbar.download_file'); ?>
 
                                             </div>
                                             <div class="col-2 curriculum_exam_question_number">
-                                                رفع الملفات من جهازك
+                                                <?php echo app('translator')->getFromJson('navbar.upload_from_pc'); ?>
                                             <br/>
                                             </div>
                                             <div class="col-3 curriculum_exam_watch">           
@@ -262,13 +313,13 @@
                                                         
                                                         <?php if($user->user_lang()->exists()): ?>
                                                             <?php if($user->user_lang->lang_stud == "Fr" ): ?>
-                                                                <p> <a href = "<?php echo e(route('downloadStage')); ?>"> استمارة مطلب التربص </a>  </p>
+                                                                <p> <a href = "<?php echo e(route('downloadStage')); ?>"> <?php echo app('translator')->getFromJson('navbar.Training_application_form'); ?> </a>  </p>
                                                             <?php else: ?>
-                                                                <p> <a href = "<?php echo e(route('downloadDemandeStageArab')); ?>"> استمارة مطلب التربص </a>  </p>
+                                                                <p> <a href = "<?php echo e(route('downloadDemandeStageArab')); ?>"> <?php echo app('translator')->getFromJson('navbar.Training_application_form'); ?> </a>  </p>
                                                             <?php endif; ?>
                                                           <?php endif; ?>
                                                         <?php else: ?>
-                                                       <p> <a href = "<?php echo e(route('downloadDemandeStageArab')); ?>">  استمارة مطلب التربص </a>  </p>
+                                                       <p> <a href = "<?php echo e(route('downloadDemandeStageArab')); ?>">  <?php echo app('translator')->getFromJson('navbar.Training_application_form'); ?> </a>  </p>
                                                     <?php endif; ?>
                                                 </div>
                                     
@@ -299,13 +350,13 @@
                                                     <?php if($course->is_lang ): ?>
                                                         <?php if($user->user_lang()->exists()): ?>
                                                             <?php if($user->user_lang->lang_stud == "Fr" ): ?>
-                                                            <p> <a href = "<?php echo e(url('download_eval')); ?>"> استمارة التقييم </a>  </p>  
+                                                            <p> <a href = "<?php echo e(url('download_eval')); ?>"> <?php echo app('translator')->getFromJson('navbar.Evaluation_form'); ?> </a>  </p>  
                                                             <?php else: ?>
-                                                            <p> <a href = "<?php echo e(url('download_eval_arab')); ?>"> استمارة التقييم </a>  </p>  
+                                                            <p> <a href = "<?php echo e(url('download_eval_arab')); ?>"> <?php echo app('translator')->getFromJson('navbar.Evaluation_form'); ?> </a>  </p>  
                                                             <?php endif; ?>
                                                         <?php endif; ?>
                                                     <?php else: ?>
-                                                     <p> <a href = "<?php echo e(url('download_eval_arab')); ?>"> استمارة التقييم </a>  </p>  
+                                                     <p> <a href = "<?php echo e(url('download_eval_arab')); ?>"> <?php echo app('translator')->getFromJson('navbar.Evaluation_form'); ?> </a>  </p>  
                                                     <?php endif; ?>
                                                 </div>
 
@@ -341,7 +392,7 @@
                                         <div class="col-2 curriculum_exam_question_number">
                                         </div>
                                         <div class="col-3 curriculum_exam_watch">           
-                                            <button type="submit" class="startquiz"> رفع الملفين </button>         
+                                            <button type="submit" class="startquiz"> <?php echo app('translator')->getFromJson('navbar.upload_file'); ?> </button>         
                                         </div>
                                      </div>
                                 </form>
@@ -352,17 +403,13 @@
 
 
                                 <?php endif; ?>
+								
+							  <?php else: ?>   
+								  <p class="failed"><?php echo app('translator')->getFromJson('navbar.youarenotstudent'); ?></p>
+							  <?php endif; ?>
 
                                 
-                                <?php if($user->user_stage->count()<0): ?>
-
-
-
-                                           
-                                
-                                    <?php else: ?>
-
-                                    <?php endif; ?>  
+                                 
                                        
 
                                     
@@ -375,7 +422,7 @@
                                     <i class="fa fa-check" aria-hidden="true"></i>
                                 </div>
                                 <div class="col-6 curriculum_exam_title">
-                                <a href="<?php echo e(url(App('urlLang').'login')); ?>">سجل الدخول</a>
+                                <a href="<?php echo e(url(App('urlLang').'login')); ?>"><?php echo app('translator')->getFromJson('navbar.pleaseLogIn'); ?></a>
                                 </div>
                                 </div>
                             <?php endif; ?>
@@ -390,28 +437,29 @@
                     <?php if(isset($course->courses_study_case) && $course->courses_study_case->active): ?>
                     
                   
-                        <h3 class="form-section div_toggle"  id="div_study_case" style="line-height:50px;padding-right:15px;background-color: #006aa8 ;color:white; height: 60px; width:100%;cursor: pointer;"><span style="float: left;padding-left:10px;"> + </span> التقرير العلمي </h3>
+                        <h3 class="form-section div_toggle"  id="div_study_case" style="line-height:50px;padding-right:15px;background-color: #006aa8 ;color:white; height: 60px; width:100%;cursor: pointer;"><span style="padding-left:10px;"> + </span> <?php echo app('translator')->getFromJson('navbar.scientific_report'); ?> </h3>
                         <div class="content_header_one study_case_block" style="display: none ; border: none;">
-                            <?php echo $course->description_study_party; ?>
-
+							  <?php echo app('translator')->getFromJson('navbar.header_study_case'); ?>
                             
 
                             <?php if(!empty($user)): ?>
+								<?php if($course->isRegistered()): ?>
 
-                               <?php if($user->lang()=="Fr"): ?>
-                                <?php echo $__env->make('front.courses.course.study_case.version_fr', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+								   <?php if($user->lang()=="Fr"): ?>
+									<?php echo $__env->make('front.courses.course.study_case.version_fr', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 
-                               <?php else: ?>
-                               <?php echo $__env->make('front.courses.course.study_case.version_ar', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+								   <?php else: ?>
+								   <?php echo $__env->make('front.courses.course.study_case.version_ar', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 
-                               <?php endif; ?>
-                        
+								   <?php endif; ?>
+								<?php else: ?>
+									<p class="failed">
+										<?php echo app('translator')->getFromJson('navbar.youarenotstudent'); ?>
+										</p>
+                                <?php endif; ?>                        
                             <?php else: ?>  
-                              <p>
-                                    إعداد تقرير علمي كتابي عن إحدى الحالات او المواضيع الرياضية المتعلقة باللياقة البدنية يتم اختياره بطريقة عشوائية من مجموعة عناوين وحالات معدة مسبقا من قبل الاكاديمية. ويتم مناقشته لمدة 15 دقيقة مع مشرف الدورة بعد تحديد موعد مسبق معه. نسبة نجاح الطالب في هذه المهمة 80%. يمكن ايجاد موضوع التقرير العلمي عند اختيار الحالة من الاسفل
-                                    
-                                    </p>
-                            <p><a href="<?php echo e(route('login')); ?>">سجل الدخول</a></p>
+                              
+                            <p><a href="<?php echo e(route('login')); ?>"><?php echo app('translator')->getFromJson('navbar.pleaseLogIn'); ?></a></p>
 
 
                         <?php endif; ?>
@@ -433,10 +481,18 @@
                         
 
                         
-                            <h3 class="form-section" style="line-height:50px;padding-right:15px;background-color: #006aa8 ;color:white; height: 60px; width:100%;cursor: pointer;" id="div_exam_final">الإمتحانات النهائية <span style="float: left;padding-left:10px;"> + </span></h3>
+                            <h3 class="form-section" style="line-height:50px;padding-right:15px;background-color: #006aa8 ;color:white; height: 60px; width:100%;cursor: pointer;" id="div_exam_final"><?php echo app('translator')->getFromJson('navbar.final_exams'); ?> <span style="padding-left:10px;"> + </span></h3>
                                 <div class="content_header_one exam_final_block" style="display: none">
-                                <?php echo $course->desciption_exam; ?>  
-                                
+                                 <?php if(Lang::locale()=="en"): ?>
+                                     <?php echo $course->desciption_exam_en; ?>
+
+
+                                 <?php else: ?>
+                                     <?php echo $course->desciption_exam; ?>
+
+
+                                 <?php endif; ?>  
+								 
                                
                                 <?php if(!empty($user)): ?>
                                     <?php if($exams->count()>0): ?>
@@ -448,12 +504,12 @@
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                    
                                     <?php else: ?>
-                                        <p>لا يوجد امتحانات</p> 
+                                        <p><?php echo app('translator')->getFromJson('navbar.no_exam'); ?></p> 
                                     <?php endif; ?> 
 
                                 <?php else: ?> 
 
-                                <p><a href="<?php echo e(route('login')); ?>">سجل الدخول</a></p>
+                                <p><a href="<?php echo e(route('login')); ?>"><?php echo app('translator')->getFromJson('navbar.pleaseLogIn'); ?></a></p>
                                 <?php endif; ?>
                                 
                                
@@ -467,10 +523,17 @@
 
 
                     <?php if($videoExams->count()>0): ?> 
-                        <h3 class="form-section"  style="line-height:50px;padding-right:15px;background-color: #006aa8 ;color:white; height: 60px; width:100%;cursor: pointer;" id="div_video"><span style="float: left;padding-left:10px;"> + </span>إمتحانات الفيديو</h3>
+                        <h3 class="form-section"  style="line-height:50px;padding-right:15px;background-color: #006aa8 ;color:white; height: 60px; width:100%;cursor: pointer;" id="div_video"><span style="padding-left:10px;"> + </span><?php echo app('translator')->getFromJson('navbar.video_exams'); ?></h3>
                         <div class="content_header_one video_block" style="display: none ">
-                        <?php echo $course->description_exam_video; ?>
+                        <?php if(Lang::locale()=="en"): ?>
+                                     <?php echo $course->description_exam_video_en; ?>
 
+
+                                 <?php else: ?>
+                                     <?php echo $course->description_exam_video; ?>
+
+
+                                 <?php endif; ?>
                        
                             <?php $__currentLoopData = $videoExams; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $videoExam): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <?php echo $__env->make("front.courses.course._exam_row",["quiz"=>$videoExam,"type"=>"video"], array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

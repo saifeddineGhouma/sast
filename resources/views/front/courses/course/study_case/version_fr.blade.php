@@ -1,11 +1,10 @@
 @if(!empty($user))
-<!----user  logged-->
-	<p>
-    description francais
+
+    @lang('navbar.header_study_case')
     
     </p>
-     <div class="alert alert-info  text-center"> <a href="">Telecharge fichier</a></div>
-      <h5 >sujet : <span id="sujets_description" style="font-size: 16px">{{$sujet->description}}</span> </h5>
+     <div class="alert alert-info  text-center"> <a href="">@lang('navbar.download_file')</a></div>
+      <h5 >@lang('navbar.sujet') : <span id="sujets_description" style="font-size: 16px">{{$sujet->description}}</span> </h5>
        @if($passed>0)
         <ul class="list-group" style="width: 500px;margin:auto;">
             @foreach($user->studycase()->where('courses_id',$course->id)->where('document','!=','')->get() as $studycase)
@@ -27,13 +26,13 @@
 
            
             <div class="col-md-6" ><input type="file" name="document"  ></div>
-             <div class="col-md-6" >:upload fichier</div>
+             <div class="col-md-6" >:@lang('navbar.upload_file')</div>
               <div class="form-group">
              
               <div class="col-md-8"> 
                   <textarea class="form-control" name="user_message" rows="5" id="comment"></textarea>
               </div> 
-              <div class="col-md-4"> <label for="commantaire">:Commantaire  </label></div> 
+              <div class="col-md-4"> <label for="commantaire">:@lang('navbar.notes')  </label></div> 
               
             </div>
             
@@ -46,7 +45,7 @@
 <!----user not logged-->
 @else
 	<p>
-	description francais
+	@lang('navbar.header_study_case')
 	</p>
 	<p><a href="{{route('login')}}">سجل الدخول</a></p>
 @endif

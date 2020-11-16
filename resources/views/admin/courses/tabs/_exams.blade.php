@@ -112,4 +112,26 @@ else{
     <label class="form-check-label" for="is_Lang">Multi-lang  </label>
   </div>
 
+  <h3 class="form-section">Is-Workshop </h3>
+	@php 
+
+	 if(isset($course))
+	 {
+		if($course->is_workshop)
+		  $checked_isworkshop="checked" ;
+		else
+		$checked_isworkshop="" ;
+
+	 }else{
+	  $checked_isworkshop="" ;
+	}
+
+
+	@endphp
+
+<div class="form-check">
+    <input type="checkbox" name="is_workshop" value="1" class="form-check-input" id="is_workshop" {{ $checked_isworkshop}}>
+    <label class="form-check-label" for="is_Lang">Is-workshop  </label>
+  </div>
+
 

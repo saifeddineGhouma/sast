@@ -331,8 +331,17 @@ class ordersController extends Controller
 		$orderproduct = OrderProduct::where("order_id", $request->order_id)->first();
 
 		$emailSast = App('setting')->email;
-		if ($request->paid) {
-			$orderOnlinePayment->payment_status = "paid";
+		if ($request->paid || $request->engaged) {
+			  if($request->paid){
+				   $orderOnlinePayment->payment_status = "paid";
+				   $orderOnlinePayment->engaged = null;
+				   if(!empty($orderproduct->course_id)){
+					   $user = Auth::user();
+					   $user->student->students_certificates->where('course_id', $orderproduct->course_id)->where('active',0)->update(['active' => 1]);
+					}
+			  }
+			 if($request->engaged)
+			     $orderOnlinePayment->engaged = "engaged";
 			$order = Order::findOrFail($request->order_id);
 
 			/*if($order_onlinepay->payment_method=="cash"){*/
@@ -409,35 +418,7 @@ class ordersController extends Controller
 			$message1 .= '</body>';
 			$message1 .= '</html>';
 			mail($order->user->email, $subject, $message1, $headers);
-			/*}
-				$mime_boundary = "----MSA Shipping----" . md5(time());
-				$subject = "Swedish Academy : Paiement";
-				$headers = "From:Swedish Academy<info@swedish-academy.se> \n";
-				$headers .= "MIME-Version: 1.0\n";
-				$headers .= "Content-Type: multipart/alternative; boundary=\"$mime_boundary\"\n";
-				$message1 = "--$mime_boundary\n";
-				$message1 .= "Content-Type: text/html; charset=UTF-8\n";
-				$message1 .= "Content-Transfer-Encoding: 8bit\n\n";
-				$message1 .= "<html>\n";
-				$message1 .= "<body>";
-				$message1 .= "<table width='602'>";
-				$message1 .= "<tr>";
-				$message1 .= "<td>";
-				$message1 .= "<img src='https://swedish-academy.se/assets/front/img/logo-mail.png'>";
-				$message1 .= "</td>";
-				$message1 .= "</tr>";
-				$message1 .= "<tr>"; 
-				$message1 .= "<td'>";
-				$message1 .= "<strong> 
-								<br>
-								The student ".$order->user->full_name_en." purchased a course
-							  </strong>";
-				$message1 .= "</td>";
-				$message1 .= "</tr>";
-				$message1 .= '</table>';
-				$message1 .= '</body>';
-				$message1 .= '</html>';
-				mail("abadlia.nessrine@gmail.com", $subject, $message1, $headers);*/
+			
 		} else {
 			$orderOnlinePayment->payment_status = "not_paid";
 		}
@@ -454,8 +435,18 @@ class ordersController extends Controller
 	public function editPayment(Request $request, $id)
 	{
 		$orderOnlinePayment = OrderOnlinepayment::findOrFail($id);
-		if ($request->paid) {
-			$orderOnlinePayment->payment_status = "paid";
+		if ($request->paid || $request->engaged) {
+			  if($request->paid){
+				   $orderOnlinePayment->payment_status = "paid";
+				   $orderOnlinePayment->engaged = null;
+				   if(!empty($orderproduct->course_id)){
+					   $user = Auth::user();
+					   $user->student->students_certificates->where('course_id', $orderproduct->course_id)->where('active',0)->update(['active' => 1])
+					}
+
+			  }
+			 if($request->engaged)
+			     $orderOnlinePayment->engaged = "engaged";
 			$order = Order::findOrFail($request->order_id);
 			$orderProduct = OrderProduct::where("order_id", $request->order_id)->first();
 			$emailSast = App('setting')->email;
@@ -538,54 +529,24 @@ class ordersController extends Controller
 			}
 			$message1 .= "</td>";
 			$message1 .= "</tr>";
-			// $message1 .= "<tr>";
-			// $message1 .= "<td align='center'>";
-			// $message1 .= "<img src='https://swedish-academy.se/assets/front/img/logo-mail.png'>";
-			// $message1 .= "</td>";
-			// $message1 .= "</tr>";
+			
 			$message1 .= '</table>';
 			$message1 .= '</body>';
 			$message1 .= '</html>';
 			mail($order->user->email, $subject, $message1, $headers);
-			/*}
-				$mime_boundary = "----MSA Shipping----" . md5(time());
-				$subject = "Swedish Academy : Paiement";
-				$headers = "From:Swedish Academy<info@swedish-academy.se> \n";
-				$headers .= "MIME-Version: 1.0\n";
-				$headers .= "Content-Type: multipart/alternative; boundary=\"$mime_boundary\"\n";
-				$message1 = "--$mime_boundary\n";
-				$message1 .= "Content-Type: text/html; charset=UTF-8\n";
-				$message1 .= "Content-Transfer-Encoding: 8bit\n\n";
-				$message1 .= "<html>\n";
-				$message1 .= "<body>";
-				$message1 .= "<table width='602'>";
-				$message1 .= "<tr>";
-				$message1 .= "<td>";
-				$message1 .= "<img src='https://swedish-academy.se/assets/front/img/logo-mail.png'>";
-				$message1 .= "</td>";
-				$message1 .= "</tr>";
-				$message1 .= "<tr>"; 
-				$message1 .= "<td'>";
-				$message1 .= "<strong>
-								<br>
-								The student ".$order->user->full_name_en." purchased a course
-							  </strong>";
-				$message1 .= "</td>";
-				$message1 .= "</tr>";
-				$message1 .= '</table>';
-				$message1 .= '</body>';
-				$message1 .= '</html>';
-				mail("abadlia.nessrine@gmail.com", $subject, $message1, $headers);*/
-		} else
+			
+		} else{
 			$orderOnlinePayment->payment_status = "not_paid";
-
+			$orderOnlinePayment->engaged = "engaged";
+		}
+			
+      
 		echo $request->total;
 		$orderOnlinePayment->total = $request->total;
 		$orderOnlinePayment->save();
 	}
 
-
-
+  
 	public function getReport($id)
 	{
 		$order = Order::findOrFail($id);

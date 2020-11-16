@@ -70,7 +70,7 @@
 
                 <li class="nav-item">
 
-                    <a class="nav-link" href="https://goo.gl/maps/nYFFMKJEp392" target="_blank" style="direction:ltr"><i class="fa fa-map-marker"></i>&ensp;{{App('setting')->settings_trans(session()->get('locale'))->address}}</a>
+                    <a class="nav-link" href="https://goo.gl/maps/nYFFMKJEp392" target="_blank" style="direction:ltr"><i class="fa fa-map-marker"></i>&ensp;{{-- App('setting')->settings_trans(session()->get('locale'))->address --}}</a>
 
                 </li>
 
@@ -247,11 +247,10 @@
                             <img src="https://lipis.github.io/flag-icon-css/flags/4x3/tn.svg" alt="Arabe" class="img-size-50 mr-3 " style="width: 25%">
                             {{ trans('sentence.arabe') }}
                         </a>
-                        <!--
+                        
                         <a class="dropdown-item" href="/lang/fr">
                             <img src="https://lipis.github.io/flag-icon-css/flags/4x3/fr.svg" alt="Frensh" class="img-size-50 mr-3" style="width: 25%">
-                            @lang('frensh')
-                        </a>-->
+                        </a>
                         
                     </div>
                 </li>   

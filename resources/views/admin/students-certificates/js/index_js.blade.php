@@ -17,7 +17,7 @@
         {{--"ajax": "{{url('admin/categories/listing-ajax')}}"--}}
     };
     $(document).ready(function(){
-        $('#table1').DataTable(options);
+      //  $('#table1').DataTable(options);
     });
     
     $('.btn-delete').on('click', deleteRecord);

@@ -11,7 +11,8 @@
                 <td class="text-right">price</td>
                  <td class="text-right">price sale</td>
                 <td>certificate</td>
-                <td></td>
+                 <td>certificate 2</td>
+                <td class="text-left"><button type="button" onclick="addVariation('{{$type1}}');" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Add Image"><i class="fa fa-plus-circle"></i></button></td>
             </tr>
         </thead>
         <tbody>
@@ -91,15 +92,26 @@
                             @endforeach
                         </select>
                     </td>
+                      <td class="text-right">
+                        <select name="variation{{$type1}}_certificate_id_2{{$courseTypeVariation->id}}" class="form-control">
+                            @foreach($certificates as $certificate)
+                                <option value="{{$certificate->id}}"
+                                        {{ $courseTypeVariation->certificate_id_2==$certificate->id?"selected":null }}>
+                                    {{ $certificate->name_ar }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </td>
+                  
                     <td class="text-left"><button type="button" onclick="$('#variation_{{$type1}}-row{{$courseTypeVariation->id}}').remove();" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Remove"><i class="fa fa-minus-circle"></i></button></td>
-                </tr>
+            
             @endforeach
         @endif
         </tbody>
         <tfoot>
         <tr>
             <td colspan="{{ (isset($type1) && $type1=="classroom")?6:3 }}"></td>
-            <td class="text-left"><button type="button" onclick="addVariation('{{$type1}}');" data-toggle="tooltip" title="" class="btn btn-primary" data-original-title="Add Image"><i class="fa fa-plus-circle"></i></button></td>
+            
         </tr>
         </tfoot>
     </table>

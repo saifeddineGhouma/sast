@@ -89,7 +89,7 @@ return [
   "finalexams" => "Final exams",
   "question" => "Question",
   "numrepetition" => "Number of attempts",
-  "youarenotstudent" => "I'm not our student",
+  "youarenotstudent" => "You are not subscribed to this course",
   "completetest" => "Complete the test",
   "succeded" => "successful",
   "notsucceded" => "Precipitate",
@@ -154,6 +154,33 @@ return [
   "uploadcouponlater" => "You can complete the application and later upload the payment receipt image on your account profile page where you will find the Upload Payment Picture button",
   "gonnapurchasenow" => "I will make the request now and later I will attach the transfer",
   "paywakillocal" => "Pay to local agent",
-  "specialDiscount" => "We offer special discounts for groups"
+  "specialDiscount" => "We offer special discounts for groups",
+  "quizs" => "Quizzes",
+  "pratical_training"=>"Pratical Training",
+  "scientific_report"=>"Scientific Report",
+  "final_exams"=>"Final Exams",
+  "video_exams"=>"Video Exams",
+  "header_exams"=>"Passing the following tests before starting the final exam to obtain the certificate",
+  "download_file"=>"download file",
+  "upload_file"=>"upload file",
+  "no_exam"=>"There are no exams",
+  "upload_from_pc"=>"Upload files from your device",
+  "sujet"=>"Topic",
+  "header_study_case"=>"Planning of a written scientific report on one of the fitness-related sports cases or subjects, randomly picked from a group of titles and cases previously prepared by the Academy. And it is discussed with the course supervisor after having a previous appointment with him for a duration of 15 minutes. In this assignment, the student's success score is 80%. When selecting the case from the bottom, you will find the topic of the scientific report.",
+  "not_subscribed"=>"You are not subscribed to this course",
+  "Evaluation_form"=>"Evaluation form",
+  "Training_application_form"=>"Training application form",
+  "notes"=>"Notes",
+  "view"=>"View",
+  "libraire"=>"Libraire",
+  "test_result"=>"Test Result :",
+  "rest_test"=>"The Rest Of The Tests",
+  "All_quizzes_completed"=>"All quizzes must be completed in order to pass the final exam",
+  "final_theoretical_exam" =>"The final theoretical exam must be completed",
+  "partner_Swedish_Academy"=>"If you want to become a partner to the Swedish Academy",
+    "register_now" =>"Register Now ",
+
+
+
 
 ];

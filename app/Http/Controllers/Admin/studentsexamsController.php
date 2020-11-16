@@ -323,7 +323,7 @@ class studentsexamsController extends Controller
                             $certificate->export($student, $Arabic, $serialNumber, $image_name, date("Y-m-d"));
                         }
                    
-                  $serialNumber="saif";
+                  
                         if ($serialNumber != "") {
                            
                             $studentCertificate = new StudentCertificate();
@@ -380,7 +380,8 @@ class studentsexamsController extends Controller
                             $message1 .= '</table>';
                             $message1 .= '</body>';
                             $message1 .= '</html>';
-                            mail($student->user->email, $subject, $message1, $headers);
+                             if(!$course->isTotalyPaid)
+                                 mail($student->user->email, $subject, $message1, $headers);
                         }
                     }
                 }
@@ -491,7 +492,8 @@ class studentsexamsController extends Controller
                             $message1 .= '</table>';
                             $message1 .= '</body>';
                             $message1 .= '</html>';
-                            mail($student->user->email, $subject, $message1, $headers);
+                            if(!$course->isTotalyPaid)
+                                mail($student->user->email, $subject, $message1, $headers);
                         }
                     }
                 }
@@ -625,7 +627,8 @@ class studentsexamsController extends Controller
                             $message1 .= '</table>';
                             $message1 .= '</body>';
                             $message1 .= '</html>';
-                            mail($student->user->email, $subject, $message1, $headers);
+                            if(!$course->isTotalyPaid)
+                               mail($student->user->email, $subject, $message1, $headers);
                         }
                     }
                 }
@@ -761,7 +764,8 @@ class studentsexamsController extends Controller
                             $message1 .= '</table>';
                             $message1 .= '</body>';
                             $message1 .= '</html>';
-                            mail($student->user->email, $subject, $message1, $headers);
+                            if(!$course->isTotalyPaid)
+                                mail($student->user->email, $subject, $message1, $headers);
                         }
                     }
                 }

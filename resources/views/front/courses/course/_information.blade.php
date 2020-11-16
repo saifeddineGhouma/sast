@@ -61,5 +61,21 @@ if(!is_null($course->ratings()->where("approved",1))){
         </div>
     </div>
 </div>
+@if(Lang::locale()=="en")
+                    <style type="text/css">
+								   p,ul>li,ol>li{
+									   text-align:left;
+									   padding-left:15px;
+									   
+										direction: ltr;
+
+									   
+								   }
+								   
+								   
+								  
+								   
+					</style>    
+@endif					
 
 {!! $course_trans->{'content_'. $courseType->type } !!}

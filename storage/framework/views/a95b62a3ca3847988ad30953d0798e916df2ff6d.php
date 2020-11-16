@@ -1,6 +1,6 @@
 <div class="col-lg-12 course_teacher courses_more_info_content">
     <div class="content_header_one">
-        <p style="text-align: <?php echo e($textalign); ?>"><?php echo app('translator')->getFromJson('navbar.Coachs'); ?></p>
+        <p style="text-align: <?php echo e($textalign); ?>"><?php echo app('translator')->getFromJson('navbar.coachs'); ?></p>
     </div>
     <div class="company_courses ">
         <div class="row" style="direction: <?php echo e($dir); ?>">
@@ -17,7 +17,7 @@
                             <h5 class="card-title">
                                 <a href="#" onclick="return false;"><?php echo e($courseTypeVariation->teacher->user->{'full_name_'.session()->get('locale')}); ?></a>
                             </h5>
-                            <p class="card-text"><?php echo e($teacher_trans->job); ?></p>
+                            <p class="card-text"><?php echo e($teacher_trans->job); ?><?php echo e($courseTypeVariation->teacher->id); ?></p>
 
                             <?php $__currentLoopData = $courseTypeVariation->teacher->socials; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $social): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <a href="<?php echo e($social->link); ?>" target="_blank"><i class="<?php echo e($social->font); ?>" aria-hidden="true"></i></a>

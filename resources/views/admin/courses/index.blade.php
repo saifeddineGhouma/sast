@@ -61,13 +61,13 @@
 					<div class="well table-toolbar">
 						<form id="search_form" name="search_form" method="get">
 							<div class="row">
-								<div class="col-md-3 col-sm-3">
+								<div class="col-md-2 col-sm-3">
 									<div class="form-group">
 										<label class="control-label bold">Name</label>
 										<input type="text" name="name" class="form-control">
 									</div>
 								</div>
-								<div class="col-md-3 col-sm-3">
+								<div class="col-md-2 col-sm-3">
 									<div class="form-group">
 										<label class="control-label bold">Category</label>
 										<select  name="category_id[]" id="category_id"  class="form-control select2 select2-hidden-accessible" multiple aria-hidden="true" >
@@ -77,7 +77,7 @@
 										</select>
 									</div>
 								</div>
-								<div class="col-md-3 col-sm-3">
+								<div class="col-md-2 col-sm-3">
 									<div class="form-group">
 										<label class="control-label bold">Price</label>
 										<select  name="price" id="price"  class="form-control select2" aria-hidden="true" >
@@ -90,8 +90,14 @@
 
 								<div class="col-md-3 col-sm-3">
 									<div class="form-group">
-										<label class="control-label bold">Date Added</label>
-										<input class="form-control date-picker" size="16" type="text" name="created_at" />
+										<label class="control-label bold">Date Added 1 </label>
+										<input class="form-control date-picker" size="16" type="text" name="created_at_1" />
+									</div>
+								</div>
+								<div class="col-md-3 col-sm-3">
+									<div class="form-group">
+										<label class="control-label bold">Date Added 2</label>
+										<input class="form-control date-picker" size="16" type="text" name="created_at_2" />
 									</div>
 								</div>
 							</div>

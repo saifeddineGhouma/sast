@@ -188,14 +188,8 @@ console.log(course_id) ;
         if($(this).data("type")=="video"){
             location.href = '<?php echo e(url(App("urlLang")."courses/video-exam?course_id=".$course->id)); ?>'+"&videoexam_id="+$(this).data("id");
         }else{
-            if($(this).data("coursetype_id")=="292"){
-                location.href = '<?php echo e(url(App("urlLang")."courses/quiz-attempt?coursetype_id=54")); ?>'+"&quiz_id="+$(this).data("id");
-
-            }else
-            {
-                location.href = '<?php echo e(url(App("urlLang")."courses/quiz-attempt?coursetype_id=".$courseType->id)); ?>'+"&quiz_id="+$(this).data("id");
-
-            }
+            token  = Math.floor(Math.random() * 26) + Date.now();
+            location.href = '<?php echo e(url(App("urlLang")."courses/quiz-attempt?coursetype_id=".$courseType->id)); ?>'+"&quiz_id="+$(this).data("id")+'&token='+token;
         }
     });
 

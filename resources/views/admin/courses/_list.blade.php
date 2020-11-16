@@ -65,6 +65,7 @@
 	            <td> 
 	            	created at<br/>
 	            	{{ date("Y-m-d",strtotime($item->created_at)) }}<br/>
+	            	
 	            	last update <br/>
 	            	{{ date("Y-m-d",strtotime($item->updated_at)) }}
 	            </td>

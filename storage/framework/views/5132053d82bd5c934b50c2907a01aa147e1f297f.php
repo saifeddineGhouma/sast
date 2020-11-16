@@ -157,8 +157,10 @@
                                                     $courseTypeVairiation = $orderproduct->coursetype_variation;
                                                     $product_details .= "<br/>".$courseTypeVairiation->courseType->type;
                                                     if(!empty($courseTypeVairiation->teacher))
-                                                        $product_details .= " ".$courseTypeVairiation->teacher->teacher_trans(Session::get('locale'))->name;
-                                                    $url = url(App('urlLang').'courses/'.$courseTypeVairiation->coursetype_id);
+													  $product_details .= " ".((!empty($courseTypeVairiation->teacher->teacher_trans(Session::get('locale'))->name))?$courseTypeVairiation->teacher->teacher_trans(Session::get('locale'))->name:'');
+                                                         
+												   
+												   $url = url(App('urlLang').'courses/'.$courseTypeVairiation->coursetype_id);
                                                 }elseif(!empty($orderproduct->course)){
                                                     $courseType = $orderproduct->course->courseTypes()->first();
                                                     $url = url(App('urlLang').'courses/'.$courseType['id']);

@@ -1,6 +1,6 @@
 <div class="col-lg-12 course_teacher courses_more_info_content">
     <div class="content_header_one">
-        <p style="text-align: {{ $textalign }}">@lang('navbar.Coachs')</p>
+        <p style="text-align: {{ $textalign }}">@lang('navbar.coachs')</p>
     </div>
     <div class="company_courses ">
         <div class="row" style="direction: {{ $dir }}">
@@ -17,7 +17,7 @@
                             <h5 class="card-title">
                                 <a href="#" onclick="return false;">{{ $courseTypeVariation->teacher->user->{'full_name_'.session()->get('locale')} }}</a>
                             </h5>
-                            <p class="card-text">{{ $teacher_trans->job }}</p>
+                            <p class="card-text">{{ $teacher_trans->job }}{{$courseTypeVariation->teacher->id}}</p>
 
                             @foreach($courseTypeVariation->teacher->socials as $social)
                                 <a href="{{ $social->link }}" target="_blank"><i class="{{$social->font}}" aria-hidden="true"></i></a>

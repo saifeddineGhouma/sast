@@ -76,7 +76,7 @@ class SiteController extends Controller
         $books = Book::take(4)->get();
         $teachers = Teacher::where("show_in_home", 1)->get();
         $testimonials = CourseRating::where("approved", 1)->get();
-
+         
         return view("front.home.index", array(
             "setting" => $setting, "sliderImages" => $sliderImages,
             "categories" => $categories, "countries" => $countries,
@@ -148,6 +148,7 @@ class SiteController extends Controller
     {
         $page = Page::join("pages_translations", "pages_translations.page_id", "=", "pages.id")
             ->where("pages_translations.slug", $slug)->first(["pages.*"]);
+            
         if (!empty($page)) {
             $page_trans = $page->page_trans(session()->get('locale'));
             if ($page_trans->slug != $slug)

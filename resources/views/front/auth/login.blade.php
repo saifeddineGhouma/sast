@@ -167,7 +167,7 @@
 								<input type="checkbox" class="form-check-input" name="agreement">
 								<label class="form-check-label" for="Check">
 								{{trans('home.accepter_cond')}}	
-									<a href="/pages/usage-policy">
+									<a href="/pages/privacy-policy">
 									{{trans('home.condition_term')}} {{trans('home.and')}} {{trans('home.privacy_police')}}
 									</a>
 									{{-- {{trans('home.and')}} 

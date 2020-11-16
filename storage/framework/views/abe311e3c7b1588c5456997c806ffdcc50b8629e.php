@@ -28,7 +28,7 @@
         <img src="<?php echo e(asset('uploads/kcfinder/upload/image/'.App("setting")->settings_trans(App('lang'))->logo)); ?>" alt="Swedish" title="Swedish">
 
         <div class="modal-body" style="text-align: center;">
-            إذا كنت تريد أن تصبح شريكًا للأكاديمية السويدية     
+           <?php echo app('translator')->getFromJson('navabr.partner_Swedish_Academy'); ?>  
         <br>
         <button onclick="js:location.href='<?php echo e(url(App('urlLang').'partnership')); ?>'" type="button" class="btn btn-primary" > سجل الان  </button>
         </div>
@@ -424,7 +424,7 @@
                             <div class="media">
                            <!--      <img class="align-self-center mr-3" src="<?php echo e(asset('uploads/kcfinder/upload/image/'.$testimonial->image)); ?>" alt=""> -->
                                 <div class="media-body align-self-center">
-                                    <p><?php echo e(isset($testimonial->comment) ? $testimonial->comment : null); ?></p>
+                                    <p><?php echo e(isset($testimonial->comment) ? $testimonial->comment : null); ?>--<?php echo e($testimonial->id); ?>--</p>
                                 </div>
                             </div>
                             <p class="client_name"><?php echo e(isset($testimonial->user->full_name_en) ? $testimonial->user->full_name_en : null); ?></p>

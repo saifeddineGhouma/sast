@@ -72,7 +72,6 @@ class CoursesController extends Controller
             $passed = 0;
             $lang   = 'Ar' ;
 		
-		//StudentStudyCase::where('courses_id', $course->id)->where('students_id', $student->id)->where('document','!=','')->get();
         if (Auth::check()) {
             $student = Auth::user()->student;
             $lang    = $course->is_lang ? Auth::user()->lang() : 'Ar';
@@ -388,7 +387,6 @@ class CoursesController extends Controller
 
             if (!empty($studentQuiz)) {
 
-
                 $totalPoints = 0;
                 if (!empty($questions)) {
 
@@ -596,11 +594,16 @@ class CoursesController extends Controller
                                                 $teacherName = "";
                                                 $teacherName = $courseTypeVariation->teacher->user->full_name_en;
                                                 $studentCertificate->teacher_name = $teacherName;
-
+                                                $studentCertificate->manual = 0;
+                                                if(!$course->isTotalyPaid())
+                                                   {
+                                                    $studentCertificate->active = 0;
+                                                    $studentCertificate->manual = 1;
+                                                   } 
                                                 $studentCertificate->serialnumber = $serialNumber;
                                                 $studentCertificate->image = $image_name;
                                                 $studentCertificate->date = date("Y-m-d");
-                                                $studentCertificate->manual = 0;
+                                                
                                                 $studentCertificate->save();
 
                                                 $mime_boundary = "----MSA Shipping----" . md5(time());
@@ -636,7 +639,8 @@ class CoursesController extends Controller
                                                 $message1 .= '</table>';
                                                 $message1 .= '</body>';
                                                 $message1 .= '</html>';
-                                                mail($student->user->email, $subject, $message1, $headers);
+                                                 if(!$course->isTotalyPaid())
+                                                   mail($student->user->email, $subject, $message1, $headers);
                                             }
                                         }
                         } 

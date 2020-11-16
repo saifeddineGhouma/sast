@@ -176,7 +176,7 @@
                                                                 <p><?php echo app('translator')->getFromJson('navbar.accompanetransfertphoto'); ?></p>
 
                                                                 <div class="form-group">
-                                                                    <input type="file" name="banktransfer_image"  />
+                                                                    <input type="file" name="banktransfer_image" <!--accept="image/x-png,image/gif,image/jpeg,image/jpg"!--> />
                                                                 </div>
                                                                 <p><?php echo app('translator')->getFromJson('navbar.accepttrasfertafterverification'); ?></p>
 
@@ -187,7 +187,7 @@
                                                                     <strong><?php echo app('translator')->getFromJson('navbar.remarque'); ?></strong> <?php echo app('translator')->getFromJson('navbar.maxsizephoto'); ?>.
                                                                 </div>
                                                                 <div class="alert alert-danger">
-                                                                    <strong><?php echo app('translator')->getFromJson('navbar.remarque'); ?></strong> <?php echo app('translator')->getFromJson('navbar.accaptedtypeofphoto'); ?> ( jpg , jpeg , png ,gif )
+                                                                    <strong><?php echo app('translator')->getFromJson('navbar.remarque'); ?></strong> <?php echo app('translator')->getFromJson('navbar.accaptedtypeofphoto'); ?> ( jpg , jpeg , png ,gif ,pdf)
                                                                 </div>
                                                             </div>
                                                         </div>

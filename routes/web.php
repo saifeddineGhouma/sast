@@ -520,7 +520,12 @@ Route::get('login', 'Front\Auth\LoginController@Login')->name("login");
 Route::post('login', 'Front\Auth\LoginController@postLogin');
 Route::get('logout', 'Front\Auth\LoginController@logout');
 
+   Route::get('/payment/paypal','PaymentController@showform')->name('show.form');
+   Route::post('stripe', 'PaymentController@payWithstripe')->name('stripe.payment.post');
+   Route::post('paypal', 'PaymentController@payWithpaypal')->name('paypal.payment.post');
 
+// route for check status of the payment
+Route::get('status', 'PaymentController@getPaymentStatus');
 Route::group([
     'namespace' => 'Front', 'prefix' => LaravelLocalization::setLocale(),
     'middleware' => ['localizationRedirect']
@@ -595,7 +600,7 @@ Route::group([
     Route::get('home/unique-username', 'HomeController@getUniqueUsername');
     Route::get('home/unique-email', 'HomeController@getUniqueEmail');
     Route::get('home/unique-mobile', 'HomeController@getUniqueMobile');
-    Route::get('/pages/{slug}', 'SiteController@getPage');
+    Route::get('/pages/{slug}', 'SiteController@fv');
     Route::get('/PDF/{id}/{client}', 'HomeController@getPDF');
 
 
@@ -607,7 +612,7 @@ Route::group([
     Route::post('courses/submit-video', 'CoursesController@postSubmitVideo');
     Route::post('courses/edit-video/{studentVideoExam_id}', 'CoursesController@postUpdateVideo');
     Route::post('courses/save-reply/{courseQuestion_id}', 'CoursesController@postSaveReply');
-    Route::post('courses/submit-quiz/{studentQuiz_id}', 'CoursesController@postSubmitQuiz');
+    Route::post('courses/submit-quiz/{studentQuiz_id}', 'CoursesController@postSubmitQuiz')->name('post.submit.quiz');
     Route::get('courses/studies', 'CoursesController@getStudies');
     Route::get('courses/{coursetype_id}', 'CoursesController@getView');
     /***study case  */
@@ -631,6 +636,8 @@ Route::group([
     Route::get('checkout/payment', 'CheckoutController@getPayment');
     Route::post('checkout/payment', 'CheckoutController@postPayment');
     Route::get('checkout/details', 'CheckoutController@getDetails');
+    /*facture*/
+    Route::get('generate/facture','CheckoutController@generateFacture')->name('generate.facture');
     Route::get('checkout/confirm', 'CheckoutController@getConfirm');
     Route::post('checkout/checkout', 'CheckoutController@postCheckout');
     Route::get('checkout/return', 'CheckoutController@getReturn');
@@ -653,6 +660,10 @@ Route::group([
     Route::get('account/view/{id}', 'AccountController@getView');
     Route::post('account/banktransfer', 'AccountController@postBanktransfer');
     Route::get('account/certificates', 'AccountController@getCertificates');
+    /*mes factures */
+    Route::get('account/factures', 'AccountController@getfactures')->name('get.factures');
+
+    /*end factures */
     Route::get('account/books', 'AccountController@getBooks');
     Route::get('account/email-verification', 'AccountController@getEmailVerification');
     Route::get('account/mobile-verification', 'AccountController@getMobileVerification');
@@ -673,4 +684,6 @@ Route::group([
     Route::get('/categories/productsmore', 'CategoriesController@getProductsmore');
     Route::get('/categories/reload-products', 'CategoriesController@getReloadProducts');
     Route::get('/{slug}', 'CategoriesController@getView');
+
+
 });

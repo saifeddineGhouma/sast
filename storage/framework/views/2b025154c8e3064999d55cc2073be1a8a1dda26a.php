@@ -285,6 +285,10 @@
 
     <?php else: ?>
         <input type="submit" class="btn btn-success" value="<?php echo app('translator')->getFromJson('navbar.paynow'); ?>" />
+	 <a href="<?php echo e(route('generate.facture')); ?>" target="_blank">
+            <button  type="button" class="btn btn-primary">نسخ </button>
+            
+        </a>
     <?php endif; ?>
 
     <input onclick="js:location.href='<?php echo e($checkout['totalPrice']==0?url(App('urlLang').'checkout'):url(App('urlLang').'checkout/payment')); ?>'" class="btn btn-warning" value="<?php echo app('translator')->getFromJson('navbar.previous'); ?>">

@@ -83,8 +83,26 @@ class StudentVideoExam extends Model
         }
 
         if(!empty($request1['created_at'])){
-            $created_at =  date("y-m-d",strtotime($request1['created_at']));
-            $query = $query->where(DB::raw("DATE(created_at)"),$created_at);
+
+               if(!(empty($request1['created_at_2'])))
+             {
+                $created_at_1 =  date("y-m-d", strtotime($request1['created_at']));
+                $created_at_2 =  date("y-m-d", strtotime($request1['created_at_2']));
+
+                $query = $query->whereBetween(DB::raw("DATE(created_at)"), [$created_at_1,$created_at_2]);
+                
+
+             }else{
+                
+                $created_at =  date("y-m-d",strtotime($request1['created_at']));
+                $query = $query->where(DB::raw("DATE(created_at)"),$created_at);
+              
+             }
+
+
+
+            /***********/
+
         }
         return $query;
     }

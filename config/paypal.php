@@ -25,7 +25,7 @@ return array(
 
 	*/
 
-	'mode' => 'live',
+	'mode' => 'sandbox',
 
 	/**
 
@@ -35,7 +35,7 @@ return array(
 
 	'http.ConnectionTimeOut' => 1000,
 
-	/**
+	/**	
 
 	* Whether want to log to a file
 

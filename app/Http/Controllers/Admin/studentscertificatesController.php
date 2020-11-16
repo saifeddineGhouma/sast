@@ -26,9 +26,10 @@ class studentscertificatesController extends Controller
     }
 	
     public function index(Request $request){
+
         $StudentCertificate = StudentCertificate::where('manual', $request->manual)
                                                 ->orderBy('date','DESC')  
-                                                ->get();
+                                                ->paginate(20);
            
         return view('admin.students-certificates.index',compact('StudentCertificate'),array(
             "table_name"=>$this->table_name,"record_name"=>$this->record_name

@@ -114,7 +114,10 @@ class Quiz extends Model
             if($isRegistered) {
 				
                 $paidOrder_ids = \App\Order::join("order_onlinepayments", "order_onlinepayments.order_id", "=", "orders.id")
-                    ->where("order_onlinepayments.payment_status", "paid")
+                    ->where(function ($query) {
+                     $query->where("order_onlinepayments.payment_status", "paid")
+                           ->orWhere("order_onlinepayments.engaged", "engaged");
+                })
                     ->groupBy("orders.id", "orders.total")
                     ->havingRaw("sum(order_onlinepayments.total)>=orders.total")
                     ->pluck("orders.id")->all();

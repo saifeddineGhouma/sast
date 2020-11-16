@@ -196,15 +196,29 @@ class coursesController extends Controller
                     $course->is_lang = 1;
                 else
                     $course->is_lang = 0;
+
+                /*is workshop*/
+                if($request->is_workshop)
+                    $course->is_workshop = 1;
+                else
+                    $course->is_workshop = 0;
 				
                 // description 
                 $course->description_all_exam = $request->description_all_exam;
                 $course->description_quiz = $request->description_quiz;
                 $course->desciption_exam = $request->desciption_exam;
                 $course->description_exam_video = $request->description_exam_video;
-                $course->description_stage = $request->description_stage;
-				//  study case
+                $course->description_stage = $request->description_stage;				
 				$course->description_study_case = $request->description_study_case;
+                /*description en anglais*/
+                $course->description_all_exam_en = $request->description_all_exam_en;
+                $course->description_quiz_en = $request->description_quiz_en;
+                $course->desciption_exam_en = $request->desciption_exam_en;
+                $course->description_exam_video_en = $request->description_exam_video_en;
+                $course->description_stage_en = $request->description_stage_en;               
+                $course->description_study_case_en = $request->description_study_case_en;
+
+
                 $course->save();
 				
 				$coursestudycase = new CourseStudyCase();
@@ -414,6 +428,9 @@ class coursesController extends Controller
                 $courseTypeVariation->price = $request->get("variation".$course_type->type."_price_".$courseTypeVariation->id);
                 $courseTypeVariation->pricesale = $request->get("variation".$course_type->type."_pricesale_".$courseTypeVariation->id);
                 $courseTypeVariation->certificate_id = $request->get("variation".$course_type->type."_certificate_id_".$courseTypeVariation->id);
+                /*2eme certif*/
+                $courseTypeVariation->certificate_id_2 = $request->get("variation".$course_type->type."_certificate_id_2".$courseTypeVariation->id);
+
                 $courseTypeVariation->priceautre = $request->get("variation".$course_type->type."_priceautre_".$courseTypeVariation->id);
                 $courseTypeVariation->devise = $request->get("variation".$course_type->type."_pricedevise_".$courseTypeVariation->id);
                 $courseTypeVariation->update();
@@ -721,14 +738,31 @@ class coursesController extends Controller
                     $course->is_lang = 0;
 				  
                  }
+                 //is workshop
+
+                 if($request->is_workshop)
+                   
+                    $course->is_workshop = 1;
+                 
+                else
+                 {
+                    $course->is_workshop = 0;
+                  
+                 }
                 // description
                 $course->description_all_exam = $request->description_all_exam;
                 $course->description_quiz = $request->description_quiz;
                 $course->desciption_exam = $request->desciption_exam;
                 $course->description_exam_video = $request->description_exam_video;
-                $course->description_stage = $request->description_stage;
-                
+                $course->description_stage = $request->description_stage;                
 				$course->description_study_case = $request->description_study_case;
+                 /*description en anglais*/
+                $course->description_all_exam_en = $request->description_all_exam_en;
+                $course->description_quiz_en = $request->description_quiz_en;
+                $course->desciption_exam_en = $request->desciption_exam_en;
+                $course->description_exam_video_en = $request->description_exam_video_en;
+                $course->description_stage_en = $request->description_stage_en;               
+                $course->description_study_case_en = $request->description_study_case_en;
                 $course->save();
 
 //study case 

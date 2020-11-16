@@ -67,7 +67,9 @@ if(empty($quiz_trans))
 	<div class="container quiz_container">
 		<div class="row">
 			<div class="col-12  course_quiz courses_more_info_content">
-				<form method="post" id="form-quiz" name="formquiz" action='{{url(App("urlLang")."courses/submit-quiz/".$studentQuiz->id)}}'>
+				<!--form method="post" id="form-quiz" name="formquiz" action='{{-- url(App("urlLang")."courses/submit-quiz/".$studentQuiz->id) --}}'-->
+				<form method="post" id="form-quiz" name="formquiz" action="{{route('post.submit.quiz',$studentQuiz->id)}}">
+
 					{!! csrf_field() !!}
 					<div id="accordion">
 						@foreach($questions as $question)

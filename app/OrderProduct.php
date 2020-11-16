@@ -51,12 +51,16 @@ class OrderProduct extends Model
 
     public function isTotalPaid()
     {
+		
         $isPaid = false;
 
         $countOrders = Order::join("order_products", "order_products.order_id", "=", "orders.id")
             ->join("order_onlinepayments", "order_onlinepayments.order_id", "=", "orders.id")
             ->where("order_products.id", $this->id)
-            ->where("order_onlinepayments.payment_status", "paid")
+            ->where(function ($query) {
+                $query->where("order_onlinepayments.payment_status", "paid")
+                      ->orWhere("order_onlinepayments.engaged", "engaged");
+            })			
             ->select(DB::raw("sum(order_onlinepayments.total) as sumPayments"), "orders.id", "orders.total")
             ->groupBy("orders.id", "orders.total")
             ->havingRaw("sum(order_onlinepayments.total)>=orders.total")
@@ -67,4 +71,5 @@ class OrderProduct extends Model
 
         return $isPaid;
     }
+	
 }

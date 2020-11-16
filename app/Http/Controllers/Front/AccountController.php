@@ -53,12 +53,15 @@ class AccountController extends Controller
             $query->where("student_id", Auth::user()->id);
         })->join("orders", "order_products.order_id", "=", "orders.id")
             ->join("order_onlinepayments", "order_onlinepayments.order_id", "=", "orders.id")
-            ->where("order_onlinepayments.payment_status", "paid")
+            ->where(function ($query) {
+                    $query->where("order_onlinepayments.payment_status", "paid")
+                          ->orWhere("order_onlinepayments.engaged", "engaged");
+             })
             ->select(DB::raw("sum(order_onlinepayments.total) as sumPayments"), "orders.id", "orders.total")
             ->groupBy("orders.id", "orders.total")
             ->havingRaw("sum(order_onlinepayments.total)>=orders.total")
             ->count();
-
+       
         $countCertificates = 0;
         $student = $user->student;
 
@@ -255,7 +258,10 @@ class AccountController extends Controller
         $user =  Auth::user();
 
         $paidOrder_ids = Order::join("order_onlinepayments", "order_onlinepayments.order_id", "=", "orders.id")
-            ->where("order_onlinepayments.payment_status", "paid")
+             ->where(function ($query) {
+                   $query->where("order_onlinepayments.payment_status", "paid")
+                         ->orWhere("order_onlinepayments.engaged", "engaged");
+              })
             ->groupBy("orders.id", "orders.total")
             ->havingRaw("sum(order_onlinepayments.total)>=orders.total")
             ->pluck("orders.id")->all();
@@ -364,7 +370,10 @@ class AccountController extends Controller
             ->join("orders", "order_products.order_id", "=", "orders.id")
             ->join("order_onlinepayments", "order_onlinepayments.order_id", "=", "orders.id")
             ->whereNotNull("order_products.book_id")
-            ->where("order_onlinepayments.payment_status", "paid")
+            ->where(function ($query) {
+                     $query->where("order_onlinepayments.payment_status", "paid")
+                           ->orWhere("order_onlinepayments.engaged", "engaged");
+             })
             ->select(DB::raw("sum(order_onlinepayments.total) as sumPayments"), "orders.total", "books.id")
             ->groupBy("orders.total", "books.id")
             ->havingRaw("sum(order_onlinepayments.total)>=orders.total")
@@ -513,5 +522,10 @@ class AccountController extends Controller
         $ticket->resolu = 2;
         $ticket->save();
         return redirect(App('urlLang') . 'account/ticket');
+    }
+    public function getfactures()
+    {
+        $orders= Order::where('user_id',Auth::id())->get();
+        dd($orders);
     }
 }

@@ -59,18 +59,27 @@ class CartController extends Controller
         $message[1] = "";
         //$error = $this->hasErrorRequest($request);
         //dd($request);
+
         if ($error == 0) {
             if (session()->has("cart")) {
+
                 $cart = session()->get('cart');
                 //print_r($cart);
-
+        
                 if ($this->hasproduct($cart, $request)) {
+                    /**/
                     $this->updateproduct($cart, $request);
                 } else {
                     array_push($cart, $this->newcartpro($request));
+                      $course = Course::where('course_lie_id',$cart[0]['course_id'])->first();
+
+                       if(!empty($course))
+                         array_push($cart, $this->CoureLie($course));
+                    
                 }
                 session()->put('cart', $cart);
             } else {
+                
                 $this->initCart($request);
             }
             /****** add files to cart */
@@ -110,6 +119,7 @@ class CartController extends Controller
 
     public function postDeletefromcart(Request $request)
     {
+
         $message = array();
         $message[0] = "success";
         $message[1] = "";
@@ -118,7 +128,7 @@ class CartController extends Controller
         foreach ($cart as $key => $cart_pro) {
             if ($request->has("coursetypevariation_id")) {
                 if (isset($cart_pro["coursetypevariation_id"]) && $cart_pro["coursetypevariation_id"] == $request->coursetypevariation_id) {
-                    if ($cart_pro["need_experience"] == "yes") {
+                    if ( $cart_pro["need_experience"] == "yes") {
                         $files = session()->get('files');
                         foreach ($files as $key => $fileName) {
                             $path = 'uploads/kcfinder/upload/files/experience/' . $fileName;
@@ -252,11 +262,22 @@ class CartController extends Controller
     {
         $cart = array();
         array_push($cart, $this->newcartpro($request));
+            
+            if(isset($cart[0]['course_id']))
+        {    $course_lie_id = Course::where('id',$cart[0]['course_id'])->pluck('course_lie_id')->first() ;
+
+            $course = Course::find($course_lie_id);
+             
+              if(!empty($course))
+               array_push($cart, $this->CoureLie($course));
+        }
+
         session()->put('cart', $cart);
     }
     public function hasproduct($cart, $request)
     {
         foreach ($cart as $cart_pro) {
+
             if (
                 isset($cart_pro["coursetypevariation_id"]) &&
                 $cart_pro["coursetypevariation_id"] == $request->coursetypevariation_id
@@ -433,11 +454,33 @@ class CartController extends Controller
         $cart_pro["price"] = $price;
         $cart_pro["points"] = $points;
         $cart_pro["total"] = $total;
+        /**/
+         
+
+        
         if ($request->hasFile('experience_files')) {
             $cart_pro["need_experience"] = "yes";
         } else {
             $cart_pro["need_experience"] = "no";
         }
         return $cart_pro;
+    }
+
+    private function CoureLie($course)
+    {
+      
+        $course->courseTypes()->first()->couseType_variations()->first();
+       // dd($course->id,$course->courseTypes()->first()->couseType_variations()->first());
+        $cart_pro = array();
+        $cart_pro["course_id"] = $course->id;
+        $cart_pro["coursetypevariation_id"] = $course->courseTypes()->first()->couseType_variations()->first()->id;
+        $cart_pro["quantity"] = 1;
+        $cart_pro["price"] = $course->courseTypes()->first()->couseType_variations()->first()->price;
+        $cart_pro["points"] = 0;
+        $cart_pro["need_experience"] = "no";
+        $cart_pro["total"] = $course->courseTypes()->first()->couseType_variations()->first()->price;
+
+        return $cart_pro;
+
     }
 }

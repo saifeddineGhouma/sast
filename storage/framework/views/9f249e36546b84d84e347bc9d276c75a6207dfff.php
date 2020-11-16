@@ -71,7 +71,7 @@
 
                 <li class="nav-item">
 
-                    <a class="nav-link" href="https://goo.gl/maps/nYFFMKJEp392" target="_blank" style="direction:ltr"><i class="fa fa-map-marker"></i>&ensp;<?php echo e(App('setting')->settings_trans(session()->get('locale'))->address); ?></a>
+                    <a class="nav-link" href="https://goo.gl/maps/nYFFMKJEp392" target="_blank" style="direction:ltr"><i class="fa fa-map-marker"></i>&ensp;</a>
 
                 </li>
 
@@ -251,11 +251,10 @@
                             <?php echo e(trans('sentence.arabe')); ?>
 
                         </a>
-                        <!--
+                        
                         <a class="dropdown-item" href="/lang/fr">
                             <img src="https://lipis.github.io/flag-icon-css/flags/4x3/fr.svg" alt="Frensh" class="img-size-50 mr-3" style="width: 25%">
-                            <?php echo app('translator')->getFromJson('frensh'); ?>
-                        </a>-->
+                        </a>
                         
                     </div>
                 </li>   

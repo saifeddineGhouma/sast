@@ -34,7 +34,7 @@
         <img src="{{asset('uploads/kcfinder/upload/image/'.App("setting")->settings_trans(App('lang'))->logo)}}" alt="Swedish" title="Swedish">
 
         <div class="modal-body" style="text-align: center;">
-            إذا كنت تريد أن تصبح شريكًا للأكاديمية السويدية     
+           @lang('navabr.partner_Swedish_Academy')  
         <br>
         <button onclick="js:location.href='{{url(App('urlLang').'partnership')}}'" type="button" class="btn btn-primary" > سجل الان  </button>
         </div>
@@ -439,7 +439,7 @@
                             <div class="media">
                            <!--      <img class="align-self-center mr-3" src="{{asset('uploads/kcfinder/upload/image/'.$testimonial->image)}}" alt=""> -->
                                 <div class="media-body align-self-center">
-                                    <p>{{ $testimonial->comment or null }}</p>
+                                    <p>{{ $testimonial->comment or null }}--{{$testimonial->id}}--</p>
                                 </div>
                             </div>
                             <p class="client_name">{{ $testimonial->user->full_name_en or null }}</p>

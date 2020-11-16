@@ -137,7 +137,7 @@
 			</div>
 		</div>
 	</div>
-	
+	<a href="https://m.me/swedishacademy" target="_blank" style="position: fixed;bottom: 15px;right: 15px;"><img src='/uploads/kcfinder/upload/image/messenger.ico' style="width: 70px;" /></a>
     <button type="button" id="js-top" class="btn btn-primary top-link hide" data-toggle="modal" data-target="#modalDiscount"><img src="https://img.icons8.com/plasticine/100/000000/gift.png" style="margin-left: -3rem;padding-top: 5rem;width: 4rem;"/></button>
      <!--Modal: modalDiscount-->
     <div class="modal fade right" id="modalDiscount" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -209,81 +209,5 @@ scrollToTopButton.onclick = function(e) {
 	</script>
 	<?php echo $__env->make("front.layouts.js._newsletter_js", array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 	<?php echo $__env->yieldContent("scripts"); ?>
-	<?php if($user = Auth::user()): ?>
-		<script src="https://wchat.freshchat.com/js/widget.js"></script>
-		<script>
-		  window.fcWidget.init({
-		    token: "2c29fe31-f567-4a42-bf3b-6a72d911afde",
-		    host: "https://wchat.freshchat.com"
-		  });
-		</script> 
-		<script>
-		  window.fcWidget.setExternalId('<?php echo e($user->username); ?>');
-
-		  window.fcWidget.user.setFirstName('<?php echo e($user->full_name_ar); ?>');
-
-		  window.fcWidget.user.setEmail('<?php echo e($user->email); ?>');
-
-		  window.fcWidget.user.setProperties({
-		    plan: "Estate",                 
-		    status: "Active"                
-		  });
-		</script>
-	<?php else: ?>
-		<script src="https://snippets.freshchat.com/js/fc-pre-chat-form.js"></script>
-		<script>
-		  fcPreChatFormData = { 
-		    //Form header color and Submit button color.
-		    mainbgColor: '#0aa4db',
-		    //Form Header Text and Submit button text color.
-		    maintxColor: '#fff',
-		    //Chat Form Title
-		    title: 'الاكاديمية السويدية للتدريب الرياضي',
-		    //Chat form Welcome Message 
-		    textBanner: 'يمكنك التواصل معنا عبر الشات من هنا',
-		    //Name field Label
-		    nameLabel: 'الإسم',
-		    //Set reqName as 'required' if you want the name field to be mandatory.
-		    reqName: 'غير مطلوب',
-		    //If name field is set as mandatory, then the below message will be displayed if the field value is not valid or empty.
-		    nameError: 'الرجاء إدخال إسم صحيح :)',
-		    //To not display the Email, set the value to 'no'
-		    showEmail: 'نعم',
-		    //Email field label
-		    emailLabel: 'البريد الالكتروني',
-		    //Set reqEmail as 'required' if you want the field to be mandatory. 
-		    reqEmail: 'غير مطلوب',
-		    //If email field is set as mandatory, then the below message will be displayed if the field value is not valid or empty.
-		    emailError: 'الرجاء إدخال بريد إلكتروني صالح',
-		    //To not display the Phone, set the value to 'no'
-		    showPhone: 'نعم',
-		    //Phone Field Label
-		    phoneLabel: 'رقم الهاتف',
-		    //Set reqPhone as 'required' if you want the field to be mandatory.
-		    reqPhone: 'مطلوب',
-		    //If phone field is set as mandatory, then the below message will be displayed if the field value is not valid or empty.
-		    phoneError: 'الرجاء إدخال رقم هاتف صالح',
-		    //Submit Button Label.
-		    SubmitLabel: 'إبدأ',
-		  };
-		  window.fcSettings = {
-		    token: '2c29fe31-f567-4a42-bf3b-6a72d911afde',
-		    host: "https://wchat.freshchat.com",
-		    config: {
-		      cssNames: {
-		        //The below element is mandatory. Please add any custom class or leave the default.
-		        widget: 'custom_fc_frame',
-		        //The below element is mandatory. Please add any custom class or leave the default.
-		        expanded: 'custom_fc_expanded'
-		      }
-		    },
-		    onInit: function() {
-		      console.log('widget init');
-		      fcPreChatform.fcWidgetInit(fcPreChatFormData);
-		    }
-		  };
-		</script>
-		<script src="https://wchat.freshchat.com/js/widget.js"></script>
-	<?php endif; ?>
 </body>
 </html>	

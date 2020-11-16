@@ -280,6 +280,10 @@
 
     @else
         <input type="submit" class="btn btn-success" value="@lang('navbar.paynow')" />
+	 <a href="{{route('generate.facture')}}" target="_blank">
+            <button  type="button" class="btn btn-primary">نسخ </button>
+            
+        </a>
     @endif
 
     <input onclick="js:location.href='{{$checkout['totalPrice']==0?url(App('urlLang').'checkout'):url(App('urlLang').'checkout/payment')}}'" class="btn btn-warning" value="@lang('navbar.previous')">

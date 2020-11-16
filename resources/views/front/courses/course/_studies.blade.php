@@ -1,7 +1,9 @@
-
+<style>
+p{text-algin:center;}
+</style>
     <div class=" course_curriculum courses_more_info_content">
         <div class="content_header_one">
-            <p>المنهج الدراسي</p>
+            <p>@lang('navbar.courseWay')</p>
         </div>
         @if(in_array($courseType->id, [292, 298, 328])) 
           @if($user)
@@ -40,7 +42,7 @@
                         <div class="card-header">
                             <h5 class="mb-0">
                                 <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse_{{ $courseStudy->id }}" aria-expanded="true" aria-controls="collapse_{{$courseStudy->id}}">
-                                    <span>{{ $courseStudy->duration }} <sup>ساعة</sup></span> | <b>{{$loop->iteration }}.</b>{{ $courseStudy->{'name_'.App('lang')} }} {{ $courseStudy->type }}
+                                    <span>{{ $courseStudy->duration }} <sup>@lang('navbar.hours')</sup></span> | <b>{{$loop->iteration }}.</b>{{ $courseStudy->{'name_'.App('lang')} }} {{ $courseStudy->type }}
                                 </button>
                             </h5>
                             <span class="showhide">
@@ -105,7 +107,7 @@
         @else
             @if(in_array($courseType->id, [299, 300, 301, 302]))
              <p>   انقر على هذه الصورة اذا اردت شراء احد كتبتنا  </p> <br>
-             <a href="{{url(App('urlLang').'books')}}"> المكتبة  </a>
+             <a href="{{url(App('urlLang').'books')}}"> @lang('navbar.libraire')  </a>
 
             @else 
                 <div id="accordion">
@@ -114,7 +116,7 @@
                             <div class="card-header">
                                 <h5 class="mb-0">
                                     <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse_{{ $courseStudy->id }}" aria-expanded="true" aria-controls="collapse_{{$courseStudy->id}}">
-                                        <span>{{ $courseStudy->duration }} <sup>ساعة</sup></span> | <b>{{$loop->iteration }}.</b>{{ $courseStudy->{'name_'.App('lang')} }} {{ $courseStudy->type }}
+                                        <span>{{ $courseStudy->duration }} <sup>@lang('navbar.hours')</sup></span> | <b>{{$loop->iteration }}.</b>{{ $courseStudy->{'name_'.app()->getLocale()} }} {{ $courseStudy->type }}
                                     </button>
                                 </h5>
                                 <span class="showhide">
@@ -137,30 +139,30 @@
                                             @endif
                                         </div>
                                         <div class="col-8 curriculum_title">
-                                            <p>{{ $courseStudy->{'name_'.App('lang')} }} </p>
+                                            <p>{{ $courseStudy->{'name_'.app()->getLocale()} }} </p>
                                         </div>
                                         <div class="col-3 curriculum_watch">
                                             @if($courseStudy->only_registered && Auth::guest())
-                                                <button onclick="location.href='{{ url(App('urlLang').'login') }}'">للمسجلين فقط</button>
+                                                <button onclick="location.href='{{ url(App('urlLang').'login') }}'">@lang('navbar.pleaseLogIn')</button>
                                             @else
                                                 @if($course->isRegistered())
                                                     @if($courseStudy->type == "html"||$courseStudy->type == "pdf")
                                                         @if($courseStudy->type == "html")
-                                                            <button onclick="location.href='{{ url(App('urlLang').'courses/studies?courseStudy_id='.$courseStudy->id) }}'" target="_blank">مشاهدة</button>
+                                                            <button onclick="location.href='{{ url(App('urlLang').'courses/studies?courseStudy_id='.$courseStudy->id) }}'" target="_blank">@lang('navbar.view')</button>
                                                     @elseif($courseStudy->type == "pdf")
                                                         
-                                                                <button onclick="location.href='{{ url(App('urlLang').'/uploads/kcfinder/upload/file/'. $courseStudy->url ) }}'" target="_blank">مشاهدة</button>
+                                                                <button onclick="location.href='{{ url(App('urlLang').'/uploads/kcfinder/upload/file/'. $courseStudy->url ) }}'" target="_blank">@lang('navbar.view')</button>
                                                             {{----}}
                                                             @endif
                                                         <a href="https://swedish-academy.se/telecharge.php?pdf={{$courseStudy->url}}" download="{{$courseStudy->url}}" target="_blank" style="float: left;">
                                                             <img src="{{asset('assets/front/img/icon-download.png')}}" /> 
-                                                            تحميل
+																@lang('navbar.upload_file')
                                                         </a>
                                                     @else
-                                                        <button onclick="location.href='{{ url(App('urlLang').'uploads/kcfinder/upload/file/'.$courseStudy->url) }}'" target="_blank">مشاهدة</button>
+                                                        <button onclick="location.href='{{ url(App('urlLang').'uploads/kcfinder/upload/file/'.$courseStudy->url) }}'" target="_blank">@lang('navbar.view')</button>
                                                     @endif
                                                 @else
-                                                    <button onclick="location.href='{{ url(App('urlLang').'login') }}'">للمسجلين فقط</button>
+                                                    <button onclick="location.href='{{ url(App('urlLang').'login') }}'">@lang('navbar.pleaseLogIn')</button>
                                                 @endif
                                             @endif
                                         </div>

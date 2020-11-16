@@ -22,6 +22,7 @@
                         </li>
                         <li class="breadcrumb-item active" aria-current="page" style="direction:<?php echo e($dir); ?>">
                             <span><?php echo e($page_trans->title); ?></span>
+
                         </li>
                     </ol>
                 </nav>
@@ -32,6 +33,7 @@
     <div class="contact-area" style="direction:<?php echo e($dir); ?>; text-align: justify ;">
         <div class="container">
             <div class="row"> 
+                
                 <p>
                     <?php echo $page_trans->content; ?>
 

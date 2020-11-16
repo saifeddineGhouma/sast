@@ -234,6 +234,14 @@ class usersController extends Controller
             }
             if ($request->checkPassword)
                 $user->password = bcrypt($request->password);
+             if($request->paid)
+                  $user->paid=1;
+              else
+              {
+                $user->paid=0;
+              }
+
+             
             $user->save();
 
             Session::flash('alert-success', 'user has been updated succussfully ..');

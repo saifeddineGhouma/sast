@@ -60,7 +60,7 @@ if(empty($quiz_trans))
 <div class="quiz_result">
 	<div class="container quiz_container">
 
-		<button  onclick="js:window.location.href='{{ url(App("urlLang")."courses/".$courseType->id) }}'" class="btn btn-success" style="margin-right: 45%;margin-bottom: 20px;"> بقية الاختبارات  </button>
+		<button  onclick="js:window.location.href='{{ url(App("urlLang")."courses/".$courseType->id) }}'" class="btn btn-success" style="margin-right: 45%;margin-bottom: 20px;"> @lang('navbar.rest_test')  </button>
 
 	</div>
 	<div class="container quiz_container">
@@ -68,17 +68,17 @@ if(empty($quiz_trans))
 			<div class="col-4  course_quiz_result courses_more_info_content">
 				<div class="content_header_one">
 					<i class="fa fa-bookmark" aria-hidden="true"></i>
-					<span class="quiz_text">نتيجة الاختبار : </span>
+					<span class="quiz_text">  @lang('navbar.test_result') </span>
 
 					@if($studentQuiz->successfull)
 						<i class="fa fa-check-circle-o" aria-hidden="true"></i>
 						<span class="quiz_result_statues">
-						ناجح
+						@lang('navbar.succeded')
 					</span>
 					@else
 						<i class="fa fa-times psnt" aria-hidden="true"></i>
 						<span class="quiz_result_statues_fl">
-						راسب
+						@lang('navbar.notsucceded')
 					</span>
 
 					@endif
