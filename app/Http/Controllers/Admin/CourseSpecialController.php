@@ -32,8 +32,8 @@ use DB;
 
 class CourseSpecialController extends Controller
 {
-	 private $table_name = "Course_Special";
-    private $record_name = "Course_Special";
+	 private $table_name = "Course Special";
+    private $record_name = "Course Special";
 	    public function __construct()
     {
     }
@@ -53,7 +53,7 @@ class CourseSpecialController extends Controller
 
      public function listing(Request $request)
     {
-        $courses_special = CourseSpecial::search($request)->get();
+        $courses_special = CourseSpecial::search($request)->latest()->get();
         return view('admin.valid_in_courses_special.list',compact('courses_special'));
 
     }
@@ -84,9 +84,9 @@ class CourseSpecialController extends Controller
                 $courseTypeVariation = $student->order_products()->where('course_id', $course->id)->first()->coursetype_variation()->first();
                 
                  $existCertif     = StudentCertificate::where('student_id', $student->id)->where('course_id', $course->id)->count();
-                  
+                 
                  if ($course->isCompleteQuizzes($student))  {   
-             /* if ($studentVideo->successfull==1 && $studentVideo->status=="completed" ) { */
+             
                 if ($course_special->status == "success") {
 
 
@@ -176,6 +176,12 @@ class CourseSpecialController extends Controller
 
 
             }
+             $request->session()->flash('alert-success', "student in course special has been edit");
+
+
+
+       return back() ;
+
     }
 
 
