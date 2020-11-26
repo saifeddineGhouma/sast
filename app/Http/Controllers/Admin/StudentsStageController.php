@@ -34,6 +34,7 @@ class StudentsStageController extends Controller
     }
     public function UpdateStage($valid, StudentStage $stage)
     {
+        
         $stage->valider = $valid;
         $stage->update();
         return redirect()->back();

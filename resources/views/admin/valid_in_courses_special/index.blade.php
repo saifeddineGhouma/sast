@@ -1,7 +1,8 @@
+
 @extends('admin/layouts/master')
 
 @section('title')
-Stage
+{{ ucfirst(str_replace("-"," ",$table_name)) }}
 @endsection
 
 @section("header_styles")
@@ -15,12 +16,12 @@ Stage
 <link href="{{asset('assets/admin/vendors/select2/select2.min.css')}}" type="text/css" rel="stylesheet">
 <link href="{{asset('assets/admin/vendors/select2/select2-bootstrap.min.css')}}" type="text/css" rel="stylesheet">
 @endsection
-                 
+
 @section('content')
 <!-- Content Header (Page header) -->
-<section class="content-header"> 
+<section class="content-header">
     <!--section starts-->
-    <h1>{{ ucfirst('Stage') }}</h1>
+    <h1>{{ ucfirst(str_replace("-"," ",$table_name)) }}</h1>
     <ol class="breadcrumb">
         <li>
             <a href="{{url('/admin')}}">
@@ -28,11 +29,10 @@ Stage
                 Dashboard
             </a>
         </li>
-        <li class="active">{{ ucfirst('Stage') }}</li>
+        <li class="active">{{ ucfirst(str_replace("-"," ",$table_name)) }}</li>
     </ol>
 </section>
 <!--section ends-->
-
 <section class="content">
     <div class="row">
         <div class="col-lg-12">
@@ -41,7 +41,7 @@ Stage
 	                    <div class="panel-title pull-left">
                            <div class="caption">
 		                        <i class="livicon" data-name="camera-alt" data-size="16" data-loop="true" data-c="#fff" data-hc="white"></i>
-							   {{ ucfirst('Stage') }}
+							   {{ ucfirst(str_replace("-"," ",$table_name)) }}
 		                    </div>
 	                    </div>
 	                </div>
@@ -57,68 +57,85 @@ Stage
 	                        </div>
 	                    </div>
 	                </div>
+
+					<div class="well table-toolbar">
+						<form id="search_form" name="search_form" method="get">
+							<div class="row">
+								<div class="col-md-4 col-sm-4">
+									<div class="form-group">
+										<label class="control-label bold">Student</label>
+										<input name="student_id" class="form-control" placeholder="email or name ar / en or username ">
+											
+										
+									</div>
+									
+								</div>
+							
+								<div class="col-md-4 col-sm-4">
+									<div class="form-group">
+										<label class="control-label bold">Course</label>
+										<select  name="course_id" class="form-control select2">
+											<option value="">selected</option>
+                                            @foreach($courses as $course)
+												<option value="{{$course->id}}">{{$course->course_trans("ar")->name}}</option>
+											@endforeach
+										</select>
+									</div>
+								</div>
+
+						
+							</div>
+							<div class="row">
+								
+								<div class="col-md-4 col-sm-4">
+									<div class="form-group">
+										<label class="control-label bold">Date Added</label>
+										<input class="form-control date-picker" size="16" type="text" name="created_at" />
+									</div>
+								</div>
+								<div class="col-md-4">
+									<button type="button" name='search'id="filterBtn" class="btn green demo-loading-btn col-md-6" style="margin-top: 25px;" data-loading-text="<li class='fa fa-search'></li> Searching...">
+										<li class="fa fa-search"></li> Search 
+									</button>
+								</div>
+							</div>
+						</form>
+
+					</div>
+
+
+
+
+					<div class="table-toolbar">
+	                    <div class="row" style="margin-top: 20px;">
+
+
+	                    </div>
+	                </div>
 	                <div id="reloaddiv">
-                        {{-- <div id="childList"></div> --}}
-                        <table class="table table-striped table-bordered" id="table1" style="display: none">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>user1111</th>
-                                    <th>course </th>
-                                    <th>Demande stage</th>
-                                    <th>Evaluation stage</th>
-                                    <th>Created at</th>
-                                    <th class="text-center"> status </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($stages as $stage)
-                                    <tr> 
-                                        <td>{{ $stage->id }}</td>
-                    
-                                        <td>
-                                            {{ $stage->user['full_name_en']}}
-                                          </td>
-                                        <td>
-                                            {{ $stage->course->course_trans("ar")->name}}
-                                        </td> 
-                                        <td>
-                                            <a href = "{{url(App('urlLang').'/admin/view_stage/' . $stage->id)}}">    View
-                                        </td>
-                                        <td>
-                                            <a href = "{{url(App('urlLang').'/admin/view_evaluation/'. $stage->id)}}">   View
-                                        </td>
-                                        <td> 
-                                          
-                                            {{ date("Y-m-d",strtotime($stage->created_at)) }}
-                                        </td>
-                                        <td> 
-                                            <form method="POST">
-                                           @if($stage->valider == 1)
-                                           <span class="label label-sm label-success"> <a href="{{url('/admin/stages/0/'. $stage->id)}}">  Valider </a> </span>
-                                           @else
-                                           <span class="label label-sm label-danger"> <a href="{{url('/admin/stages/1/'. $stage->id)}}">  Refuser </a> </span>
-                                           @endif
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                              
-                            </tbody>
-                        </table>
+						<div id="childList"></div>
                 	</div>
+
+
+
+
+
 	            </div>
 	         </div>
 	    </div>
 	</div>
 </section>
 
+
+
 @endsection
-@section("footer_scripts") 
+@section("footer_scripts")
 
     <script src="{{asset('assets/admin/vendors/datatables/datatable.js')}}" type="text/javascript"></script>
     <script src="{{asset('assets/admin/vendors/datatables/datatables.min.js')}}" type="text/javascript"></script>
 	<script src="{{asset('assets/admin/vendors/datatables/plugins/bootstrap/datatables.bootstrap.js')}}" type="text/javascript"></script>
+	<script src="{{asset('assets/admin/vendors/datatables/pipeline.js')}}" type="text/javascript"></script>
+
 	<script src="{{asset('assets/admin/vendors/bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}" type="text/javascript"></script>
 
     <script type="text/javascript" src="{{asset('assets/admin/vendors/countUp/countUp.js')}}"></script>
@@ -126,8 +143,26 @@ Stage
 	<script src="{{asset('assets/admin/vendors/bootbox/bootbox.min.js')}}" type="text/javascript"></script>
 	<script src="{{asset('assets/admin/js/pages/components-date-time-pickers.js')}}" type="text/javascript"></script>
 	<script src="{{asset('assets/admin/vendors/select2/select2.min.js')}}" type="text/javascript"></script>
+    @include('admin.valid_in_courses_special.js.index_js')
 
 
+<script type="text/javascript">
+    $('.valid_stage').on('change', function() {
+    	alert('test')
+        $('#label_stage').html($(".valid_stage option:selected").text());
+        $('#modal_stage').modal('show');
+    });
 
-@endsection
+    $('#save_valid').on('click', function() {
+		alert('test')
+        var lang =$('#lang').val() ;
+        url = "{{route('add.student.lang',['lang'=>':lang','user'=>Auth::id()])}}";
+        url = url.replace(':lang', lang);
  
+        window.location.href= url ;
+
+    });
+
+    $('.select2').select2();
+</script>
+@endsection

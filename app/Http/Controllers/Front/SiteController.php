@@ -146,6 +146,7 @@ class SiteController extends Controller
 
     public function getPage($slug)
     {
+        
         $page = Page::join("pages_translations", "pages_translations.page_id", "=", "pages.id")
             ->where("pages_translations.slug", $slug)->first(["pages.*"]);
             
@@ -235,7 +236,8 @@ class SiteController extends Controller
             $studentCertificates = $studentCertificates->where("course_id", $course_id);
         }
         $studentCertificates = $studentCertificates->skip($request->start)->take($request->length)
-            ->orderBy("created_at", "desc")->get();
+            ->orderBy("created_at", "desc")->get()->unique('student_id');
+
         $current = $request->start;
 
 
@@ -248,7 +250,7 @@ class SiteController extends Controller
                 foreach ($users_r as $user) {
                     array_push($users, $user->id);
                 }
-                $studentCertificates = StudentCertificate::whereIn('student_id', $students)->whereIn('student_id', $users)->get();
+                $studentCertificates = StudentCertificate::whereIn('student_id', $students)->whereIn('student_id', $users)->get()->unique('student_id');
             }
         }
 

@@ -27,7 +27,7 @@
                 $student_name = ucwords(strtolower($studentCertificate->student->user->full_name_en));
             ?>
             <tr>
-                <td class="sorting_1">{{ $studentCertificate->student->user->id }}</td>
+                <td class="sorting_1">{{ $studentCertificate->id }}</td>
                 <td class="sorting_1">{{ $studentCertificate->serialnumber }}</td>
                 <td> {{$student_name}}</td>
                 <td>
@@ -44,6 +44,7 @@
 
     </table>
 </div>
+<h1>{{$to}}</h1>
  <div class="dataTables_paginate">
 
     <a class="paginate_button first disabled" data-start="0" onclick="paginate(this)">الاول</a>
@@ -68,6 +69,7 @@
 
         }
     ?>
+
     @for($i=$from;$i<=$to;$i++)
         <span><a class="paginate_button {{ $current==($i-1)*40?'current':null }}" data-start="{{ ($i-1)*40 }}" onclick="paginate(this)">{{$i}}</a></span>
     @endfor

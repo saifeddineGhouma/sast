@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use DB ;
+use App\User ;
 class StudentStage extends Model
 {
     protected $table = "students_stage";
@@ -79,7 +80,20 @@ class StudentStage extends Model
 
      public static function search($request)
     {
-        $query = self::filter($request);
+        $query = self::select('*');
+
+        if(isset($request->course_id))
+          $query=  $query->where('course_id',$request->course_id);
+        if(isset($request->student_id))
+          {
+            $IDstudents = User::where('full_name_ar','like','%'.$request->student_id.'%')
+                                ->orWhere('full_name_en','like','%'.$request->student_id.'%')
+                                ->orWhere('username','like','%'.$request->student_id.'%')
+                                ->orWhere('email','like','%'.$request->student_id.'%')
+                                ->pluck('id');
+            $query=  $query->whereIn('user_id',$IDstudents)    ; 
+          } 
+       
         return $query;
     }
 

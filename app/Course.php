@@ -260,7 +260,12 @@ class Course extends Model
     {
         return $this->hasMany("App\StudentCertificate", "course_id");
     }
- public function students_stage()
+    public function courses_special()
+    {
+        return $this->hasMany("App\CourseSpecial", "course_id");
+    }
+
+    public function students_stage()
     {
         return $this->hasMany("App\StudentStage", "course_id");
     }
@@ -822,6 +827,11 @@ class Course extends Model
                  
             }
 
+            if(!$this->ValidCoursSpecial($student->id))
+            {
+                return false ;
+            }
+
 
         } else {
            return  false;
@@ -1144,4 +1154,27 @@ class Course extends Model
             return true ;
            }
      }
+
+     public function isSpecial()
+    {
+        if(isset($this->special) && $this->special )
+          return true ;
+        return false ;
+    }
+   private function ValidCoursSpecial($user_id=null)
+   {
+
+    if($this->isSpecial())
+    {
+        $query = $this->courses_special()->where('student_id',$user_id)->first();
+          if(!empty($query) && $query->status=="success")
+            return true ;
+          return false ;
+
+
+    }
+    return true ;
+
+
+   }
 }

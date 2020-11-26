@@ -441,7 +441,7 @@ class ordersController extends Controller
 				   $orderOnlinePayment->engaged = null;
 				   if(!empty($orderproduct->course_id)){
 					   $user = Auth::user();
-					   $user->student->students_certificates->where('course_id', $orderproduct->course_id)->where('active',0)->update(['active' => 1])
+					   $user->student->students_certificates->where('course_id', $orderproduct->course_id)->where('active',0)->update(['active' => 1]);
 					}
 
 			  }

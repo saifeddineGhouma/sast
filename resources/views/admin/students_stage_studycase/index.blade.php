@@ -59,24 +59,23 @@
 	                </div>
 
 					<div class="well table-toolbar">
-						<form   action="{{route('students.stage')}}" method="get">
+						<form id="search_form" name="search_form" method="get">
 							<div class="row">
 								<div class="col-md-4 col-sm-4">
 									<div class="form-group">
 										<label class="control-label bold">Student</label>
-										<select name="student_id" class="form-control select2">
-											<option value=""></option>
-											@foreach($students as $student)
-												<option value="{{$student->id}}">{{$student->user->full_name_en}}</option>
-											@endforeach
-										</select>
+										<input name="student_id" class="form-control" placeholder="email or name ar / en or username ">
+											
+										
 									</div>
+									
 								</div>
+							
 								<div class="col-md-4 col-sm-4">
 									<div class="form-group">
 										<label class="control-label bold">Course</label>
 										<select  name="course_id" class="form-control select2">
-											<option value=""></option>
+											<option value="">selected</option>
                                             @foreach($courses as $course)
 												<option value="{{$course->id}}">{{$course->course_trans("ar")->name}}</option>
 											@endforeach
@@ -84,18 +83,7 @@
 									</div>
 								</div>
 
-								<div class="col-md-4 col-sm-4">
-									<div class="form-group">
-										<label class="control-label bold">Type</label>
-										<select  name="types" class="form-control select2" id="stageOrstudycase"  onchange="location = this.value;">
-											<option>selected Type </option>
-											<option value="{{route('students.stage')}}" {{(\Request::route()->getName()=='students.stage')?'selected':''}}>Stage</option>
-											<option value="{{route('students.studycase')}}" {{(\Request::route()->getName()=='students.studycase')?'selected':''}}>Study Case</option>
-										</select>
-
-								      
-									</div>
-								</div>
+						
 							</div>
 							<div class="row">
 								
@@ -106,7 +94,7 @@
 									</div>
 								</div>
 								<div class="col-md-4">
-									<button type="submit" name='search'id="filterBtn" class="btn green demo-loading-btn col-md-6" style="margin-top: 25px;" data-loading-text="<li class='fa fa-search'></li> Searching...">
+									<button type="button" name='search'id="filterBtn" class="btn green demo-loading-btn col-md-6" style="margin-top: 25px;" data-loading-text="<li class='fa fa-search'></li> Searching...">
 										<li class="fa fa-search"></li> Search 
 									</button>
 								</div>
@@ -124,126 +112,10 @@
 
 	                    </div>
 	                </div>
-
-
-	                <div id="reloaddiv" class="block_stage" >
-						<table class="table table-striped table-bordered" id="table1">
-							<thead>
-							<tr>
-								<th>Username</th>
-								<th>Email</th>
-								<th>Course </th>
-								<th>Demande de stage</th>
-								<th>Evaluation de stage</th>
-								<th>Status</th>
-								<th class="text-center"> Date added </th>
-								<th > Actions </th>
-							</tr>
-							</thead>
-							<tbody>
-								@foreach($stages as $stage)
-								<tr>
-									<td>{{$stage->user->full_name_en}}</td>
-									<td>{{$stage->user->email}}</td>
-									<td>{{$stage->course->course_trans('ar')->name}}</td>
-									<td>
-									   @foreach($stage->user->user_stage as $stage_user)
-                                              
-                                               <a href="{{asset('uploads/kcfinder/upload/image/stage/'.$stage_user->demande_stage)}}" target="_blank">
-											
-											 stage   
-
-									        	</a> <br/>
-
-										@endforeach
-									
-										
-
-										</td>
-										<td>
-										
-										
-										 @foreach($stage->user->user_stage as $stage_user)
-                                              
-                                               <a href="{{asset('uploads/kcfinder/upload/image/stage/'.$stage_user->evaluation_stage)}}" target="_blank">
-											
-											 Evalution de stage 
-
-									        	</a> <br/>
-
-										@endforeach
-
-										</td>
-								
-								
-									<td> 
-										@php 
-									
-										if($stage->valider==1)
-										{
-											$badge='success';
-											$status='Valid' ;
-										}elseif($stage->valider==0){
-										    $badge='info';
-										    $status='EnCours';
-
-
-									}else{
-									        $badge='danger';
-										    $status='Invalid';
-
-								}
-										
-										
-
-										@endphp
-										
-											
-										
-										<span class="badge badge-{{$badge}}">{{$status}}</span>
-
-									</td>
-										<td>{{\Carbon\Carbon::parse($stage->created_at)->format('m-d-Y')}}</td>
-									<td>
-								@php 
-									
-										if($stage->valider==1)
-										{
-											$badge='success';
-											$status='Valid' ;
-										}elseif($stage->valider==0){
-										    $badge='info';
-										    $status='EnCours';
-
-
-									}else{
-									        $badge='danger';
-										    $status='Invalid';
-
-								}
-										
-										
-
-										@endphp
-										
-											
-
-												<a href="{{route('students.stage.edit',$stage->id)}}">
-                        <i class="livicon" data-name="edit" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="edit student stage"></i>
-					</a>
-										
-										
-									</td>
-
-								</tr>
-
-								@endforeach
-
-
-							</tbody>
-						</table>
-						{{ $stages->links() }}
+	                <div id="reloaddiv">
+						<div id="childList"></div>
                 	</div>
+
 
 
 
@@ -290,6 +162,7 @@
 	<script src="{{asset('assets/admin/vendors/bootbox/bootbox.min.js')}}" type="text/javascript"></script>
 	<script src="{{asset('assets/admin/js/pages/components-date-time-pickers.js')}}" type="text/javascript"></script>
 	<script src="{{asset('assets/admin/vendors/select2/select2.min.js')}}" type="text/javascript"></script>
+    @include('admin.students_stage_studycase.js.index_stage_js')
 
 
 <script type="text/javascript">

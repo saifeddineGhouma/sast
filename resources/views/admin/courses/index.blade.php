@@ -116,7 +116,7 @@
 									</div>
 								</div>
 								<div class="col-md-4">
-									<button type="submit" id="filterBtn" class="btn green demo-loading-btn col-md-6" style="margin-top: 25px;" data-loading-text="<li class='fa fa-search'></li> Searching...">
+									<button type="z" id="filterBtn" class="btn green demo-loading-btn col-md-6" style="margin-top: 25px;" data-loading-text="<li class='fa fa-search'></li> Searching...">
 										<li class="fa fa-search"></li> search
 									</button>
 								</div>

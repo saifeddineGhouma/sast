@@ -33,7 +33,7 @@ use Notification;
 use App\Log;
 use App\Sujet;
 use App\StudentStudyCase;
-
+use App\CourseSpecial ;
 use App\Notifications\UserQuiz;
 
 include "assets/I18N/Arabic.php";
@@ -79,7 +79,25 @@ class CoursesController extends Controller
             $sujet = Sujet::orderByRaw("RAND()")->where('lang',Auth::user()->lang())->first();
 
         } 
+
+        ///  verif course special 
 		
+        if($course->isRegistered()  && $course->isSpecial())
+        {
+            $student_id= auth()->id();
+            $VerifStudentInCourse= $course->courses_special()->where('student_id',$student_id)->first();
+            
+             if(empty($VerifStudentInCourse))
+             {
+                $course_special = new CourseSpecial();
+                $course_special->course_id= $course->id ;
+                 $course_special->student_id= $student_id ;
+                  $course_special->status= "waiting" ;
+                   $course_special->save();
+
+             }
+
+        }
 		
        
         $topCourseTypes = CourseType::join("courses", "courses.id", "=", "course_types.course_id")

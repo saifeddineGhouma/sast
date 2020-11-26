@@ -24,6 +24,7 @@ class CategoriesController extends Controller
 	private $numCourses = 12;
 	
 	public function getView($slug){
+        
 		
         $type="category";
         $category=null;

@@ -279,6 +279,7 @@ Route::group([
     /****stage and study case *****/
     Route::get('students-stages','studentsexamsController@indexStage')->name('students.stage') ;
     Route::get('students-studycase','studentsexamsController@indexStudycase')->name('students.studycase') ;
+    Route::get('stages/listing', 'studentsexamsController@listingstage')->name('stages.listing');
 
     Route::get('students-studycase-edit/{id}','studentsexamsController@editstudycase')->name('students.studycase.edit');
 	Route::get('students-stage-edit/{id}','studentsexamsController@editstage')->name('students.stage.edit');
@@ -286,8 +287,14 @@ Route::group([
     /********update*******/
     Route::post('students-stage-update/{id}','studentsexamsController@EditStatusStage')->name('students.stage.update') ;
     Route::post('students-studycase-update/{id}','studentsexamsController@EditStatusStudycase')->name('students.studycase.update') ;
+   /*************course special*************/
+   Route::get('courses_special','CourseSpecialController@index')->name('courses_special.index');
+   Route::get('courses_special/listing', 'CourseSpecialController@listing');
+   Route::get('courses_special-edit/{id}','CourseSpecialController@edit')->name('courses_special.edit');
+    Route::post('courses_special-update/{id}','CourseSpecialController@update')->name('courses_special.update');
 
-     
+
+
     Route::get('/testimonials', 'testimonialsController@getIndex');
     Route::get('/testimonials/create', 'testimonialsController@getCreate');
     Route::post('/testimonials/create', 'testimonialsController@postCreate');

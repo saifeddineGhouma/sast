@@ -72,15 +72,7 @@ class studentsexamsController extends Controller
 
         $query       = StudentStage::where('user_id', '>' ,0);
         
-        if(!empty($request->student_id)){
-            $query = $query->where('user_id', $request->student_id);
-        }
-        if(!empty($request->course_id)){
-            $query = $query->where('course_id', $request->course_id);
-        }
-        if(!empty($request->created_at)){
-            $query = $query->where('created_at', '>' ,$request->course_id);
-        }
+   
 
         $students    = Student::orderBy("id", "desc")->get();
         $courses     = Course::get();
@@ -92,7 +84,18 @@ class studentsexamsController extends Controller
         ));
     }
     
+
+    public function listingstage(Request $request)
+    {
+        $stages = StudentStage::search($request)->get();
+        return view('admin.students_stage_studycase.list',compact('stages'));
+
+    }
+
+       
+
         public function indexStudycase(Request $request)
+    
     {
     
         $query       = StudentStudyCase::where('id', '>' ,0);
@@ -400,7 +403,7 @@ class studentsexamsController extends Controller
     }
    public function EditStatusStage(Request $request,$id)
    {
- $message ="" ;
+        $message ="" ;
 
         $studentsatge= StudentStage::findOrFail($id);
         $studentsatge->valider=1 ;
