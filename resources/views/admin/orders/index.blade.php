@@ -65,7 +65,7 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="control-label bold">Course</label>
-                                            <select name="course_id" class="form-control">
+                                            <select name="course_id" class="form-control select2">
                                                 <option value="0">Choose...</option>
                                                 @foreach($courses as $course)
                                                     <option value="{{$course['id']}}">{{$course->course_trans("ar")->name}}</option>

@@ -3,10 +3,12 @@
 
 function paginate(btn){
     btn = $(btn);
+    console.log(btn)
     var current = $("input[name='start']").val();
     var start = btn.data("start");
     if(start!=current){
         $("input[name='start']").val(start);
+        //  console.log(start,current)
         formFilter();
     }
 
@@ -30,10 +32,12 @@ function formFilter(){
 //			 $("#content_loading").modal("show");
 		},
 		success: function(result){
-      console.log(result);
+     
 			result = $.parseJSON(result);
         	var output = result[0];
     	 	output = output.replace(/\\"/g , '"');
+
+
     	 					
 			$("#graduates_content").html(output);
 		},

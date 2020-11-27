@@ -71,9 +71,10 @@
     ?>
 
     @for($i=$from;$i<=$to;$i++)
-      
-       
-        <span><a class="paginate_button {{ $current==($i-1)*40?'current':null }}" data-start="{{ ($i-1)*40 }}" onclick="paginate(this)">{{$i}}--{{$current}}</a></span>
+      @if($numPages > 0)
+             
+        <span><a class="paginate_button {{ $current==($i-1)*40?'current':null }}" data-start="{{ ($i-1)*40 }}" onclick="paginate(this)">{{$i}}--{{$numPages}}</a></span>
+        @endif
 
         
     @endfor
