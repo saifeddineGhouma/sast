@@ -183,7 +183,21 @@ class CourseSpecialController extends Controller
        return back() ;
 
     }
+       
 
+       public function delete($id)
+       {
+
+          $course_special = CourseSpecial::find($id);
+          if(!empty($course_special))
+           {
+            $course_special->delete();
+            return response()->json(['message'=>'success']);
+           } 
+            return response()->json(['message'=>'failed']);
+
+
+       }
 
 
 

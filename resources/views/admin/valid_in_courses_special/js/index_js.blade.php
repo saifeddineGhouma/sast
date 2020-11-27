@@ -1,5 +1,9 @@
 
 <script type="text/javascript">
+$(".remove").click(function(){
+   alert('test')
+     
+    });
 
     $(document).ready(function(){
          
@@ -20,8 +24,53 @@
 };
 formFilter()
 
-});
 
+});
+function confirmDelete(id)
+{
+              var csrf_token=$('meta[name="csrf_token"]').attr('content');
+
+            swal({
+               title: "Are you sure?",
+                text: "You will not be able to recover this imaginary file!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel plx!",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            })
+            .then((willDelete) => {
+                if (typeof willDelete.dismiss == "undefined" ||willDelete.dismiss == null) {
+                    
+                    $.ajax({
+                        url : "{{ url('admin/courses_special-delete')}}" + '/' + id,
+                        type : "POST",
+                        data : {'_method' : 'DELETE', '_token': '{{csrf_token()}}'},
+                        success: function(data){
+                            
+                           swal({
+                                title: "It was deleted!",
+                                type: "success",
+                                confirmButtonText: "Ok!",
+                                });
+                           formFilter();
+                        },
+                        error : function(){
+                            swal({
+                                title: 'Opps...',
+                                text : data.message,
+                                type : 'error',
+                                timer : '1500'
+                            })
+                        }
+                    })
+                } else {
+                swal("Your imaginary file is safe!");
+                }
+            });
+}
 function formFilter(/*e*/){
 
 
@@ -59,7 +108,7 @@ function formFilter(/*e*/){
         },
         success: function(result){
 
-            console.log(result)
+          
             $("#childList").html(result);
             $('#table1').DataTable(options);
            

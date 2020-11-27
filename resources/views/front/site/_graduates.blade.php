@@ -1,6 +1,6 @@
 @php $dir = session()->get('locale') === "ar" ? "rtl" : "ltr" @endphp
 <div class="table-responsive">
-    <table class="table-bordered text-center graduates-table" style="width: 100%;" dir = "{{ $dir }}">
+    <table class="table-bordered text-center graduates-table" id="table1" style="width: 100%;" dir = "{{ $dir }}">
 
         <thead>
         <tr role="row">
@@ -44,7 +44,7 @@
 
     </table>
 </div>
-<h1>{{$to}}</h1>
+
  <div class="dataTables_paginate">
 
     <a class="paginate_button first disabled" data-start="0" onclick="paginate(this)">الاول</a>
@@ -71,7 +71,11 @@
     ?>
 
     @for($i=$from;$i<=$to;$i++)
-        <span><a class="paginate_button {{ $current==($i-1)*40?'current':null }}" data-start="{{ ($i-1)*40 }}" onclick="paginate(this)">{{$i}}</a></span>
+      
+       
+        <span><a class="paginate_button {{ $current==($i-1)*40?'current':null }}" data-start="{{ ($i-1)*40 }}" onclick="paginate(this)">{{$i}}--{{$current}}</a></span>
+
+        
     @endfor
     <a class="paginate_button last disabled" data-start="{{ $numPages*40-40 }}" onclick="paginate(this)">الاخير</a>
 </div> 

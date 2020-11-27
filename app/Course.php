@@ -284,6 +284,7 @@ class Course extends Model
  /*open course*/
     public function isRegistered($user = null)
     {
+        
         $isRegistered = false;
         if (is_null($user)) {
             $user = Auth::user();

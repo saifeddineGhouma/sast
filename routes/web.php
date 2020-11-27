@@ -292,7 +292,7 @@ Route::group([
    Route::get('courses_special/listing', 'CourseSpecialController@listing');
    Route::get('courses_special-edit/{id}','CourseSpecialController@edit')->name('courses_special.edit');
     Route::post('courses_special-update/{id}','CourseSpecialController@update')->name('courses_special.update');
-
+    Route::delete('courses_special-delete/{id}','CourseSpecialController@delete')->name('courses_special.delete');
 
 
     Route::get('/testimonials', 'testimonialsController@getIndex');
