@@ -183,7 +183,16 @@
                                             }
                                             ?>
                                             <a href="{{ $url }}"> 
-                                                {!! $product_details !!}
+                                                 @if(!empty($orderproduct->getNameCourse()))
+
+                                                    {{$orderproduct->getNameCourse()}}
+
+                                                 @else
+                                                   {!! $product_details !!}
+
+                                                 @endif
+                                              
+
                                             </a> 
                                         </td>
                                         <td>

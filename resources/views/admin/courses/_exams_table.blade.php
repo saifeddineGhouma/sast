@@ -7,6 +7,9 @@
             @if($from_section=="exam")
                 <td>attempts <br/>(zero no limits)</td>
             @endif
+            @if($from_section=="exam")
+                <td>date start</td>
+            @endif
             <td></td>
         </tr>
         </thead>
@@ -43,6 +46,11 @@
                 @if($from_section=="exam")
                     <td>
                         <input type="number" class="form-control" name="{{$name}}_attempts_{{$course_quiz->id}}" value="{{$course_quiz->attempts}}">
+                    </td>
+                @endif
+                  @if($from_section=="exam")
+                    <td>
+                        <input type="date" class="form-control datepicker" name="{{$name}}_date_start_{{$course_quiz->id}}" value="{{$course_quiz->date_start}}">
                     </td>
                 @endif
 
@@ -111,7 +119,12 @@
                 '<td>'+
                     '<input type="number" class="form-control" name="{{$name}}s['+id+'][attempts]">'+
                 ' </td>'+
+                '<td>'+
+                    '<input type="date" class="form-control datepicker" name="courses['+id+'][date_start]">'+
+                    
+                ' </td>'+
             @endif
+           
 
             '<td class="text-left"><button type="button" onclick="$(\'#{{$from_section}}-row'+id+'\').remove();" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Remove"><i class="fa fa-minus-circle"></i></button></td>'+
             '</tr> ';

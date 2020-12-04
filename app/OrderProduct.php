@@ -71,5 +71,19 @@ class OrderProduct extends Model
 
         return $isPaid;
     }
+
+
+    public function   getNameCourse()
+    {
+        if(!empty($this->course->students_certificates))
+        {
+                    $query = $this->course->students_certificates ;
+
+            if(($query->where('student_id',auth()->id())->count())>0)
+            return $query->where('student_id',auth()->id())->first()->course_name ;
+        return null ;
+        }
+        return null ;
+    }
 	
 }

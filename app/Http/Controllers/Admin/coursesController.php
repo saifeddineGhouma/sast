@@ -361,6 +361,11 @@ class coursesController extends Controller
                 else
                     $course_quiz->active = 0;
                 $course_quiz->attempts = $request->get("course_attempts_".$course_quiz->id);
+                if($request->get("course_date_start_".$course_quiz->id))
+                    $course_quiz->date_start = $request->get("course_date_start_".$course_quiz->id);
+                else
+                   $course_quiz->date_start = null ;  
+               
                 $course_quiz->update();
 				
 				$course_trans_ar = $course->course_trans("ar");
@@ -397,6 +402,11 @@ class coursesController extends Controller
                             $course_quiz->active = 0;
                         if(isset($courseQ["attempts"]))
                             $course_quiz->attempts = $courseQ["attempts"];
+                        if(isset($courseQ["date_start"]))
+                            $course_quiz->date_start = $courseQ["date_start"];
+
+
+                        
                         $course_quiz->save();
 				
 						$course_trans_ar = $course->course_trans("ar");

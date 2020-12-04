@@ -32,6 +32,7 @@ function formFilter(){
 //			 $("#content_loading").modal("show");
 		},
 		success: function(result){
+      
      
 			result = $.parseJSON(result);
         	var output = result[0];

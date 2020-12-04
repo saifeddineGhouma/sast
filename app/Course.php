@@ -922,7 +922,24 @@ class Course extends Model
         }
            return null;
     }
+    public function validDate($quiz)
+    {
+        $query = $this->courses_quizzes()->where("quiz_id", $quiz->id) ; 
+        
+          if(!empty($query->get()) && isset($query->first()->date_start) )
+          {
+            
 
+             $query=  $query->where('date_start','<=',date('Y-m-d'))->get() ;
+              if($query->count()>0)
+                return true  ;
+              else
+                return  false ;
+          
+          }
+
+          return   true  ;
+    }
     public function validQuizAttempts($quiz)
     {
         $isValid = true;
@@ -1030,10 +1047,20 @@ class Course extends Model
         if ($isRegistered) {
             if ($type != "exam" || ($type == "exam" && $this->isTotalPaid())) {
 
-                if ($type != "exam" || ($type == "exam" && $this->isFinishedQuizzes())) {
+                if ($type != "exam" || ($type == "exam" && $this->isFinishedQuizzes()  && $this->validDate($this->quizzes->where('is_exam',1)->first()))) {
                     $isValid = true;
                 } else {
-                    $messageValid = ' <p class="failed">للابد من إتمام جميع الكويزات لإتمام الاختبار النهائي  </p>';
+                          if(!$this->validDate($this->quizzes->where('is_exam',1)->first()))
+                          {
+                            $quiz_id=$this->quizzes->where('is_exam',1)->first()->id ;
+                            $date = $this->courses_quizzes()->where('quiz_id',$quiz_id)->first()->date_start ;
+                            $messageValid = '<p class="failed"> يفتح الاختبار   في </p>'.$date ;
+                               
+                          }else
+                          {
+                            $messageValid = ' <p class="failed">للابد من إتمام جميع الكويزات لإتمام الاختبار النهائي  </p>';
+                          }
+                    
                 }
             } else {
                 $messageValid = '<p class="failed">برجاء إكمال باقي الأقساط لأداء الاختبار النهائي</p>';

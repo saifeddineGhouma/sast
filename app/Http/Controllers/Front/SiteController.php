@@ -259,7 +259,7 @@ class SiteController extends Controller
 
 
         $view = view('front.site._graduates', [
-            "studentCertificates" => $studentCertificates, "numPages" => $numPages,
+            "studentCertificates" => $studentCertificates, "numPages" => $numPages,'count'=>$studentCertificates->count(),
             "current" => $current, "nbrs" => $recordsTotal
         ]);
         $result = array();

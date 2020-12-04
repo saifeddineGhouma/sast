@@ -184,7 +184,17 @@
                                             }
                                             ?>
                                             <a href="<?php echo e($url); ?>"> 
-                                                <?php echo $product_details; ?>
+                                                 <?php if(!empty($orderproduct->getNameCourse())): ?>
+
+                                                    <?php echo e($orderproduct->getNameCourse()); ?>
+
+
+                                                 <?php else: ?>
+                                                   <?php echo $product_details; ?>
+
+
+                                                 <?php endif; ?>
+                                              
 
                                             </a> 
                                         </td>

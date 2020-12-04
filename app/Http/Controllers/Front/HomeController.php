@@ -321,6 +321,9 @@ class HomeController extends Controller
 		return response()->download('uploads/kcfinder/upload/image/stage/جدول تقييم المتدرب.pdf');
 	}
 
+
+	
+
 	public function getPayment(){        
             $checkout = session()->get('checkout'); 
 			$user = Auth::user();

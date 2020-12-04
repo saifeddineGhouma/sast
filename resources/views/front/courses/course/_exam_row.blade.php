@@ -102,11 +102,13 @@
                     $validAttempts  = $course->validQuizAttempts($quiz);
                      
                     $expired        = $exam->isExpired($course);
+                    $date_open =$course->validDate($quiz) ;
+
 
                 }
 
             ?>
-
+           
             @if($validAttempts) 
 
                 @if(!$expired)
