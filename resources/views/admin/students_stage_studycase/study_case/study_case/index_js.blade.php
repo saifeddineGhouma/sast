@@ -41,16 +41,12 @@ function formFilter(/*e*/){
     "order": [ 0, "desc" ],
 };
 
-
-
-
-   // e.preventDefault();
     var data = $('#search_form').serializeArray();
     var trashed = $("input[name='trashed']").is(":checked");
     data.push({trashed: trashed});
 
     $.ajax({
-        url: "{{ url('admin/stages/listing/') }}" ,
+        url: "{{ route('studycase.listing') }}" ,
         type: "GET",
         data: data,
         beforeSend: function(){
@@ -58,7 +54,6 @@ function formFilter(/*e*/){
         },
         success: function(result){
 
-            console.log(result)
             $("#childList").html(result);
             $('#table1').DataTable(options);
            
@@ -73,6 +68,7 @@ function formFilter(/*e*/){
 };
 //$("#search_form").onClick("submit",formFilter());
 $("#filterBtn").click(function(){
+   
     formFilter()
 })
 //$("#search_form").submit();

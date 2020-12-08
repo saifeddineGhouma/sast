@@ -92,9 +92,14 @@ class studentsexamsController extends Controller
 
     }
 
-       
+    public function listingstudycase(Request $request)
+        {
+            $study_cases = StudentStudyCase::search($request)->get();
+            return view('admin.students_stage_studycase.study_case.list',compact('study_cases'));
 
-        public function indexStudycase(Request $request)
+        } 
+
+    public function indexStudycase(Request $request)
     
     {
     

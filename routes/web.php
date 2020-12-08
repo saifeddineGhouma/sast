@@ -283,6 +283,7 @@ Route::group([
 
     Route::get('students-studycase-edit/{id}','studentsexamsController@editstudycase')->name('students.studycase.edit');
 	Route::get('students-stage-edit/{id}','studentsexamsController@editstage')->name('students.stage.edit');
+    Route::get('students-studycase/listing', 'studentsexamsController@listingstudycase')->name('studycase.listing');
 
     /********update*******/
     Route::post('students-stage-update/{id}','studentsexamsController@EditStatusStage')->name('students.stage.update') ;

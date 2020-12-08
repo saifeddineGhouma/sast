@@ -72,24 +72,20 @@
 	                </div>
 
 					<div class="well table-toolbar">
-						<form   action="{{route('students.studycase')}}" method="get">
+						<form id="search_form" name="search_form" method="get">
 							<div class="row">
 								<div class="col-md-4 col-sm-4">
 									<div class="form-group">
 										<label class="control-label bold">Student</label>
-										<select name="student_id" class="form-control select2">
-											<option value="0"></option>
-											@foreach($students as $student)
-												<option value="{{$student->id}}">{{$student->user->full_name_en}}</option>
-											@endforeach
-										</select>
+										<input name="student_id" class="form-control" placeholder="email or name ar / en or username ">
+										   
 									</div>
 								</div>
 								<div class="col-md-4 col-sm-4">
 									<div class="form-group">
 										<label class="control-label bold">Course</label>
 										<select  name="course_id" class="form-control select2">
-											<option value="0"></option>
+												<option value="">selected</option>
                                             @foreach($courses as $course)
 												<option value="{{$course->id}}">{{$course->course_trans("ar")->name}}</option>
 											@endforeach
@@ -97,18 +93,7 @@
 									</div>
 								</div>
 
-								<div class="col-md-4 col-sm-4">
-									<div class="form-group">
-										<label class="control-label bold">Type</label>
-										<select  name="types" class="form-control" id="stageOrstudycase"  onchange="location = this.value;">
-											<option>selected Type </option>
-											<option value="{{route('students.stage')}}" {{(\Request::route()->getName()=='students.stage')?'selected':''}}>Stage</option>
-											<option value="{{route('students.studycase')}}" {{(\Request::route()->getName()=='students.studycase')?'selected':''}}>Study Case</option>
-										</select>
-
-								      
-									</div>
-								</div>
+							
 							</div>
 							<div class="row">
 								
@@ -131,8 +116,8 @@
 
 
 
-				<div id="reloaddiv" >
-					
+					<div id="reloaddiv" >
+						<div id="childList"></div>
 						
                 	</div>
 	         </div>
@@ -140,26 +125,9 @@
 	</div>
 </section>
 
-<div class="modal fade" id="modal_stage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Valid stage </h5>
-        <p> vailid = <span class="label_stage"></span></p>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="save_valid">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
+    @include('admin.students_stage_studycase.study_case.study_case.index_js')
+
+
 
 @endsection
 @section("footer_scripts")

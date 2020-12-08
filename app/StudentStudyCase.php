@@ -51,8 +51,24 @@ class StudentStudyCase extends Model
      */
     public static function search($request)
     {
-        $query = self::filter($request);
+
+           $query = self::select('*');
+
+        if(isset($request->course_id))
+          $query=  $query->where('course_id',$request->course_id);
+        if(isset($request->student_id))
+          {
+            
+            $IDstudents = User::where('full_name_ar','like','%'.$request->student_id.'%')
+                                ->orWhere('full_name_en','like','%'.$request->student_id.'%')
+                                ->orWhere('username','like','%'.$request->student_id.'%')
+                                ->orWhere('email','like','%'.$request->student_id.'%')
+                                ->pluck('id');
+            $query=  $query->whereIn('students_id',$IDstudents)    ; 
+          } 
+       
         return $query;
+
     }
   public function user()
     {

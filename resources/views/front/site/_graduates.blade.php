@@ -9,6 +9,7 @@
             <th class="text-center">@lang('navbar.nom')</th>
             <th class="text-center">@lang('navbar.nation')</th>
             <th class="text-center">@lang('navbar.datecertif') </th>
+            <th class="text-center">c </th>
             <th class="text-center">@lang('navbar.more')</th>
 
         </tr>
