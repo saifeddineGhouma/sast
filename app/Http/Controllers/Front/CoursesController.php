@@ -590,6 +590,7 @@ class CoursesController extends Controller
                            
 
                                         $certificate = $courseTypeVariation->certificate;
+
                                         if (!empty($certificate)) {
                                             $Arabic = new I18N_Arabic('Glyphs');
                                             $serialNumber = "";
@@ -668,7 +669,7 @@ class CoursesController extends Controller
 
 
 
-                //w
+                
                 if ($orderProduct == "") {
 
                     $orderProductt = DB::table('order_products')

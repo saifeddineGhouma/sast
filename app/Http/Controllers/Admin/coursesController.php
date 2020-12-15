@@ -40,7 +40,7 @@ use App\Notifications\OrderCreated;
 use App\CourseStudyCase ;
 use App\CourseStage ;
 use Notification;
-
+use Carbon\Carbon;
 use App\AdminHistory;
 use DB;
 use Excel;
@@ -1134,6 +1134,32 @@ class coursesController extends Controller
         return redirect()->back();
     }
 
+
+
+   public function activeFreeCourses()
+   {
+        $course_type_variation_ids = courseTypeVariation::where('price',0.00)->pluck('coursetype_id');
+        $course_ids = CourseType::whereIn('id',$course_type_variation_ids)->pluck('course_id') ;
+        $courses = Course::whereIn('id',$course_ids)->get();
+        foreach ($courses  as $key => $course) {
+              $today = Carbon::now();
+              $course_date = $course->updated_at ;
+              $difference = $course_date->diffInMonths($today,false);
+               if($difference >= 1 && $course->active ==1)
+                 {
+                     $course->active = 0 ;
+                     $course->update();
+                     if(!empty( $courses[$key+1]))
+                     {
+                        $courses[$key+1]->active = 1 ;
+                        $courses[$key+1]->update() ;
+                     }else{
+                        $courses[0]->active = 1 ;
+                        $courses[0]->update() ;
+                     }
+                 }
+        }
+   }
 	public function script(Request $request){
 		$course_ids = array(1 => 15, 2 => 265, 3 => 267, 4 => 272, 5 => 277, 6 => 283, 7 => 284, 7 => 288, 7 => 293, 7 => 297, 7 => 300, 7 => 302, 7 => 303, 7 => 324);
 		
