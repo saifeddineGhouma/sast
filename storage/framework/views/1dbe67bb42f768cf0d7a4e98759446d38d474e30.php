@@ -106,3 +106,5 @@ if(empty($setting_trans))
 	<p><?php echo app('translator')->getFromJson('navbar.footertext'); ?> </p>
 </div>
 <!-- End CopyRight -->
+
+

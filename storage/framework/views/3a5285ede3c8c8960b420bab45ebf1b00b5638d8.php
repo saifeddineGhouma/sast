@@ -72,7 +72,7 @@
                             <?php else: ?> 
                                 <div class="alert alert-warning alertweb"><i class="fa fa-exclamation-circle"></i>
                                     
-                                    <strong> ﻟﻠﺘﺴﺠﻴﻞ ﻓﻲ ﻫﺬﻩ اﻟﺪﻭﺭﺓ ﻳﺠﺐ عليك ادخال الرقم التسلسلي لشهادتك :  </strong><br> <br> 
+                                    <strong> ﻟﻠﺘﺴﺠﻴﻞ ﻓﻲ ﻫﺬﻩ اﻟﺪﻭﺭﺓ ﻳﺠﺐ عليك ادخال الرقم التسلسلي لشهادتك :  222222</strong><br> <br> 
                                     <input name="serial_number" required><br> <br>
                                     <button  onclick="location.href='<?php echo e(url(App('urlLang').'account')); ?>'">  تأكيد    </button> 
                                 </div>
@@ -207,14 +207,14 @@
                                   <?php if($user->user_verify->course_id == 505): ?>
 
                                     <?php if($user->user_verify->verify == 1): ?>
-                                      <button class="btn btn-primary btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" data-toggle="collapse" data-target="#change-search"><span style="margin-right: 10px;">  <?php echo e(floor($first_Variation->price+$vat)); ?>$ </span></button>        
+                                      <button class="btn btn-primary btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" data-toggle="collapse" data-target="#change-search"><span style="margin-right: 10px;">  <?php echo e(floor($first_Variation->price+$vat)); ?>$  </span></button>        
                                     <?php else: ?> 
-                                      <button class="btn btn-disabled btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" disabled="disabled"><span style="margin-right: 10px;"><?php echo e(floor($first_Variation->price+$vat)); ?>$</span></button>
+                                      <button class="btn btn-disabled btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" disabled="disabled"><span style="margin-right: 10px;"><?php echo e(floor($first_Variation->price+$vat)); ?>$ </span></button>
                                     <?php endif; ?>
 
                                   <?php else: ?>
                                         <?php if($course->id ==  505): ?>  
-                                            <button class="btn btn-disabled btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" disabled="disabled"><span style="margin-right: 10px;"><?php echo e(floor($first_Variation->price+$vat)); ?>$</span></button>
+                                            <button class="btn btn-disabled btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" disabled="disabled"><span style="margin-right: 10px;"><?php echo e(floor($first_Variation->price+$vat)); ?>$ </span></button>
                                         <?php endif; ?>
 
                                     
@@ -235,7 +235,7 @@
 
 
                     <?php else: ?>
-                    <button class="btn btn-disabled btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" disabled="disabled"><span style="margin-right: 10px;"><?php echo e(floor($first_Variation->price+$vat)); ?>$</span></button>
+                    <button class="btn btn-disabled btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" disabled="disabled"><span style="margin-right: 10px;"><?php echo e(floor($first_Variation->price+$vat)); ?>$ </span></button>
                     <?php endif; ?>
                     <?php endif; ?>
                 
@@ -420,19 +420,19 @@
                                                                   <?php echo e(floor(($courseTypeVariation->price + App('setting')->vat*$courseTypeVariation->price/100)/2)); ?>$
                                                                 <?php else: ?>
                                                                     <?php if($course->isPayCourseLevel2()): ?>  
-                                                                     <?php echo e(floor(($courseTypeVariation->price + App('setting')->vat*$courseTypeVariation->price/100)/2)); ?>$
+                                                                     <?php echo e(floor(($courseTypeVariation->price + App('setting')->vat*$courseTypeVariation->price/100)/2)); ?>$ 
                                                                      <?php else: ?>
                                                                         <?php if($course->isPayPackThree()): ?>  
-                                                                              <?php echo e(floor(($courseTypeVariation->price + App('setting')->vat*$courseTypeVariation->price/100)/2)); ?>$
+                                                                              <?php echo e(floor(($courseTypeVariation->price + App('setting')->vat*$courseTypeVariation->price/100)/2)); ?>$ 
                                                                          <?php else: ?>
-                                                                    <?php echo e(floor($courseTypeVariation->price + App('setting')->vat*$courseTypeVariation->price/100)); ?>$
+                                                                    <?php echo e(floor($courseTypeVariation->price + App('setting')->vat*$courseTypeVariation->price/100)); ?>$ 
                                                                          <?php endif; ?>
                                                                     <?php endif; ?>
                                                                 <?php endif; ?>
                                                             <?php else: ?>
                                                              
                                                                 
-                                                                <?php echo e(floor($courseTypeVariation->price + App('setting')->vat*$courseTypeVariation->price/100)); ?>$
+                                                                <?php echo e(floor($courseTypeVariation->price + App('setting')->vat*$courseTypeVariation->price/100)); ?>$ <!---edit_price --->
 
                                                             <?php endif; ?>
                                                         </span> 

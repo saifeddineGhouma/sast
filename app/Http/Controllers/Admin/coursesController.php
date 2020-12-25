@@ -924,11 +924,11 @@ class coursesController extends Controller
 
 //        echo '<option value="0">choose... </option>';
 
-        if(!$governments->isEmpty()){
-            foreach($governments as $government){
-                echo '<option value="'.$government->id.'">'.$government->government_trans("en")->name.'</option>';
+            if(!$governments->isEmpty()){
+                foreach($governments as $government){
+                    echo '<option value="'.$government->id.'">'.$government->government_trans("en")->name.'</option>';
+                }
             }
-        }
     }
 
     public function postMerge(Request $request){
@@ -1141,6 +1141,8 @@ class coursesController extends Controller
         $course_type_variation_ids = courseTypeVariation::where('price',0.00)->pluck('coursetype_id');
         $course_ids = CourseType::whereIn('id',$course_type_variation_ids)->pluck('course_id') ;
         $courses = Course::whereIn('id',$course_ids)->get();
+         dd($courses) ;
+        $courses_free =  Course::join('course_translations','','')
         foreach ($courses  as $key => $course) {
               $today = Carbon::now();
               $course_date = $course->updated_at ;

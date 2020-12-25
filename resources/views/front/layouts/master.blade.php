@@ -20,6 +20,7 @@
     <link rel="manifest" href="{{asset('assets/front/img/favicon/manifest.json')}}">
 	<link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
 
+
 	<meta name="msapplication-TileColor" content="#ffffff">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="msapplication-TileImage" content="{{asset('assets/front/img/favicon/ms-icon-144x144.png')}}">
@@ -99,6 +100,8 @@
 		<link rel="stylesheet" href="{{asset('assets/front/css/bootstrap-rtl.css')}}">
 	@endif
 	<link rel="stylesheet" href="{{asset('assets/front/css/jquery-ui.min.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/front/css/cockies.css')}}">
+
 	<link rel="stylesheet" href="{{asset('assets/front/css/font-awesome.min.css')}}">
 	<link rel="stylesheet" href="{{asset('assets/front/css/swiper.min.css')}}">
 	<link rel="stylesheet" href="{{asset('assets/front/css/style.css')}}">
@@ -110,6 +113,13 @@
 		#fc_widget{margin-top: 0px !important;}
 	</style>
 	<script id="mcjs">!function(c,h,i,m,p){m=c.createElement(h),p=c.getElementsByTagName(h)[0],m.async=1,m.src=i,p.parentNode.insertBefore(m,p)}(document,"script","https://chimpstatic.com/mcjs-connected/js/users/a1b68963b542466ee12238e90/8098f71e1e7a79453248389b3.js");</script>
+
+
+<!---------cockies------------>
+
+
+   
+  <!-------->
 </head>
 
 <body>
@@ -127,6 +137,17 @@
 	@yield("content")
 	@include("front.layouts._footer")
     
+
+
+
+<div class=’cookie-banner’ style=’display: none’>
+<p>
+    By using our website, you agree to our 
+    <a href=’insert-link’>cookie policy</a>
+  </p>
+<button class=’close’>&times;</button>
+</div>
+
 	<div id="content_loading" class="modal fade show" role="dialog"  style="display:none; padding-right: 17px;">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -166,6 +187,8 @@
 	<script src="{{asset('assets/front/js/bootstrap.min.js')}}" type="text/javascript"></script>
 	<script src="{{asset('assets/front/js/swiper.min.js')}}"></script>
 	<script src="{{asset('assets/front/js/script.js')}}"></script>
+  <script src="{{asset('assets/front/js/cookie.js')}}"></script>
+
 	<script src="{{ asset('/adminDash/vendors/sweetalert/sweetalert.min.js') }}"></script>
 	<script>
 	    // Set a variable for our button element.

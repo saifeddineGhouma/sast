@@ -147,7 +147,16 @@ $totalPrice = 0;
         <td><a href="<?php echo e(url(App('urlLang').'all-courses')); ?>" class="btn btn-warning pull-<?php echo e($back); ?>"><i class="fa fa-angle-<?php echo e($back); ?>"></i> <?php echo app('translator')->getFromJson('navbar.previous'); ?></a></td>
             <td colspan="2" class="hidden-xs"></td>
             <td class="hidden-xs text-center"><strong> <?php echo app('translator')->getFromJson('navbar.totalprice'); ?> <span class="pricenovat"><?php echo e($totalPrice); ?> $</span></strong></td>
+
+        <?php if(auth()->check()): ?>
         <td><a href="<?php echo e(url(App('urlLang').'checkout')); ?>" class="btn btn-success btn-block"><?php echo app('translator')->getFromJson('navbar.next'); ?> <i class="fa fa-angle-<?php echo e($next); ?>"></i></a></td>
+        <?php else: ?>
+          <td><a href="<?php echo e(url(App('urlLang').'checkout_anlogged')); ?>" class="btn btn-success btn-block"><?php echo app('translator')->getFromJson('navbar.next'); ?> <i class="fa fa-angle-<?php echo e($next); ?>"></i></a></td>
+
+        <?php endif; ?>
+
+
+
         </tr>
         </tfoot>
     <?php endif; ?>

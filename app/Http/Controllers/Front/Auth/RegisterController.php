@@ -11,7 +11,7 @@ use App\NewsletterSubscriber;
 use App\Notifications\UserConfirm;
 use App\Notifications\UserRegistered;
 use Notification;
-
+use Auth ;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 class RegisterController extends Controller
@@ -109,9 +109,14 @@ class RegisterController extends Controller
         $admins = \App\Admin::get();
         Notification::send($admins, new UserRegistered($user->id,$user->username));
         
-        $status = \App\Setting::sendSms($user);
+      // $status = \App\Setting::sendSms($user);
         $status = $this->sendEmail($user);
-        $user->notify(new UserConfirm($user));
+      //  $user->notify(new UserConfirm($user));
+           if(session()->has('cart'))
+            {
+                $this->redirectTo ="/cart" ;
+               
+            }
         return $user;
     }
 

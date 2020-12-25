@@ -75,7 +75,7 @@
                                     {{-- @if($errors->any())
                                     <h4>{{$errors->first()}}</h4>
                                     @endif --}}
-                                    <strong> ﻟﻠﺘﺴﺠﻴﻞ ﻓﻲ ﻫﺬﻩ اﻟﺪﻭﺭﺓ ﻳﺠﺐ عليك ادخال الرقم التسلسلي لشهادتك :  </strong><br> <br> 
+                                    <strong> ﻟﻠﺘﺴﺠﻴﻞ ﻓﻲ ﻫﺬﻩ اﻟﺪﻭﺭﺓ ﻳﺠﺐ عليك ادخال الرقم التسلسلي لشهادتك :  222222</strong><br> <br> 
                                     <input name="serial_number" required><br> <br>
                                     <button  onclick="location.href='{{ url(App('urlLang').'account') }}'">  تأكيد    </button> 
                                 </div>
@@ -222,14 +222,14 @@
                                   @if($user->user_verify->course_id == 505)
 
                                     @if($user->user_verify->verify == 1)
-                                      <button class="btn btn-primary btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" data-toggle="collapse" data-target="#change-search"><span style="margin-right: 10px;">  {{ floor($first_Variation->price+$vat) }}$ </span></button>        
+                                      <button class="btn btn-primary btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" data-toggle="collapse" data-target="#change-search"><span style="margin-right: 10px;">  {{ floor($first_Variation->price+$vat) }}$  </span></button>        
                                     @else 
-                                      <button class="btn btn-disabled btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" disabled="disabled"><span style="margin-right: 10px;">{{ floor($first_Variation->price+$vat) }}$</span></button>
+                                      <button class="btn btn-disabled btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" disabled="disabled"><span style="margin-right: 10px;">{{ floor($first_Variation->price+$vat) }}$ </span></button>
                                     @endif
 
                                   @else
                                         @if($course->id ==  505)  
-                                            <button class="btn btn-disabled btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" disabled="disabled"><span style="margin-right: 10px;">{{ floor($first_Variation->price+$vat) }}$</span></button>
+                                            <button class="btn btn-disabled btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" disabled="disabled"><span style="margin-right: 10px;">{{ floor($first_Variation->price+$vat) }}$ </span></button>
                                         @endif
 
                                     {{-- @if($user->user_verify->verify == 1)
@@ -261,7 +261,7 @@
 
 
                     @else
-                    <button class="btn btn-disabled btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" disabled="disabled"><span style="margin-right: 10px;">{{ floor($first_Variation->price+$vat) }}$</span></button>
+                    <button class="btn btn-disabled btn-block btn-toggle collapsed btn-form btn-inverse btn-sm" disabled="disabled"><span style="margin-right: 10px;">{{ floor($first_Variation->price+$vat) }}$ </span></button>
                     @endif
                     @endif
                 {{-- end add new code system --}}
@@ -458,12 +458,12 @@
                                                                   {{ floor(($courseTypeVariation->price + App('setting')->vat*$courseTypeVariation->price/100)/2) }}$
                                                                 @else
                                                                     @if($course->isPayCourseLevel2())  
-                                                                     {{ floor(($courseTypeVariation->price + App('setting')->vat*$courseTypeVariation->price/100)/2) }}$
+                                                                     {{ floor(($courseTypeVariation->price + App('setting')->vat*$courseTypeVariation->price/100)/2) }}$ 
                                                                      @else
                                                                         @if($course->isPayPackThree())  
-                                                                              {{ floor(($courseTypeVariation->price + App('setting')->vat*$courseTypeVariation->price/100)/2) }}$
+                                                                              {{ floor(($courseTypeVariation->price + App('setting')->vat*$courseTypeVariation->price/100)/2) }}$ 
                                                                          @else
-                                                                    {{ floor($courseTypeVariation->price + App('setting')->vat*$courseTypeVariation->price/100) }}$
+                                                                    {{ floor($courseTypeVariation->price + App('setting')->vat*$courseTypeVariation->price/100) }}$ 
                                                                          @endif
                                                                     @endif
                                                                 @endif
@@ -474,7 +474,7 @@
                                                                 @else    
                                                                     {{ $stdnum }}
                                                                 @endif --}}
-                                                                {{ floor($courseTypeVariation->price + App('setting')->vat*$courseTypeVariation->price/100) }}$
+                                                                {{ floor($courseTypeVariation->price + App('setting')->vat*$courseTypeVariation->price/100) }}$ <!---edit_price --->
 
                                                             @endif
                                                         </span> 

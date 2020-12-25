@@ -17,6 +17,7 @@ var options = {
     {{--"ajax": "{{url('admin/categories/listing-ajax')}}"--}}
 };
 $(document).ready(function(){
+	
 	$('#table1').DataTable(options);
 });
 

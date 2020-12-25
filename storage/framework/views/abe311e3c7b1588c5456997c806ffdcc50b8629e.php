@@ -21,24 +21,7 @@
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?> 
 
-<div class="modal" id="infos" style="direction:<?php echo e($dir); ?>">
-    <div class="modal-dialog">
-      <div class="modal-content" style="text-align: center">
-       
-        <img src="<?php echo e(asset('uploads/kcfinder/upload/image/'.App("setting")->settings_trans(App('lang'))->logo)); ?>" alt="Swedish" title="Swedish">
 
-        <div class="modal-body" style="text-align: center;">
-           <?php echo app('translator')->getFromJson('navabr.partner_Swedish_Academy'); ?>  
-        <br>
-        <button onclick="js:location.href='<?php echo e(url(App('urlLang').'partnership')); ?>'" type="button" class="btn btn-primary" > سجل الان  </button>
-        </div>
-            
-        <div class="modal-footer" style="display: <?php echo e($locale === "ar" ? "" : "inline-flex"); ?>" >
-          <button type="button"  data-dismiss="modal"><?php echo e(trans('home.fermer_popup_contact')); ?></button>
-        </div>
-      </div>
-    </div>
-</div>
 
 
 

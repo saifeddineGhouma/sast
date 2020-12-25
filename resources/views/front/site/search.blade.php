@@ -44,28 +44,33 @@
       <div class="row" style="direction: {{$dir}}">
 		  <h3><span>{{trans('home.results_found_for')}}</span> {{ $searchtxt }}</h3><br/>
 	  </div>
-		<div class="row"  >
+	  
+		<div class="row">
 		  @if(!$courseTypes->isEmpty())
+			  
+		     @foreach($courseTypes as $courseType)
 				<div class=" company_courses ">
 					<div class="row justify-content-around">
 						  {{-- @include("front.courses._courses") --}}
 						  <?php
-$course = $courseType->course;
-$course_trans = $course->course_trans(Session::get('locale'));
-if(empty($course_trans))
-    $course_trans = $course->course_trans('en');
+                      
+        $course = $courseType->course;
 
-$countRatings = 0;
-$sumRatings = 0;
-if(!is_null($course->ratings()->where("approved",1))){
-    $countRatings = $course->ratings()->where("approved",1)->count();
-    $sumRatings = $course->ratings()->where("approved",1)
-        ->select(DB::raw('sum(value) as sumRating'))->groupBy("course_id")->first();
-    if(!empty($sumRatings))
-        $sumRatings = $sumRatings->sumRating;
-    else
+        $course_trans = $course->course_trans(Session::get('locale'));
+        if(empty($course_trans))
+            $course_trans = $course->course_trans('en');
+
+        $countRatings = 0;
         $sumRatings = 0;
-}
+        if(!is_null($course->ratings()->where("approved",1))){
+            $countRatings = $course->ratings()->where("approved",1)->count();
+            $sumRatings = $course->ratings()->where("approved",1)
+                ->select(DB::raw('sum(value) as sumRating'))->groupBy("course_id")->first();
+            if(!empty($sumRatings))
+                $sumRatings = $sumRatings->sumRating;
+            else
+                $sumRatings = 0;
+        }
 
 $variationCount = $courseType->couseType_variations()->count();
 $first_Variation = $courseType->couseType_variations()->orderBy("price","asc")->first();
@@ -208,15 +213,20 @@ switch ($loop->index%8){
     </div>
 
 
-@endif
-					</div>
+	@endif
+			 		
+			
+			 </div>
 				</div>
+ @endforeach				
 		  @else
 			  <div class="row" style="direction: {{$dir}}">
 				  <p>{{trans('home.no_results_found')}}</p>
 			  </div>
 
 		  @endif
+		  
+		 
       </div>
     </div>
 </div>

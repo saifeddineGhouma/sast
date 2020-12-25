@@ -105,3 +105,5 @@ if(empty($setting_trans))
 	<p>@lang('navbar.footertext') </p>
 </div>
 <!-- End CopyRight -->
+
+

@@ -22,7 +22,7 @@ class ticketController extends Controller
     }
 	
     public function index(){
-   	  $tickets = Ticket::where("parent", "0")->get();
+   	  $tickets = Ticket::where("parent", "0")->latest()->get();
 	  
       return view('admin.ticket.index',array(
           "tickets"=>$tickets

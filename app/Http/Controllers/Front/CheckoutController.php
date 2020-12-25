@@ -16,7 +16,7 @@ use App\OrderproductVariation;
 use App\OrderOnlinepayment;
 use App\OrderproductStudent;
 use App\OrderproductUnStudent;
-
+use App\User ;
 use App\Country;
 use App\Government;
 use App\UserPoint;
@@ -62,6 +62,14 @@ use Session;
 use Auth;
 use File;
 use DB;
+
+use App\NewsletterSubscriber;
+use App\Notifications\UserConfirm;
+use App\Notifications\UserRegistered;
+
+
+
+
 include "assets/I18N/Arabic.php";
 
 use I18N_Arabic;
@@ -74,7 +82,7 @@ class CheckoutController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except('getIndexWithoutConnected','postInfo');
     }
 
     public function getIndex()
@@ -112,10 +120,64 @@ class CheckoutController extends Controller
             "userpoints" => $userpoints
         ));
     }
+    public function getIndexWithoutConnected()
+    {
+        $countries = Country::orderBy("sort_order")->get();
+        return view ('front.checkout.info_not_login')
+                  ->with('countries', $countries);
+    }
+    private function postUser($request)
+    {
+         $this->validate($request, [
+              'username' => 'required|string|max:255|unique:users',
+            'username' => array('Regex:/^[A-Za-z0-9 ]+$/'),
+            'email' => 'required|string|email|max:255|unique:users',
+            'mobile' => 'required|unique:users',
+        ],[
+        ]);
 
+        $user = User::create([
+            'username' =>$request->username,
+            'email' => $request->email,
+            'mobile' => $request->mobile,
+            'password' => bcrypt($request->password),
+            'auth_key'         =>  str_random(40),
+            'auth_mobile_key'   =>  rand(1111,9999)
+            ]);
+        $subscriber = NewsletterSubscriber::where('email',$request->email)->first();
+        if(!empty($subscriber)){
+            $subscriber->user_id = $user->id;
+            $subscriber->save();
+        }
+      
+        $student = new  Student();
+        if(!empty($student)){
+            $student->id = $user->id;
+            $student->save();
+        }
+       
+        $admins = \App\Admin::get();
+        Notification::send($admins, new UserRegistered($user->id,$user->username));
+        
+        // $status = \App\Setting::sendSms($user);
+        $status = $this->sendEmail($user);
+         //  $user->notify(new UserConfirm($user));
+        return $user ;
+    }
     public function postInfo(Request $request)
     {
+        if(!Auth::check())
+           {
+            
+            $user = $this->postUser($request) ;
+            Auth::login($user);
+
+           }  
+
+
         $user = Auth::user();
+
+        
         $this->validate($request, [
             'passport' => '|mimes:jpeg,bmp,png|max:5120',
             'email' => 'required|unique:users,email,' . $user->id,

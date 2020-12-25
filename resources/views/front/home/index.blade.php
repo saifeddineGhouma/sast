@@ -23,28 +23,7 @@
 @stop
 @section('content') 
 
-<div class="modal" id="infos" style="direction:{{ $dir }}">
-    <div class="modal-dialog">
-      <div class="modal-content" style="text-align: center">
-       {{-- <div class="modal-header">
-          <h4 class="modal-title" style="text-align: justify">{{ trans('home.voir_plus') }}</h4>
-          <button type="button" class="close" data-dismiss="modal">
-          </button>            
-        </div>  --}}
-        <img src="{{asset('uploads/kcfinder/upload/image/'.App("setting")->settings_trans(App('lang'))->logo)}}" alt="Swedish" title="Swedish">
 
-        <div class="modal-body" style="text-align: center;">
-           @lang('navabr.partner_Swedish_Academy')  
-        <br>
-        <button onclick="js:location.href='{{url(App('urlLang').'partnership')}}'" type="button" class="btn btn-primary" > سجل الان  </button>
-        </div>
-            
-        <div class="modal-footer" style="display: {{ $locale === "ar" ? "" : "inline-flex"}}" >
-          <button type="button"  data-dismiss="modal">{{ trans('home.fermer_popup_contact') }}</button>
-        </div>
-      </div>
-    </div>
-</div>
 
 
 

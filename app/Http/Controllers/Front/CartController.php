@@ -40,7 +40,6 @@ class CartController extends Controller
 
     public function postAddToCart(Request $request)
     {
-
         if (!($request->exists("book_id") || $request->exists("quiz_id"))) {
             if (isset($request->pack_id)) {
                 //echo "afef";
@@ -393,6 +392,11 @@ class CartController extends Controller
 
     public function newcartpro(&$request)
     {
+
+        
+
+
+
         $cart_pro = array();
         $price = 0;
         $total = 0;
@@ -416,6 +420,7 @@ class CartController extends Controller
                     }
                 }
             } else {
+
                 $price = $courseTypeVariation->price;
             }
 

@@ -268,39 +268,7 @@ class SiteController extends Controller
         return json_encode($result);
     }
 
-    /*public function getGraduates(){
-
-        $currentYear = date("Y");
-        $courses = Course::whereHas("students_certificates",function($query) use($currentYear){
-            $query->where(DB::raw("Year(created_at)"),$currentYear);
-        })->get();
-        return view('front.site.graduates',[
-            "currentYear"=>$currentYear,"courses"=>$courses
-        ]);
-    }
-
-    public function loadCourses(Request $request){
-        $result = array();
-        $year = $request->year;
-        $courses = Course::whereHas("students_certificates",function($query) use($year){
-            $query->where(DB::raw("Year(students_certificates.created_at)"),"=",$year);
-        })->get();
-        $result["courses"] = '<option value="">اختر الدورة</option>';
-
-        if(!$courses->isEmpty()){
-            foreach($courses as $course){
-                if(isset($course->course_trans(App("lang"))->name))
-                    $name = $course->course_trans(App("lang"))->name;
-                else {
-                    $name = $course->course_trans("ar")->name;
-                }
-                $result["courses"] .= '<option value="'.$course->id.'">'.$name.'</option>';
-            }
-        }
-        return $result;
-    }
-
-    */
+   
 
     public function certificates($serialNumber)
     {
@@ -383,6 +351,7 @@ class SiteController extends Controller
     public function getSearch(Request $request)
     {
 
+
         $country_id = $request->country_id;
         $category_id = $request->category_id;
         $type = $request->type;
@@ -431,7 +400,8 @@ class SiteController extends Controller
         }
 
         $courseTypes = $courseTypes->get(["course_types.*"]);
-
+        
+       
 
         return view("front.site.search", array(
             "searchtxt" => $searchtxt, "courseTypes" => $courseTypes
@@ -574,4 +544,35 @@ class SiteController extends Controller
 
         return back()->with('message_success', 'Thanks !');
     }
+
+    function getClientIP(){
+          if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+          } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+          } else {
+            $ip = $_SERVER['REMOTE_ADDR'];
+          }
+          return $ip;
+        }
+
+
+
+    function ip_details() {
+
+        $ip = $this->getClientIP();
+
+        dd($ip,request()->ip());
+      $json = file_get_contents("http://api.ipstack.com/{$ip}?access_key=699dd0481dd7dd12356797eee716e091");
+      $details = json_decode($json, true);
+      return $details;
+    }
+
+    public function getfacture()
+    {
+        return view('front.site.factures.sast') ;
+    }
+
+
+
 }

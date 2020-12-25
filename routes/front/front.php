@@ -1,5 +1,16 @@
 <?php 
 Route::get('/', 'SiteController@getIndex');
+
+Route::get('/getmycountry',function(){
+
+    $ip=  request()->ip();
+     $json = file_get_contents("http://ipinfo.io/{$ip}");
+     dd($json);
+    $details = json_decode($json);
+    return $details;
+});
+
+Route::get('/getfacturesast','SiteController@getfacture')->name('get.facture.sast');
     Route::get('convert_pdf/{id}/{client}', 'HomeController@convertToPDF')->name('convertToPDF');
     Route::get('description_course', 'HomeController@getDescriptionCourse')->name('getDescriptionCourse');
 
@@ -97,6 +108,7 @@ Route::get('/', 'SiteController@getIndex');
     Route::get('cart', 'CartController@getIndex');
 
     Route::get('checkout', 'CheckoutController@getIndex');
+    Route::get('checkout_anlogged/','CheckoutController@getIndexWithoutConnected')->name('checkout.not.logged');
     Route::post('checkout/info', 'CheckoutController@postInfo');
     Route::get('checkout/payment', 'CheckoutController@getPayment');
     Route::post('checkout/payment', 'CheckoutController@postPayment');

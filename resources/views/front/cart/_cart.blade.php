@@ -145,7 +145,16 @@ $totalPrice = 0;
         <td><a href="{{ url(App('urlLang').'all-courses') }}" class="btn btn-warning pull-{{$back}}"><i class="fa fa-angle-{{ $back }}"></i> @lang('navbar.previous')</a></td>
             <td colspan="2" class="hidden-xs"></td>
             <td class="hidden-xs text-center"><strong> @lang('navbar.totalprice') <span class="pricenovat">{{ $totalPrice }} $</span></strong></td>
+
+        @if(auth()->check())
         <td><a href="{{ url(App('urlLang').'checkout') }}" class="btn btn-success btn-block">@lang('navbar.next') <i class="fa fa-angle-{{$next}}"></i></a></td>
+        @else
+          <td><a href="{{ url(App('urlLang').'checkout_anlogged') }}" class="btn btn-success btn-block">@lang('navbar.next') <i class="fa fa-angle-{{$next}}"></i></a></td>
+
+        @endif
+
+
+
         </tr>
         </tfoot>
     @endif

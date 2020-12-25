@@ -82,6 +82,7 @@
                 <input class="form-control date-picker" name="date_of_birth" placeholder="yyyy-m-d" value="{{ $user->date_of_birth }}" type="text"/>
             </div>
         </div>
+           
      
         <div class="col-md-12">
             <div class="form-group">
@@ -118,13 +119,6 @@
       
 
     </div>
-
-
-
-
-
-
-
     <div class="row userlogedin">
         <div class="col-md-6">
             <div class="form-group">
@@ -148,6 +142,4 @@
     </div>
 
 </div>
-
-
 
